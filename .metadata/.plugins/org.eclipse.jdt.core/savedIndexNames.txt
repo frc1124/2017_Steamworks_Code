@@ -1,0 +1,1 @@
+INDEX VERSION 1.129+C:\Users\Shmish\Documents\GitHub\2017_Steamworks_Code\.metadata\.plugins\org.eclipse.jdt.core
