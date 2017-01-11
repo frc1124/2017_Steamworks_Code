@@ -1,0 +1,13 @@
+package org.usfirst.frc.team1124.robot;
+
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SpeedController;
+
+public class RobotMap {
+	//odd on the left, high in the back (1 is left front, 4 is back right)
+	public static SpeedController wheelOne;
+    public static SpeedController wheelTwo;
+    public static SpeedController wheelThree;
+    public static SpeedController wheelFour;
+    public static RobotDrive mechDrive;
+}
