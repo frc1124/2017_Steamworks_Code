@@ -220,3 +220,8 @@ pip-log.txt
 *.ini
 Uberbots2017/dist/FRCUserProgram.jar
 *.jar
+*.snap
+.metadata/.plugins/org.eclipse.core.resources/.projects/Uberbots2017/.markers.snap
+*.snap
+*.resources
+*.xmi
