@@ -11,8 +11,8 @@ public class TeleopArcade extends Command {
 	private PWM wheelThree;
 	private PWM wheelFour;
 
-	private double dir;
-	private double mag;
+	private double x;
+	private double y;
 
 	public TeleopArcade() {
 		wheelOne = new PWM(0);
@@ -22,34 +22,10 @@ public class TeleopArcade extends Command {
 	}
 
 	protected void execute() {
-		dir = OI.stick.getDirectionRadians();
-		mag = OI.stick.getMagnitude();
-
-		//lateral motion
-		if( (dir >= 0 ) && (dir <= 1*Math.PI/2) ) {
-			wheelOne.setSpeed( mag );
-			wheelTwo.setSpeed( (dir*(4/Math.PI)-1)*mag );
-			wheelThree.setSpeed( (dir*(4/Math.PI)-1)*mag );
-			wheelFour.setSpeed( mag );
-		}
-		if( (dir >= Math.PI/2) && (dir <= Math.PI) ) {
-			wheelOne.setSpeed( (dir*(-4/Math.PI)+3)*mag );
-			wheelTwo.setSpeed( mag );
-			wheelThree.setSpeed( mag );
-			wheelFour.setSpeed( (dir*(-4/Math.PI)+3)*mag );
-		}
-		if( (dir >= Math.PI) && (dir <= 3*Math.PI/2 )) {
-			wheelOne.setSpeed( mag );
-			wheelTwo.setSpeed( (dir*(-4/Math.PI)+5)*mag );
-			wheelThree.setSpeed( (dir*(-4/Math.PI)+5)*mag );
-			wheelFour.setSpeed( mag );
-		}
-		if( (dir >= 3*Math.PI/2) ) {
-			wheelOne.setSpeed( (dir*(4/Math.PI)+7)*mag );
-			wheelTwo.setSpeed( mag );
-			wheelThree.setSpeed( mag );
-			wheelFour.setSpeed( (dir*(4/Math.PI)+7)*mag );
-		}
+		x = OI.stick.getX();
+		y = OI.stick.getY();
+		
+		wheelOne.setSpeed(y*(-1));
 	}
 
 	protected boolean isFinished() { return (false); }
