@@ -215,3 +215,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+*.log
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+*.ini
+Uberbots2017/dist/FRCUserProgram.jar
