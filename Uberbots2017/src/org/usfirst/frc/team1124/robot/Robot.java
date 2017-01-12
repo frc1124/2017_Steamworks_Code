@@ -24,13 +24,25 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledInit() {}
+
 	public void autonomousInit() {}
+
 	public void teleopInit() {}
+
 	public void testInit() {}
-	
-	//Walden i swear to god...
-	public void disabledPeriodic() { Scheduler.getInstance().run(); }
-	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
-	public void teleopPeriodic() { Scheduler.getInstance().run(); }
+
+	// Walden i swear to god...
+	public void disabledPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	public void autonomousPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
 	public void testPeriodic() {}
 }

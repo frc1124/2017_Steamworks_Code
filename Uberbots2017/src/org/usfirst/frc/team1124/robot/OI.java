@@ -13,8 +13,8 @@ public class OI {
 	public OI() {
 		stick = new Joystick(0);
 		trigger = new JoystickButton(stick, 1);
-		
-		//button bindings
+
+		// button bindings
 		trigger.whileHeld(new TeleopMech());
 	}
 }

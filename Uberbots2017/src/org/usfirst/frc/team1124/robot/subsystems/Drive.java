@@ -27,5 +27,7 @@ public class Drive extends Subsystem {
 		mechDrive.setSensitivity(0.5);
 	}
 
-	public void initDefaultCommand() { setDefaultCommand(new TeleopArcade()); }
+	public void initDefaultCommand() {
+		setDefaultCommand(new TeleopArcade());
+	}
 }
