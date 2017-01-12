@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import org.usfirst.frc.team1124.robot.commands.Teleop;
+import org.usfirst.frc.team1124.robot.commands.TeleopMech;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -28,5 +28,5 @@ public class Drive extends Subsystem {
 		mechDrive.setSensitivity(0.5);
 	}
 
-	public void initDefaultCommand() { setDefaultCommand(new Teleop()); }
+	public void initDefaultCommand() { setDefaultCommand(new TeleopMech()); }
 }

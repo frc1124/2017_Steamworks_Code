@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team1124.robot.OI;
 
-public class Teleop extends Command {
+public class TeleopMech extends Command {
 	private PWM wheelOne;
 	private PWM wheelTwo;
 	private PWM wheelThree;
@@ -14,7 +14,7 @@ public class Teleop extends Command {
 	private double dir;
 	private double mag;
 
-	public Teleop() {
+	public TeleopMech() {
 		wheelOne = new PWM(0);
 		wheelTwo = new PWM(1);
 		wheelThree = new PWM(2);
