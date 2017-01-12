@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drive extends Subsystem {
-	// odd on the left, high in the back (1 is left front, 4 is back right)
+	// odd on the left, high in the back (1 is front left, 4 is back right)
 	private SpeedController wheelOne;
 	private SpeedController wheelTwo;
 	private SpeedController wheelThree;
@@ -28,7 +28,5 @@ public class Drive extends Subsystem {
 		mechDrive.setSensitivity(0.5);
 	}
 
-	public void initDefaultCommand() {
-		setDefaultCommand(new Teleop());
-	}
+	public void initDefaultCommand() { setDefaultCommand(new Teleop()); }
 }

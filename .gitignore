@@ -226,3 +226,5 @@ Uberbots2017/dist/FRCUserProgram.jar
 *.resources
 *.xmi
 *.index
+*.index
+*.snap

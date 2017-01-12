@@ -31,13 +31,8 @@ public class Teleop extends Command {
 		wheelFour.setSpeed(-1 * x);
 	}
 
-	protected boolean isFinished() {
-		return (false);
-	}
-
+	protected boolean isFinished() { return (false); }
 	protected void end() {}
-
 	protected void interrupted() {}
-
 	protected void initilize() {}
 }
