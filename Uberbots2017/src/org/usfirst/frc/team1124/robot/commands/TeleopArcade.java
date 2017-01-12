@@ -25,7 +25,10 @@ public class TeleopArcade extends Command {
 		x = OI.stick.getX();
 		y = OI.stick.getY();
 		
-		wheelOne.setSpeed(y*(-1));
+		wheelOne.setSpeed(y*x);
+		wheelOne.setSpeed(y*x);
+		wheelThree.setSpeed(y*x);
+		wheelFour.setSpeed(y*x);
 	}
 
 	protected boolean isFinished() { return (false); }
