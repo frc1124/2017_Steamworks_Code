@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team1124.robot.OI;
+import org.usfirst.frc.team1124.robot.RobotMap;
 
 public class TeleopMech extends Command {
 	private PWM wheelOne;
@@ -15,10 +16,10 @@ public class TeleopMech extends Command {
 	private double mag;
 
 	public TeleopMech() {
-		wheelOne = new PWM(0);
-		wheelTwo = new PWM(1);
-		wheelThree = new PWM(2);
-		wheelFour = new PWM(3);
+		wheelOne = new PWM(RobotMap.FRONT_LEFT);
+		wheelTwo = new PWM(RobotMap.FRONT_RIGHT);
+		wheelThree = new PWM(RobotMap.BACK_LEFT);
+		wheelFour = new PWM(RobotMap.BACK_RIGHT);
 	}
 
 	protected void execute() {
