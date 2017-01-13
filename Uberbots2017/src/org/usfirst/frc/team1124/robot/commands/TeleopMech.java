@@ -4,24 +4,15 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team1124.robot.OI;
+import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.RobotMap;
 
 public class TeleopMech extends Command {
-	private PWM wheelOne;
-	private PWM wheelTwo;
-	private PWM wheelThree;
-	private PWM wheelFour;
-
 	private double dir;
 	private double mag;
 
-	public TeleopMech() {
-		wheelOne = new PWM(RobotMap.FRONT_LEFT);
-		wheelTwo = new PWM(RobotMap.FRONT_RIGHT);
-		wheelThree = new PWM(RobotMap.BACK_LEFT);
-		wheelFour = new PWM(RobotMap.BACK_RIGHT);
-	}
-
+	public TeleopMech() { requires(Robot.drive); }
+	
 	protected void execute() {
 		dir = ((Math.atan2(OI.stick.getY(), OI.stick.getX()) * 180 / Math.PI) + 360)%360;
 		mag = OI.stick.getMagnitude();
@@ -31,20 +22,20 @@ public class TeleopMech extends Command {
 			double b = Math.cos(Math.toRadians(dir-45));
 			a*=mag;
 			b*=mag;
-			wheelOne.setSpeed(b);
-			wheelTwo.setSpeed(a);
-			wheelThree.setSpeed(b);
-			wheelFour.setSpeed(a);
+			Robot.drive.setSpeedOne(b);
+			Robot.drive.setSpeedTwo(a);
+			Robot.drive.setSpeedThree(b);
+			Robot.drive.setSpeedFour(a);
 		}
 		if(dir >= 90 && dir < 180) {
 			double b = Math.sin(Math.toRadians(135-dir));
 			double a = Math.cos(Math.toRadians(135-dir));
 			a*=mag;
 			b*=mag;
-			wheelOne.setSpeed(b);
-			wheelTwo.setSpeed(a);
-			wheelThree.setSpeed(b);
-			wheelFour.setSpeed(a);
+			Robot.drive.setSpeedOne(b);
+			Robot.drive.setSpeedTwo(a);
+			Robot.drive.setSpeedThree(b);
+			Robot.drive.setSpeedFour(a);
 		}
 		if(dir >= 180 && dir < 270) {
 			double a = -Math.sin(Math.toRadians(dir-45));

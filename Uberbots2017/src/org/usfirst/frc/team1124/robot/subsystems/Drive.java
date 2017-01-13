@@ -33,4 +33,8 @@ public class Drive extends Subsystem {
 	}
 	
 	public RobotDrive getRobotDrive(){ return mechDrive; }
+	public void setSpeedOne(double x) { this.wheelOne.set(x); }
+	public void setSpeedTwo(double x) { this.wheelTwo.set(x); }
+	public void setSpeedThree(double x) { this.wheelThree.set(x); }
+	public void setSpeedFour(double x) { this.wheelFour.set(x); }
 }

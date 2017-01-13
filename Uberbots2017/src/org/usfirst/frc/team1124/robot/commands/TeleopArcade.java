@@ -7,7 +7,7 @@ import org.usfirst.frc.team1124.robot.Robot;
 
 public class TeleopArcade extends Command {
 	
-	public TeleopArcade() {requires(Robot.drive);}
+	public TeleopArcade() { requires(Robot.drive); }
 
 	protected void execute() {Robot.drive.getRobotDrive().arcadeDrive(OI.stick);}
 
