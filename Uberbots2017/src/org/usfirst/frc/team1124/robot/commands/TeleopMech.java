@@ -52,9 +52,7 @@ public class TeleopMech extends Command {
 		}
 	}
 
-	protected boolean isFinished() {
-		return (false);
-	}
+	protected boolean isFinished() {return (false);}
 
 	protected void end() {}
 

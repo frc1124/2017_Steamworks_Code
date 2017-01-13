@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team1124.robot.OI;
+import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.RobotMap;
 
 public class TeleopArcade extends Command {
@@ -23,13 +24,8 @@ public class TeleopArcade extends Command {
 	}
 
 	protected void execute() {
-		x = OI.stick.getX();
-		y = OI.stick.getY();
-
-		wheelOne.setSpeed(y * x);
-		wheelTwo.setSpeed(y * x);
-		wheelThree.setSpeed(y * x);
-		wheelFour.setSpeed(y * x);
+		
+		Robot.drive.getRobotDrive().arcadeDrive(OI.stick);
 	}
 
 	protected boolean isFinished() {
@@ -37,8 +33,6 @@ public class TeleopArcade extends Command {
 	}
 
 	protected void end() {}
-
 	protected void interrupted() {}
-
 	protected void initilize() {}
 }
