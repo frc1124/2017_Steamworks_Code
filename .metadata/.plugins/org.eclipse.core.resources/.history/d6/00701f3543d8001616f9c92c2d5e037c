@@ -1,9 +1,0 @@
-package org.usfirst.frc.team1124.robot;
-
-public class RobotMap {
-	public static SpeedController driveSpeedController4;
-    public static SpeedController driveSpeedController1;
-    public static SpeedController driveSpeedController3;
-    public static SpeedController driveSpeedController2;
-    public static RobotDrive driveRobotDrive41;
-}
