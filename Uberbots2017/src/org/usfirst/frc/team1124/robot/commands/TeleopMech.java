@@ -23,33 +23,48 @@ public class TeleopMech extends Command {
 	}
 
 	protected void execute() {
-		dir = OI.stick.getDirectionRadians();
+		dir = ((Math.atan2(OI.stick.getY(), OI.stick.getX()) * 180 / Math.PI) + 360)%360;
 		mag = OI.stick.getMagnitude();
-
-		// lateral motion
-		if ((dir >= 0) && (dir <= 1 * Math.PI / 2)) {
-			wheelOne.setSpeed(mag);
-			wheelTwo.setSpeed((dir * (4 / Math.PI) - 1) * mag);
-			wheelThree.setSpeed((dir * (4 / Math.PI) - 1) * mag);
-			wheelFour.setSpeed(mag);
+		
+		if(dir >=0 && dir < 90) {
+			double a = Math.sin(Math.toRadians(dir-45));
+			double b = Math.cos(Math.toRadians(dir-45));
+			a*=mag;
+			b*=mag;
+			wheelOne.setSpeed(b);
+			wheelTwo.setSpeed(a);
+			wheelThree.setSpeed(b);
+			wheelFour.setSpeed(a);
 		}
-		if ((dir >= Math.PI / 2) && (dir <= Math.PI)) {
-			wheelOne.setSpeed((dir * (-4 / Math.PI) + 3) * mag);
-			wheelTwo.setSpeed(mag);
-			wheelThree.setSpeed(mag);
-			wheelFour.setSpeed((dir * (-4 / Math.PI) + 3) * mag);
+		if(dir >= 90 && dir < 180) {
+			double b = Math.sin(Math.toRadians(135-dir));
+			double a = Math.cos(Math.toRadians(135-dir));
+			a*=mag;
+			b*=mag;
+			wheelOne.setSpeed(b);
+			wheelTwo.setSpeed(a);
+			wheelThree.setSpeed(b);
+			wheelFour.setSpeed(a);
 		}
-		if ((dir >= Math.PI) && (dir <= 3 * Math.PI / 2)) {
-			wheelOne.setSpeed(mag);
-			wheelTwo.setSpeed((dir * (-4 / Math.PI) + 5) * mag);
-			wheelThree.setSpeed((dir * (-4 / Math.PI) + 5) * mag);
-			wheelFour.setSpeed(mag);
+		if(dir >= 180 && dir < 270) {
+			double a = -Math.sin(Math.toRadians(dir-45));
+			double b = -Math.cos(Math.toRadians(dir-45));
+			a*=mag;
+			b*=mag;
+			wheelOne.setSpeed(b);
+			wheelTwo.setSpeed(a);
+			wheelThree.setSpeed(b);
+			wheelFour.setSpeed(a);
 		}
-		if ((dir >= 3 * Math.PI / 2)) {
-			wheelOne.setSpeed((dir * (4 / Math.PI) + 7) * mag);
-			wheelTwo.setSpeed(mag);
-			wheelThree.setSpeed(mag);
-			wheelFour.setSpeed((dir * (4 / Math.PI) + 7) * mag);
+		if(dir >= 270 && dir < 360) {
+			double b = -Math.sin(Math.toRadians(135-dir));
+			double a = -Math.cos(Math.toRadians(135-dir));
+			a*=mag;
+			b*=mag;
+			wheelOne.setSpeed(b);
+			wheelTwo.setSpeed(a);
+			wheelThree.setSpeed(b);
+			wheelFour.setSpeed(a);
 		}
 	}
 
