@@ -7,6 +7,7 @@ import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.RobotMap;
 
 public class TeleopMech extends Command {
+	
 	private PWM wheelOne;
 	private PWM wheelTwo;
 	private PWM wheelThree;
@@ -23,7 +24,7 @@ public class TeleopMech extends Command {
 	}
 
 	protected void execute() {
-		dir = ((Math.atan2(OI.stick.getY(), OI.stick.getX()) * 180 / Math.PI) + 360)%360;
+		dir = ((Math.atan2(-OI.stick.getY(), OI.stick.getX()) * 180 / Math.PI) + 360)%360;
 		mag = OI.stick.getMagnitude();
 		
 		if(dir >=0 && dir < 90) {
