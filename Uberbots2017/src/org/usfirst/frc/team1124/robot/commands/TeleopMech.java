@@ -47,8 +47,8 @@ public class TeleopMech extends Command {
 			wheelFour.setSpeed(a);
 		}
 		if(dir >= 180 && dir < 270) {
-			double a = -Math.sin(Math.toRadians(dir-45));
-			double b = -Math.cos(Math.toRadians(dir-45));
+			double a = -Math.sin(Math.toRadians(dir-180-45));
+			double b = -Math.cos(Math.toRadians(dir-180-45));
 			a*=mag;
 			b*=mag;
 			wheelOne.setSpeed(b);
@@ -57,8 +57,8 @@ public class TeleopMech extends Command {
 			wheelFour.setSpeed(a);
 		}
 		if(dir >= 270 && dir < 360) {
-			double b = -Math.sin(Math.toRadians(135-dir));
-			double a = -Math.cos(Math.toRadians(135-dir));
+			double b = -Math.sin(Math.toRadians(135-dir+180));
+			double a = -Math.cos(Math.toRadians(135-dir+180));
 			a*=mag;
 			b*=mag;
 			wheelOne.setSpeed(b);
