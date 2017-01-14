@@ -10,55 +10,30 @@ public class TeleopMech extends Command {
 	private double dir;
 	private double mag;
 
-	public TeleopMech() { requires(Robot.drive); }
-	
-	protected void execute() {
-		dir = ((Math.atan2(-OI.stick.getY(), OI.stick.getX()) * 180 / Math.PI) + 360)%360;
-		mag = OI.stick.getMagnitude();
-		
-		if(dir >=0 && dir < 90) {
-			double a = Math.sin(Math.toRadians(dir-45));
-			double b = Math.cos(Math.toRadians(dir-45));
-			a*=mag;
-			b*=mag;
-			Robot.drive.setSpeedOne(b);
-			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(a);
-			Robot.drive.setSpeedFour(b);
-		}
-		if(dir >= 90 && dir < 180) {
-			double b = Math.sin(Math.toRadians(135-dir));
-			double a = Math.cos(Math.toRadians(135-dir));
-			a*=mag;
-			b*=mag;
-			Robot.drive.setSpeedOne(b);
-			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(a);
-			Robot.drive.setSpeedFour(b);
-		}
-		if(dir >= 180 && dir < 270) {
-			double a = -Math.sin(Math.toRadians(dir-180-45));
-			double b = -Math.cos(Math.toRadians(dir-180-45));
-			a*=mag;
-			b*=mag;
-			Robot.drive.setSpeedOne(b);
-			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(a);
-			Robot.drive.setSpeedFour(b);
-		}
-		if(dir >= 270 && dir < 360) {
-			double b = -Math.sin(Math.toRadians(135-dir+180));
-			double a = -Math.cos(Math.toRadians(135-dir+180));
-			a*=mag;
-			b*=mag;
-			Robot.drive.setSpeedOne(b);
-			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(a);
-			Robot.drive.setSpeedFour(b);
-		}
+	private static final double PID_BUFFER = 0.95;
+
+	public TeleopMech() {
+		requires(Robot.drive);
 	}
 
-	protected boolean isFinished() {return (false);}
+	protected void execute() {
+		dir = ((Math.atan2(-OI.stick.getY(), OI.stick.getX()) * 180 / Math.PI) + 360) % 360;
+		mag = OI.stick.getMagnitude();
+
+		double a = Math.sin(Math.toRadians(dir - 45));
+		double b = Math.cos(Math.toRadians(dir - 45));
+		a *= mag * PID_BUFFER;
+		b *= mag * PID_BUFFER;
+		Robot.drive.setSpeedOne(b);
+		Robot.drive.setSpeedTwo(a);
+		Robot.drive.setSpeedThree(a);
+		Robot.drive.setSpeedFour(b);
+	}
+
+	protected boolean isFinished() {
+		// It's never over
+		return (false);
+	}
 
 	protected void end() {}
 
