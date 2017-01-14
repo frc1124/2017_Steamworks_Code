@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drive extends Subsystem {
 
+	private static final double PID_BUFFER = 0.95;
+
 	private SpeedController wheelOne;
 	private SpeedController wheelTwo;
 	private SpeedController wheelThree;
@@ -56,5 +58,17 @@ public class Drive extends Subsystem {
 	public void setSpeedFour(double x) {
 		// sets the speed to back right wheel
 		this.wheelFour.set(x);
+	}
+
+	public void mechDrive(double dir, double mag) {
+
+		double a = Math.sin(Math.toRadians(dir - 45));
+		double b = Math.cos(Math.toRadians(dir - 45));
+		a *= mag * PID_BUFFER;
+		b *= mag * PID_BUFFER;
+		setSpeedOne(b);
+		setSpeedTwo(a);
+		setSpeedThree(a);
+		setSpeedFour(b);
 	}
 }

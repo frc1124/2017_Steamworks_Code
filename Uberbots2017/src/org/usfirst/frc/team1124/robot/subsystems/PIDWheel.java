@@ -32,14 +32,11 @@ public class PIDWheel extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
+		// gives the output
 		motor.pidWrite(output);
-		return;
 	}
 
 	@Override
-	protected void initDefaultCommand() {
-		// Nothing
-		// Here
-	}
+	protected void initDefaultCommand() {}
 
 }
