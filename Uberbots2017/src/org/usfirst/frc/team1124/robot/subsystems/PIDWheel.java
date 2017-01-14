@@ -26,12 +26,14 @@ public class PIDWheel extends PIDSubsystem {
 
 	@Override
 	protected double returnPIDInput() {
+		// returns
 		return encoder.getDistance();
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
 		motor.pidWrite(output);
+		return;
 	}
 
 	@Override
