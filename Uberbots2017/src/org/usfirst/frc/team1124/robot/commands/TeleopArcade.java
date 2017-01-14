@@ -11,11 +11,11 @@ public class TeleopArcade extends Command {
 
 	protected void execute() {Robot.drive.getRobotDrive().arcadeDrive(OI.stick);}
 
-	protected boolean isFinished() {
-		return (false);
-	}
+	protected boolean isFinished() {return (false);}
 
 	protected void end() {}
+	
 	protected void interrupted() {}
+	
 	protected void initilize() {}
 }

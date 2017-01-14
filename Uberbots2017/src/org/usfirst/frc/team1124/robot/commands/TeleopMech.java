@@ -1,11 +1,9 @@
 package org.usfirst.frc.team1124.robot.commands;
 
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.Robot;
-import org.usfirst.frc.team1124.robot.RobotMap;
 
 public class TeleopMech extends Command {
 
@@ -25,8 +23,8 @@ public class TeleopMech extends Command {
 			b*=mag;
 			Robot.drive.setSpeedOne(b);
 			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(b);
-			Robot.drive.setSpeedFour(a);
+			Robot.drive.setSpeedThree(a);
+			Robot.drive.setSpeedFour(b);
 		}
 		if(dir >= 90 && dir < 180) {
 			double b = Math.sin(Math.toRadians(135-dir));
@@ -35,8 +33,8 @@ public class TeleopMech extends Command {
 			b*=mag;
 			Robot.drive.setSpeedOne(b);
 			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(b);
-			Robot.drive.setSpeedFour(a);
+			Robot.drive.setSpeedThree(a);
+			Robot.drive.setSpeedFour(b);
 		}
 		if(dir >= 180 && dir < 270) {
 			double a = -Math.sin(Math.toRadians(dir-180-45));
@@ -45,8 +43,8 @@ public class TeleopMech extends Command {
 			b*=mag;
 			Robot.drive.setSpeedOne(b);
 			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(b);
-			Robot.drive.setSpeedFour(a);
+			Robot.drive.setSpeedThree(a);
+			Robot.drive.setSpeedFour(b);
 		}
 		if(dir >= 270 && dir < 360) {
 			double b = -Math.sin(Math.toRadians(135-dir+180));
@@ -55,8 +53,8 @@ public class TeleopMech extends Command {
 			b*=mag;
 			Robot.drive.setSpeedOne(b);
 			Robot.drive.setSpeedTwo(a);
-			Robot.drive.setSpeedThree(b);
-			Robot.drive.setSpeedFour(a);
+			Robot.drive.setSpeedThree(a);
+			Robot.drive.setSpeedFour(b);
 		}
 	}
 
