@@ -26,7 +26,7 @@ public class PIDWheel extends PIDSubsystem {
 
 	@Override
 	protected double returnPIDInput() {
-		// returns
+		// returns distance the wheel rolled
 		return encoder.getDistance();
 	}
 
