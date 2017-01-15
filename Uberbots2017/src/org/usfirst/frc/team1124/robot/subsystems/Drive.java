@@ -66,9 +66,9 @@ public class Drive extends Subsystem {
 		double b = Math.cos(Math.toRadians(dir - 45));
 		a *= mag * PID_BUFFER;
 		b *= mag * PID_BUFFER;
-		setSpeedOne(b);
-		setSpeedTwo(a);
-		setSpeedThree(a);
-		setSpeedFour(b);
+		setSpeedOne(a);
+		setSpeedTwo(b);
+		setSpeedThree(b);
+		setSpeedFour(a);
 	}
 }
