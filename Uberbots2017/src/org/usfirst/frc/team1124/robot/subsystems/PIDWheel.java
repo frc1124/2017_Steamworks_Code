@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import org.usfirst.frc.team1124.robot.RobotMap;
+
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -16,11 +18,11 @@ public class PIDWheel extends PIDSubsystem {
 	private CANTalon motor;
 	private Encoder encoder;
 
-	public PIDWheel(int p, int i, int d, int CANchannel, int a_channel, int b_channel) {
+	public PIDWheel(int p, int i, int d, int CANchannel) {
 		super(p, i, d);
 		motor = new CANTalon(CANchannel);
 
-		encoder = new Encoder(a_channel, b_channel, false, EncodingType.k4X);
+		encoder = new Encoder(RobotMap.A_CHANNEL[CANchannel], RobotMap.B_CHANNEL[CANchannel], false, EncodingType.k4X);
 		encoder.setDistancePerPulse(DIS_PER_PULSE);
 	}
 
