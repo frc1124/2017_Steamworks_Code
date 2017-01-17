@@ -2,9 +2,11 @@ package org.usfirst.frc.team1124.robot.subsystems;
 
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.TeleopArcade;
+
+import com.ctre.CANTalon;
+
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drive extends Subsystem {
@@ -18,10 +20,10 @@ public class Drive extends Subsystem {
 	private RobotDrive robotDrive;
 
 	public Drive() {
-		wheelOne = new Talon(RobotMap.FRONT_LEFT);
-		wheelTwo = new Talon(RobotMap.FRONT_RIGHT);
-		wheelThree = new Talon(RobotMap.BACK_LEFT);
-		wheelFour = new Talon(RobotMap.BACK_LEFT);
+		wheelOne = new CANTalon(RobotMap.FRONT_LEFT);
+		wheelTwo = new CANTalon(RobotMap.FRONT_RIGHT);
+		wheelThree = new CANTalon(RobotMap.BACK_LEFT);
+		wheelFour = new CANTalon(RobotMap.BACK_LEFT);
 
 		robotDrive = new RobotDrive(wheelOne, wheelTwo, wheelThree, wheelFour);
 		robotDrive.setSafetyEnabled(true);
