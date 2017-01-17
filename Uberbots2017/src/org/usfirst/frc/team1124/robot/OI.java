@@ -7,14 +7,10 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
-	public static Joystick stick;
-	public static Button trigger;
+	public static Joystick stick = new Joystick(0);
+	public static Button trigger = new JoystickButton(stick, 1);
 
 	public OI() {
-		stick = new Joystick(0);
-		trigger = new JoystickButton(stick, 1);
-
-		// button bindings
 		trigger.whileHeld(new TeleopMech());
 	}
 }
