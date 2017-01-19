@@ -23,7 +23,7 @@ public class Drive extends Subsystem {
 		wheelOne = new CANTalon(RobotMap.FRONT_LEFT);
 		wheelTwo = new CANTalon(RobotMap.FRONT_RIGHT);
 		wheelThree = new CANTalon(RobotMap.BACK_LEFT);
-		wheelFour = new CANTalon(RobotMap.BACK_LEFT);
+		wheelFour = new CANTalon(RobotMap.BACK_RIGHT);
 
 		robotDrive = new RobotDrive(wheelOne, wheelTwo, wheelThree, wheelFour);
 		robotDrive.setSafetyEnabled(true);
