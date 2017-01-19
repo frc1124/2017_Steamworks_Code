@@ -63,10 +63,10 @@ public class Drive extends Subsystem {
 	}
 
 	public void mechDrive(double dir, double mag) {
-		System.out.println(((CANTalon) wheelOne).getOutputCurrent());
-		System.out.println(((CANTalon) wheelTwo).getOutputCurrent());
-		System.out.println(((CANTalon) wheelThree).getOutputCurrent());
-		System.out.println(((CANTalon) wheelFour).getOutputCurrent());
+		System.out.println(((CANTalon) wheelOne).getEncPosition());
+		System.out.println(((CANTalon) wheelTwo).getEncPosition());
+		System.out.println(((CANTalon) wheelThree).getEncPosition());
+		System.out.println(((CANTalon) wheelFour).getEncPosition());
 
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
