@@ -6,30 +6,42 @@ import org.usfirst.frc.team1124.robot.commands.TeleopArcade;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Drive extends Subsystem {
+	
+	NetworkTable table;
 
-	private static final double PID_BUFFER = 0.95;
+	private static final double PID_BUFFER = 0.5;
 
-	private SpeedController wheelOne;
-	private SpeedController wheelTwo;
-	private SpeedController wheelThree;
-	private SpeedController wheelFour;
+	private CANTalon wheelOne;
+	private CANTalon wheelTwo;
+	private CANTalon wheelThree;
+	private CANTalon wheelFour;
 	private RobotDrive robotDrive;
 
 	public Drive() {
+		
+		table = NetworkTable.getTable("dataTable");
+		
 		wheelOne = new CANTalon(RobotMap.FRONT_LEFT);
-		wheelTwo = new CANTalon(RobotMap.FRONT_RIGHT);
-		wheelThree = new CANTalon(RobotMap.BACK_LEFT);
+		wheelTwo = new CANTalon(RobotMap.BACK_LEFT);
+		wheelThree = new CANTalon(RobotMap.FRONT_RIGHT);
 		wheelFour = new CANTalon(RobotMap.BACK_RIGHT);
+		
+		wheelOne.setEncPosition(0);
+		wheelTwo.setEncPosition(0);
+		wheelThree.setEncPosition(0);
+		wheelFour.setEncPosition(0);
 
 		robotDrive = new RobotDrive(wheelOne, wheelTwo, wheelThree, wheelFour);
 		robotDrive.setSafetyEnabled(true);
 		robotDrive.setExpiration(0.1);
 		robotDrive.setMaxOutput(1.0);
 		robotDrive.setSensitivity(0.5);
+		
+		
 	}
 
 	public void initDefaultCommand() {
@@ -63,18 +75,20 @@ public class Drive extends Subsystem {
 	}
 
 	public void mechDrive(double dir, double mag) {
-		System.out.println(((CANTalon) wheelOne).getEncPosition());
-		System.out.println(((CANTalon) wheelTwo).getEncPosition());
-		System.out.println(((CANTalon) wheelThree).getEncPosition());
-		System.out.println(((CANTalon) wheelFour).getEncPosition());
+		
+		table.putNumber("back_left", wheelTwo.getEncPosition());
+		table.putNumber("front_left", wheelOne.getEncPosition());
+		table.putNumber("back_right", wheelFour.getEncPosition());
+		table.putNumber("front_right", wheelThree.getEncPosition());
+		table.putNumber("dir", dir);
 
-		double a = Math.sin(Math.toRadians(dir - 45));
-		double b = Math.cos(Math.toRadians(dir - 45));
+		double a = Math.sin(Math.toRadians(dir -45));
+		double b = Math.cos(Math.toRadians(dir -45));
 		a *= mag * PID_BUFFER;
 		b *= mag * PID_BUFFER;
-		setSpeedOne(a);
-		setSpeedTwo(b);
-		setSpeedThree(b);
-		setSpeedFour(a);
+		setSpeedOne(-b);
+		setSpeedTwo(-a);
+		setSpeedThree(a);
+		setSpeedFour(b);
 	}
 }
