@@ -5,9 +5,10 @@ import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 
 import com.ctre.CANTalon;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
@@ -22,6 +23,8 @@ public class Drive extends Subsystem {
 	private CANTalon wheelThree;
 	private CANTalon wheelFour;
 	private RobotDrive robotDrive;
+	
+	public AHRS navX;
 
 	public Drive() {
 
@@ -42,6 +45,9 @@ public class Drive extends Subsystem {
 		robotDrive.setExpiration(0.1);
 		robotDrive.setMaxOutput(1.0);
 		robotDrive.setSensitivity(0.5);
+		
+		navX = new AHRS(Port.kMXP);
+		navX.zeroYaw();
 
 	}
 
@@ -76,7 +82,9 @@ public class Drive extends Subsystem {
 	}
 
 	public void mechDrive(double dir, double mag) {
-
+		
+		
+		
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
 		a *= mag * PID_BUFFER;
@@ -97,5 +105,7 @@ public class Drive extends Subsystem {
 		table.putNumber("left_y", -OI.stick.getY());
 		table.putNumber("right_x", OI.stick.getRawAxis(4));
 		table.putNumber("right_y", -OI.stick.getRawAxis(5));
+		
+		table.putNumber("Yaw", navX.getYaw());
 	}
 }
