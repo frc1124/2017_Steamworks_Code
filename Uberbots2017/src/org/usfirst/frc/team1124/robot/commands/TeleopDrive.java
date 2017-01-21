@@ -43,7 +43,7 @@ public class TeleopDrive extends Command implements PIDOutput {
 			Drive.table.putNumber("Magnitude", mag);
 			Drive.table.putNumber("Direction", dir);
 
-			Robot.drive.mechDrive(dir + correction, mag);
+			Robot.drive.mechDrive(dir, mag);
 		} else {
 			Robot.drive.getRobotDrive().arcadeDrive(mag, OI.stick.getDirectionDegrees() + correction);
 		}
