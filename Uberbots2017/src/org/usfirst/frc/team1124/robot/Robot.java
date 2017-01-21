@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team1124.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -24,13 +25,35 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledInit() {}
+
 	public void autonomousInit() {}
+
 	public void teleopInit() {}
+
 	public void testInit() {}
 
+	public void disabledPeriodic() {
+		Scheduler.getInstance().run();
+	}
 
-	public void disabledPeriodic() {Scheduler.getInstance().run();}
-	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
-	public void teleopPeriodic() { Scheduler.getInstance().run(); }
+	public void autonomousPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	public void teleopPeriodic() {
+		if (OI.stick.getX(GenericHID.Hand.kRight) != 0 || OI.stick.getY(GenericHID.Hand.kRight) != 0) {
+			if (!teleopMech.isRunning()) {
+				teleopArcade.cancel();
+				teleopMech.start();
+			}
+		} else {
+			if (!teleopArcade.isRunning()) {
+				teleopArcade.start();
+				teleopMech.cancel();
+			}
+		}
+		Scheduler.getInstance().run();
+	}
+
 	public void testPeriodic() {}
 }
