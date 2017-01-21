@@ -16,8 +16,6 @@ public class Drive extends Subsystem {
 
 	public static NetworkTable table;
 
-	private static final double PID_BUFFER = 0.95;
-
 	private CANTalon[] wheels = new CANTalon[5];
 	private RobotDrive robotDrive;
 
@@ -66,8 +64,8 @@ public class Drive extends Subsystem {
 
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
-		a *= mag * PID_BUFFER;
-		b *= mag * PID_BUFFER;
+		a *= mag;
+		b *= mag;
 		setSpeed(-b, FRONT_LEFT);
 		setSpeed(-a, BACK_LEFT);
 		setSpeed(a, FRONT_RIGHT);

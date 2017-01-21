@@ -14,7 +14,9 @@ public class TeleopDrive extends Command implements PIDOutput {
 	double correction = 0;
 	double dir;
 
-	private static final double P = 0.005f;
+	private static final double PID_BUFFER = 0.6;
+
+	private static final double P = 0.01f;
 	private static final double I = 0.0f;
 	private static final double D = 0.0f;
 
@@ -42,7 +44,7 @@ public class TeleopDrive extends Command implements PIDOutput {
 			Drive.table.putNumber("Direction", dir);
 			PIDcontroller.setSetpoint(Math.atan2(OI.RightX, OI.RightY));
 
-			Robot.drive.mechDrive(dir + correction, mag);
+			Robot.drive.mechDrive(dir + correction, mag * PID_BUFFER);
 		} else {
 			PIDcontroller.setSetpoint(OI.stick.getDirectionDegrees());
 
@@ -51,7 +53,7 @@ public class TeleopDrive extends Command implements PIDOutput {
 			double newY = -Math.sin(Math.toRadians(-newAngle + 90)) * mag;
 			double newX = Math.cos(Math.toRadians(newAngle + 90)) * mag;
 
-			Robot.drive.getRobotDrive().arcadeDrive(newY, newX, false);
+			Robot.drive.getRobotDrive().arcadeDrive(newY * PID_BUFFER, newX * PID_BUFFER, false);
 		}
 	}
 
