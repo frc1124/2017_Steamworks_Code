@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
 import org.usfirst.frc.team1124.robot.OI;
-import org.usfirst.frc.team1124.robot.RobotMap;
+import static org.usfirst.frc.team1124.robot.RobotMap.*;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 
 import com.ctre.CANTalon;
@@ -18,34 +18,26 @@ public class Drive extends Subsystem {
 
 	private static final double PID_BUFFER = 0.5;
 
-	private CANTalon wheelOne;
-	private CANTalon wheelTwo;
-	private CANTalon wheelThree;
-	private CANTalon wheelFour;
+	private CANTalon[] wheels = new CANTalon[5];
 	private RobotDrive robotDrive;
-	
+
 	public AHRS navX;
 
 	public Drive() {
 
 		table = NetworkTable.getTable("dataTable");
 
-		wheelOne = new CANTalon(RobotMap.FRONT_LEFT);
-		wheelTwo = new CANTalon(RobotMap.BACK_LEFT);
-		wheelThree = new CANTalon(RobotMap.FRONT_RIGHT);
-		wheelFour = new CANTalon(RobotMap.BACK_RIGHT);
+		for (int i = 0; i <= 5; i++) {
+			wheels[i] = new CANTalon(i);
+			wheels[i].setEncPosition(0);
+		}
 
-		wheelOne.setEncPosition(0);
-		wheelTwo.setEncPosition(0);
-		wheelThree.setEncPosition(0);
-		wheelFour.setEncPosition(0);
-
-		robotDrive = new RobotDrive(wheelOne, wheelTwo, wheelThree, wheelFour);
+		robotDrive = new RobotDrive(wheels[FRONT_LEFT], wheels[BACK_LEFT], wheels[FRONT_RIGHT], wheels[BACK_RIGHT]);
 		robotDrive.setSafetyEnabled(true);
 		robotDrive.setExpiration(0.1);
 		robotDrive.setMaxOutput(1.0);
 		robotDrive.setSensitivity(0.5);
-		
+
 		navX = new AHRS(Port.kMXP);
 		navX.zeroYaw();
 
@@ -61,54 +53,38 @@ public class Drive extends Subsystem {
 		return robotDrive;
 	}
 
-	public void setSpeedOne(double x) {
-		// sets the speed to front left wheel
-		this.wheelOne.set(x);
-	}
-
-	public void setSpeedTwo(double x) {
-		// sets the speed to front right wheel
-		this.wheelTwo.set(x);
-	}
-
-	public void setSpeedThree(double x) {
-		// sets the speed to back left wheel
-		this.wheelThree.set(x);
-	}
-
-	public void setSpeedFour(double x) {
-		// sets the speed to back right wheel
-		this.wheelFour.set(x);
+	public void setSpeed(double s, int CANchannel) {
+		wheels[CANchannel].set(s);
 	}
 
 	public void mechDrive(double dir, double mag) {
-		
-		if(OI.stick.getRawButton(6)){
+
+		if (OI.stick.getRawButton(6)) {
 			dir = 90;
 			mag = 1;
 		}
-		
+
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
 		a *= mag * PID_BUFFER;
 		b *= mag * PID_BUFFER;
-		setSpeedOne(-b);
-		setSpeedTwo(-a);
-		setSpeedThree(a);
-		setSpeedFour(b);
+		setSpeed(-b, FRONT_LEFT);
+		setSpeed(-a, BACK_LEFT);
+		setSpeed(a, FRONT_RIGHT);
+		setSpeed(b, BACK_RIGHT);
 	}
 
 	public void putDataOnTable() {
-		table.putNumber("back_left", wheelTwo.getEncPosition());
-		table.putNumber("front_left", wheelOne.getEncPosition());
-		table.putNumber("back_right", wheelFour.getEncPosition());
-		table.putNumber("front_right", wheelThree.getEncPosition());
+		table.putNumber("back_left", wheels[BACK_LEFT].getEncPosition());
+		table.putNumber("front_left", wheels[FRONT_LEFT].getEncPosition());
+		table.putNumber("back_right", wheels[BACK_RIGHT].getEncPosition());
+		table.putNumber("front_right", wheels[FRONT_RIGHT].getEncPosition());
 
 		table.putNumber("left_x", OI.stick.getX());
 		table.putNumber("left_y", -OI.stick.getY());
 		table.putNumber("right_x", OI.stick.getRawAxis(4));
 		table.putNumber("right_y", -OI.stick.getRawAxis(5));
-		
+
 		table.putNumber("Yaw", navX.getYaw());
 	}
 }
