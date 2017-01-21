@@ -12,6 +12,7 @@ public class TeleopDrive extends Command {
 	}
 
 	protected void execute() {
+		Robot.drive.putDataOnTable();
 		if (usingMech()) {
 			double dir = ((Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)) * 180 / Math.PI) + 360) % 360;
 			double mag = Math.sqrt(Math.pow(OI.stick.getRawAxis(5), 2) + Math.pow(OI.stick.getRawAxis(4), 2));

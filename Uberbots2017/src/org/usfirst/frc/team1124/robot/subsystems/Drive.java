@@ -77,17 +77,6 @@ public class Drive extends Subsystem {
 
 	public void mechDrive(double dir, double mag) {
 
-		table.putNumber("back_left", wheelTwo.getEncPosition());
-		table.putNumber("front_left", wheelOne.getEncPosition());
-		table.putNumber("back_right", wheelFour.getEncPosition());
-		table.putNumber("front_right", wheelThree.getEncPosition());
-		table.putNumber("dir", dir);
-
-		table.putNumber("left_x", OI.stick.getX());
-		table.putNumber("left_y", -OI.stick.getY());
-		table.putNumber("right_x", OI.stick.getRawAxis(4));
-		table.putNumber("right_y", -OI.stick.getRawAxis(5));
-
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
 		a *= mag * PID_BUFFER;
@@ -96,5 +85,17 @@ public class Drive extends Subsystem {
 		setSpeedTwo(-a);
 		setSpeedThree(a);
 		setSpeedFour(b);
+	}
+
+	public void putDataOnTable() {
+		table.putNumber("back_left", wheelTwo.getEncPosition());
+		table.putNumber("front_left", wheelOne.getEncPosition());
+		table.putNumber("back_right", wheelFour.getEncPosition());
+		table.putNumber("front_right", wheelThree.getEncPosition());
+
+		table.putNumber("left_x", OI.stick.getX());
+		table.putNumber("left_y", -OI.stick.getY());
+		table.putNumber("right_x", OI.stick.getRawAxis(4));
+		table.putNumber("right_y", -OI.stick.getRawAxis(5));
 	}
 }
