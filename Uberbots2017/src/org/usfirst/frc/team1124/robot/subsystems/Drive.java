@@ -2,7 +2,7 @@ package org.usfirst.frc.team1124.robot.subsystems;
 
 import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.RobotMap;
-import org.usfirst.frc.team1124.robot.commands.TeleopArcade;
+import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 
 import com.ctre.CANTalon;
 
@@ -47,7 +47,7 @@ public class Drive extends Subsystem {
 
 	public void initDefaultCommand() {
 		// by default, arcade drive is used
-		setDefaultCommand(new TeleopArcade());
+		setDefaultCommand(new TeleopDrive());
 	}
 
 	public RobotDrive getRobotDrive() {
@@ -83,10 +83,10 @@ public class Drive extends Subsystem {
 		table.putNumber("front_right", wheelThree.getEncPosition());
 		table.putNumber("dir", dir);
 
-		table.putNumber("left_x", OI.stick.getX(GenericHID.Hand.kLeft));
-		table.putNumber("left_y", -OI.stick.getY(GenericHID.Hand.kLeft));
-		table.putNumber("right_x", OI.stick.getX(GenericHID.Hand.kRight));
-		table.putNumber("right_y", -OI.stick.getY(GenericHID.Hand.kRight));
+		table.putNumber("left_x", OI.stick.getX());
+		table.putNumber("left_y", -OI.stick.getY());
+		table.putNumber("right_x", OI.stick.getRawAxis(4));
+		table.putNumber("right_y", -OI.stick.getRawAxis(5));
 
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
