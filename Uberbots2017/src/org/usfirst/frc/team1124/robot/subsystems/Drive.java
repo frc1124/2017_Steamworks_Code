@@ -1,16 +1,18 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.TeleopArcade;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Drive extends Subsystem {
-	
+
 	NetworkTable table;
 
 	private static final double PID_BUFFER = 0.5;
@@ -22,14 +24,14 @@ public class Drive extends Subsystem {
 	private RobotDrive robotDrive;
 
 	public Drive() {
-		
+
 		table = NetworkTable.getTable("dataTable");
-		
+
 		wheelOne = new CANTalon(RobotMap.FRONT_LEFT);
 		wheelTwo = new CANTalon(RobotMap.BACK_LEFT);
 		wheelThree = new CANTalon(RobotMap.FRONT_RIGHT);
 		wheelFour = new CANTalon(RobotMap.BACK_RIGHT);
-		
+
 		wheelOne.setEncPosition(0);
 		wheelTwo.setEncPosition(0);
 		wheelThree.setEncPosition(0);
@@ -40,8 +42,7 @@ public class Drive extends Subsystem {
 		robotDrive.setExpiration(0.1);
 		robotDrive.setMaxOutput(1.0);
 		robotDrive.setSensitivity(0.5);
-		
-		
+
 	}
 
 	public void initDefaultCommand() {
@@ -75,15 +76,20 @@ public class Drive extends Subsystem {
 	}
 
 	public void mechDrive(double dir, double mag) {
-		
+
 		table.putNumber("back_left", wheelTwo.getEncPosition());
 		table.putNumber("front_left", wheelOne.getEncPosition());
 		table.putNumber("back_right", wheelFour.getEncPosition());
 		table.putNumber("front_right", wheelThree.getEncPosition());
 		table.putNumber("dir", dir);
 
-		double a = Math.sin(Math.toRadians(dir -45));
-		double b = Math.cos(Math.toRadians(dir -45));
+		table.putNumber("left_x", OI.stick.getX(GenericHID.Hand.kLeft));
+		table.putNumber("left_y", -OI.stick.getY(GenericHID.Hand.kLeft));
+		table.putNumber("right_x", OI.stick.getX(GenericHID.Hand.kRight));
+		table.putNumber("right_y", -OI.stick.getY(GenericHID.Hand.kRight));
+
+		double a = Math.sin(Math.toRadians(dir - 45));
+		double b = Math.cos(Math.toRadians(dir - 45));
 		a *= mag * PID_BUFFER;
 		b *= mag * PID_BUFFER;
 		setSpeedOne(-b);
