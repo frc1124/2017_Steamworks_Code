@@ -11,7 +11,6 @@ public class Robot extends IterativeRobot {
 	public static Command teleopDrive;
 	public static OI oi;
 	public static Drive drive;
-
 	public void robotInit() {
 		RobotMap.init();
 
