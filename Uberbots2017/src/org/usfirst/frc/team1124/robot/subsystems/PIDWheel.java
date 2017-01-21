@@ -26,19 +26,16 @@ public class PIDWheel extends PIDSubsystem {
 		encoder.setDistancePerPulse(DIS_PER_PULSE);
 	}
 
-	@Override
 	protected double returnPIDInput() {
 		// returns distance the wheel rolled
 		return encoder.getDistance();
 	}
 
-	@Override
 	protected void usePIDOutput(double output) {
 		// gives the output
 		motor.pidWrite(output);
 	}
 
-	@Override
 	protected void initDefaultCommand() {}
 
 }

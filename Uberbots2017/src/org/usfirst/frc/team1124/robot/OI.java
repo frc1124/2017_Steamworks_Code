@@ -8,6 +8,5 @@ public class OI {
 	public static Joystick stick = new Joystick(0);
 	public static Button trigger = new JoystickButton(stick, 1);
 
-	public OI() {
-	}
+	public OI() {}
 }

@@ -1,17 +1,14 @@
 
 package org.usfirst.frc.team1124.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import org.usfirst.frc.team1124.robot.subsystems.Drive;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import org.usfirst.frc.team1124.robot.subsystems.*;
-import org.usfirst.frc.team1124.robot.commands.TeleopArcade;
-import org.usfirst.frc.team1124.robot.commands.TeleopMech;
 
 public class Robot extends IterativeRobot {
-	public static Command teleopMech;
-	public static Command teleopArcade;
+	public static Command teleopDrive;
 	public static OI oi;
 	public static Drive drive;
 
@@ -20,8 +17,6 @@ public class Robot extends IterativeRobot {
 
 		drive = new Drive();
 		oi = new OI();
-		teleopMech = new TeleopMech();
-		teleopArcade = new TeleopArcade();
 	}
 
 	public void disabledInit() {}
@@ -41,17 +36,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		if (OI.stick.getX(GenericHID.Hand.kRight) != 0 || OI.stick.getY(GenericHID.Hand.kRight) != 0) {
-			if (!teleopMech.isRunning()) {
-				teleopArcade.cancel();
-				teleopMech.start();
-			}
-		} else {
-			if (!teleopArcade.isRunning()) {
-				teleopArcade.start();
-				teleopMech.cancel();
-			}
-		}
 		Scheduler.getInstance().run();
 	}
 
