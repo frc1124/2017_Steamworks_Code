@@ -34,18 +34,24 @@ public class TeleopDrive extends Command implements PIDOutput {
 		OI.RightX = OI.stick.getRawAxis(4);
 		OI.RightY = -OI.stick.getRawAxis(5);
 
-		double mag = Math.sqrt(Math.pow(OI.RightY, 2) + Math.pow(OI.RightX, 2));
-		PIDcontroller.setSetpoint(Math.atan2(OI.RightX, OI.RightY));
-
 		Robot.drive.putDataOnTable();
 		if (usingMech()) {
+			double mag = Math.sqrt(Math.pow(OI.RightY, 2) + Math.pow(OI.RightX, 2));
 			double dir = ((Math.atan2(OI.RightY, OI.RightX) * 180 / Math.PI) + 360) % 360;
 			Drive.table.putNumber("Magnitude", mag);
 			Drive.table.putNumber("Direction", dir);
+			PIDcontroller.setSetpoint(Math.atan2(OI.RightX, OI.RightY));
 
 			Robot.drive.mechDrive(dir + correction, mag);
 		} else {
-			Robot.drive.getRobotDrive().arcadeDrive(mag, OI.stick.getDirectionDegrees() + correction);
+			PIDcontroller.setSetpoint(OI.stick.getDirectionDegrees());
+
+			double newAngle = OI.stick.getDirectionDegrees() + correction;
+			double mag = OI.stick.getMagnitude();
+			double newY = -Math.sin(Math.toRadians(-newAngle + 90)) * mag;
+			double newX = Math.cos(Math.toRadians(newAngle + 90)) * mag;
+
+			Robot.drive.getRobotDrive().arcadeDrive(newY, newX, false);
 		}
 	}
 

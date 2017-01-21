@@ -16,7 +16,7 @@ public class Drive extends Subsystem {
 
 	public static NetworkTable table;
 
-	private static final double PID_BUFFER = 0.5;
+	private static final double PID_BUFFER = 0.95;
 
 	private CANTalon[] wheels = new CANTalon[5];
 	private RobotDrive robotDrive;
@@ -27,7 +27,7 @@ public class Drive extends Subsystem {
 
 		table = NetworkTable.getTable("dataTable");
 
-		for (int i = 0; i <= 5; i++) {
+		for (int i = 1; i <= 4; i++) {
 			wheels[i] = new CANTalon(i);
 			wheels[i].setEncPosition(0);
 		}
