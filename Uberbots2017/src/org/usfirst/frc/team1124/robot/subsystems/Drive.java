@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Drive extends Subsystem {
 
-	NetworkTable table;
+	public static NetworkTable table;
 
 	private static final double PID_BUFFER = 0.5;
 
@@ -83,7 +83,10 @@ public class Drive extends Subsystem {
 
 	public void mechDrive(double dir, double mag) {
 		
-		
+		if(OI.stick.getRawButton(6)){
+			dir = 90;
+			mag = 1;
+		}
 		
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
