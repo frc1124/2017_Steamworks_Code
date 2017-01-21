@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Drive extends Subsystem {
 
 	public static NetworkTable table;
+	public static NetworkTable dashboard;
 
 	private CANTalon[] wheels = new CANTalon[5];
 	private RobotDrive robotDrive;
@@ -24,6 +25,7 @@ public class Drive extends Subsystem {
 	public Drive() {
 
 		table = NetworkTable.getTable("dataTable");
+		dashboard = NetworkTable.getTable("jsDashboard");
 
 		for (int i = 1; i <= 4; i++) {
 			wheels[i] = new CANTalon(i);
@@ -84,5 +86,7 @@ public class Drive extends Subsystem {
 		table.putNumber("right_y", -OI.stick.getRawAxis(5));
 
 		table.putNumber("Yaw", navX.getYaw());
+
+		dashboard.putValue("FrontRight", wheels[FRONT_RIGHT].getOutputVoltage());
 	}
 }
