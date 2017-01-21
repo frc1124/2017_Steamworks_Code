@@ -3,7 +3,6 @@ package org.usfirst.frc.team1124.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Command;
 
 public class OI {
 	public static Joystick stick = new Joystick(0);
