@@ -86,6 +86,12 @@ public class Drive extends Subsystem {
 		table.putNumber("right_y", -OI.stick.getRawAxis(5));
 
 		table.putNumber("Yaw", navX.getYaw());
+		
+		table.putNumber("Accel X", navX.getRawAccelX());
+		table.putNumber("Accel Y", navX.getRawAccelY());
+		table.putNumber("Accel Z", navX.getRawAccelZ());
+		
+		table.putNumber("Accel Total", Math.sqrt(Math.pow(navX.getRawAccelX(), 2) + Math.pow(navX.getRawAccelY(), 2) + Math.pow(navX.getRawAccelZ(), 2)));
 
 		dashboard.putValue("frontRight", wheels[FRONT_RIGHT].getOutputVoltage());
 		dashboard.putValue("frontLeft", wheels[FRONT_LEFT].getOutputVoltage());
