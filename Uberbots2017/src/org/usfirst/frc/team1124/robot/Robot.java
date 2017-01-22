@@ -7,6 +7,7 @@ import org.usfirst.frc.team1124.vision.*;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 
 public class Robot extends IterativeRobot {
@@ -24,7 +25,9 @@ public class Robot extends IterativeRobot {
 
 	public void disabledInit() {}
 
-	public void autonomousInit() {}
+	@SuppressWarnings("deprecation")
+	public void autonomousInit() {
+	}
 
 	public void teleopInit() {}
 

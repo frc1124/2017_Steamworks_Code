@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Drive extends Subsystem {
 
 	public static NetworkTable table;
-	public static NetworkTable dashboard;
+	public NetworkTable dashboard;
 
-	private CANTalon[] wheels = new CANTalon[5];
+	public CANTalon[] wheels = new CANTalon[5];
 	private RobotDrive robotDrive;
 
 	public AHRS navX;
@@ -57,7 +57,7 @@ public class Drive extends Subsystem {
 		wheels[CANchannel].set(s);
 	}
 
-	public void mechDrive(double dir, double mag) {
+	public void mechDrive(double dir, double mag, double corr) {
 
 		if (OI.stick.getRawButton(6)) {
 			dir = 90;
@@ -66,12 +66,17 @@ public class Drive extends Subsystem {
 
 		double a = Math.sin(Math.toRadians(dir - 45));
 		double b = Math.cos(Math.toRadians(dir - 45));
-		a *= mag;
-		b *= mag;
-		setSpeed(-b, FRONT_LEFT);
-		setSpeed(-a, BACK_LEFT);
-		setSpeed(a, FRONT_RIGHT);
-		setSpeed(b, BACK_RIGHT);
+		double frontLeft = -b - corr;
+		double backLeft = -a - corr;
+		double frontRight = a - corr;
+		double backRight = b - corr;
+		double max = Math.max(Math.max(Math.abs(frontLeft), Math.abs(frontRight)), Math.max(Math.abs(backLeft), Math.abs(backRight)));
+		double multiplier = mag/max;
+		
+		setSpeed(frontLeft*multiplier, FRONT_LEFT);
+		setSpeed(backLeft*multiplier, BACK_LEFT);
+		setSpeed(frontRight*multiplier, FRONT_RIGHT);
+		setSpeed(backRight*multiplier, BACK_RIGHT);
 	}
 
 	public void putDataOnTable() {
