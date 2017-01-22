@@ -88,7 +88,7 @@ public class Drive extends Subsystem {
 		table.putNumber("Yaw", navX.getYaw());
 
 		dashboard.putValue("frontRight", wheels[FRONT_RIGHT].getOutputVoltage());
-		dashboard.putValue("fontLeft", wheels[FRONT_LEFT].getOutputVoltage());
+		dashboard.putValue("frontLeft", wheels[FRONT_LEFT].getOutputVoltage());
 		dashboard.putValue("backRight", wheels[BACK_RIGHT].getOutputVoltage());
 		dashboard.putValue("backLeft", wheels[BACK_LEFT].getOutputVoltage());
 	}
