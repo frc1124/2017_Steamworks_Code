@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import utils.MiniPID;
 
 public class Drive extends Subsystem {
+	private double turnPoint;
 	private MiniPID turn = new MiniPID(0.1,0,0);
 	private AHRS navX;
 	private CANTalon frontLeft = new CANTalon(1);
@@ -16,8 +17,9 @@ public class Drive extends Subsystem {
 	private CANTalon rearRight = new CANTalon(4);
 	private RobotDrive drive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 	
-	public Drive() {}
+	public Drive() { turn.setOutputLimits(1.0); }
 	
+	public double getTurnPoint() { return turnPoint; }
 	public MiniPID getTurn() { return turn; }
 	public RobotDrive getDrive() { return drive; }
 	public AHRS getNavx() { return navX; }
