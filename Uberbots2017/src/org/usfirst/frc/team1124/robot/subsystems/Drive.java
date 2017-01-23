@@ -9,7 +9,7 @@ import utils.MiniPID;
 
 public class Drive extends Subsystem {
 	private double turnPoint;
-	private MiniPID turn = new MiniPID(0.1,0,0);
+	private MiniPID turn = new MiniPID(0.01,0,0.01);
 	private AHRS navX;
 	private CANTalon frontLeft = new CANTalon(1);
 	private CANTalon rearLeft = new CANTalon(2);
@@ -19,6 +19,7 @@ public class Drive extends Subsystem {
 	
 	public Drive() { turn.setOutputLimits(1.0); }
 	
+	public void setTurnPoint(double point) { this.turnPoint = point; }
 	public double getTurnPoint() { return turnPoint; }
 	public MiniPID getTurn() { return turn; }
 	public RobotDrive getDrive() { return drive; }
