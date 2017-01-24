@@ -442,7 +442,7 @@ public class MiniPID{
 	private boolean bounded(double value, double min, double max){
 		// Note, this is an inclusive range. This is so tests like
 		// `bounded(constrain(0,0,1),0,1)` will return false.
-		// This is more helpful for determining edge-case behaviour
+		// This is more helpful for determining edge-case behavior
 		// than <= is.
 		return (min<value) && (value<max);
 	}

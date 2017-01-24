@@ -3,7 +3,6 @@ package org.usfirst.frc.team1124.vision;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.opencv.core.Mat;
@@ -17,7 +16,7 @@ import org.opencv.core.Mat;
 		camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(640, 480);
 		cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputstream = CameraServer.getInstance().putVideo("visionCamera1",640,480);
+		CameraServer.getInstance().putVideo("visionCamera1",640,480);
 	
 		
 		

@@ -9,7 +9,7 @@ import utils.MiniPID;
 
 public class Drive extends Subsystem {
 	private double turnPoint;
-	private MiniPID turn = new MiniPID(0.01,0,0.01);
+	private MiniPID turn = new MiniPID(0.01,0,0.05);
 	private AHRS navX;
 	private CANTalon frontLeft = new CANTalon(1);
 	private CANTalon rearLeft = new CANTalon(2);
