@@ -1,106 +1,65 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import org.usfirst.frc.team1124.robot.OI;
-import static org.usfirst.frc.team1124.robot.RobotMap.*;
-import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
-
+import org.usfirst.frc.team1124.robot.Robot;
 import com.ctre.CANTalon;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import utils.MiniPID;
 
 public class Drive extends Subsystem {
+	private double turnPoint = 0.0;
+	private MiniPID turn = new MiniPID(0.01, 0.006, 0.5);
+	private AHRS navX = new AHRS(SPI.Port.kMXP);
+	private static CANTalon frontLeft = new CANTalon(1);
+	private static CANTalon rearLeft = new CANTalon(2);
+	private static CANTalon frontRight = new CANTalon(3);
+	private static CANTalon rearRight = new CANTalon(4);
 
-	public static NetworkTable table;
-	public NetworkTable dashboard;
-
-	public CANTalon[] wheels = new CANTalon[5];
-	private RobotDrive robotDrive;
-
-	public AHRS navX;
+	private RobotDrive drive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 
 	public Drive() {
+		turn.setOutputLimits(1.0);
+	}
 
-		table = NetworkTable.getTable("dataTable");
-		dashboard = NetworkTable.getTable("jsDashboard");
+	public static CANTalon getFrontLeft() {
+		return frontLeft;
+	}
 
-		for (int i = 1; i <= 4; i++) {
-			wheels[i] = new CANTalon(i);
-			wheels[i].setEncPosition(0);
-		}
+	public static CANTalon getFrontRight() {
+		return frontRight;
+	}
 
-		robotDrive = new RobotDrive(wheels[FRONT_LEFT], wheels[BACK_LEFT], wheels[FRONT_RIGHT], wheels[BACK_RIGHT]);
-		robotDrive.setSafetyEnabled(true);
-		robotDrive.setExpiration(0.1);
-		robotDrive.setMaxOutput(1.0);
-		robotDrive.setSensitivity(0.5);
+	public static CANTalon getRearLeft() {
+		return rearLeft;
+	}
 
-		navX = new AHRS(Port.kMXP);
-		navX.zeroYaw();
+	public static CANTalon getRearRight() {
+		return rearRight;
+	}
 
+	public void setTurnPoint(double point) {
+		this.turnPoint = point;
+	}
+
+	public double getTurnPoint() {
+		return turnPoint;
+	}
+
+	public MiniPID getTurn() {
+		return turn;
+	}
+
+	public RobotDrive getDrive() {
+		return drive;
+	}
+
+	public AHRS getNavx() {
+		return navX;
 	}
 
 	public void initDefaultCommand() {
-		// by default, arcade drive is used
-		setDefaultCommand(new TeleopDrive());
-	}
-
-	public RobotDrive getRobotDrive() {
-		// returns the drive
-		return robotDrive;
-	}
-
-	public void setSpeed(double s, int CANchannel) {
-		wheels[CANchannel].set(s);
-	}
-
-	public void mechDrive(double dir, double mag, double corr) {
-
-		if (OI.stick.getRawButton(6)) {
-			dir = 90;
-			mag = 1;
-		}
-
-		double a = Math.sin(Math.toRadians(dir - 45));
-		double b = Math.cos(Math.toRadians(dir - 45));
-		double frontLeft = -b - corr;
-		double backLeft = -a - corr;
-		double frontRight = a - corr;
-		double backRight = b - corr;
-		double max = Math.max(Math.max(Math.abs(frontLeft), Math.abs(frontRight)), Math.max(Math.abs(backLeft), Math.abs(backRight)));
-		double multiplier = mag/max;
-		
-		setSpeed(frontLeft*multiplier, FRONT_LEFT);
-		setSpeed(backLeft*multiplier, BACK_LEFT);
-		setSpeed(frontRight*multiplier, FRONT_RIGHT);
-		setSpeed(backRight*multiplier, BACK_RIGHT);
-	}
-
-	public void putDataOnTable() {
-		table.putNumber("back_left", wheels[BACK_LEFT].getEncPosition());
-		table.putNumber("front_left", wheels[FRONT_LEFT].getEncPosition());
-		table.putNumber("back_right", wheels[BACK_RIGHT].getEncPosition());
-		table.putNumber("front_right", wheels[FRONT_RIGHT].getEncPosition());
-
-		table.putNumber("left_x", OI.stick.getX());
-		table.putNumber("left_y", -OI.stick.getY());
-		table.putNumber("right_x", OI.stick.getRawAxis(4));
-		table.putNumber("right_y", -OI.stick.getRawAxis(5));
-
-		table.putNumber("Yaw", navX.getYaw());
-		
-		table.putNumber("Accel X", navX.getRawAccelX());
-		table.putNumber("Accel Y", navX.getRawAccelY());
-		table.putNumber("Accel Z", navX.getRawAccelZ());
-		
-		table.putNumber("Accel Total", Math.sqrt(Math.pow(navX.getRawAccelX(), 2) + Math.pow(navX.getRawAccelY(), 2) + Math.pow(navX.getRawAccelZ(), 2)));
-
-		dashboard.putValue("frontRight", wheels[FRONT_RIGHT].getOutputVoltage());
-		dashboard.putValue("frontLeft", wheels[FRONT_LEFT].getOutputVoltage());
-		dashboard.putValue("backRight", wheels[BACK_RIGHT].getOutputVoltage());
-		dashboard.putValue("backLeft", wheels[BACK_LEFT].getOutputVoltage());
+		this.setDefaultCommand(Robot.teleopDrive);
 	}
 }
