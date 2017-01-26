@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1124.robot;
 
+import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.vision.*;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -20,6 +21,8 @@ public class Robot extends IterativeRobot {
 		camera1 = new Camera();
 		drive.getNavx().reset();
 		drive.getNavx().zeroYaw();
+		teleopDrive = new TeleopDrive();
+		
 	}
 
 	public void disabledInit() {}
