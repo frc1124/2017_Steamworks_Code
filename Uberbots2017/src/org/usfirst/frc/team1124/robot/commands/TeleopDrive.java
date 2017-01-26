@@ -29,7 +29,8 @@ public class TeleopDrive extends Command {
 			Robot.drive.getDrive().mecanumDrive_Cartesian(OI.stick.getRawAxis(4), OI.stick.getRawAxis(5),
 					Robot.drive.getTurn().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getTurnPoint()),
 					Robot.drive.getNavx().getYaw());
-			NetworkTable.getTable("correction").putNumber("thing",Robot.drive.getTurn().getOutput(Robot.drive.getNavx().getYaw()));
+			NetworkTable.getTable("correction").putNumber("thing",
+					Robot.drive.getTurn().getOutput(Robot.drive.getNavx().getYaw()));
 		} else {
 			Drive.getFrontLeft().setInverted(false);
 			Drive.getRearLeft().setInverted(false);
@@ -39,27 +40,25 @@ public class TeleopDrive extends Command {
 		NetworkTable.getTable("CommandTest").putBoolean("it go", true);
 	}
 
-	public void arcadeDrive(double throttle, double turn, double correction){
-		double leftSpeed = clamp(-turn - throttle - correction, -1, 1);
-		double rightSpeed = clamp(-turn + throttle - correction, -1, 1);
-		
+	public void arcadeDrive(double throttle, double turn, double correction) {
+		double leftSpeed = -turn - throttle + correction;
+		double rightSpeed = -turn + throttle + correction;
+		if (Math.abs(Math.max(leftSpeed, rightSpeed)) > 1) {
+			leftSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
+			rightSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
+		}
+
 		Drive.getFrontLeft().set(leftSpeed);
 		Drive.getRearLeft().set(leftSpeed);
 		Drive.getFrontRight().set(rightSpeed);
 		Drive.getRearRight().set(rightSpeed);
 	}
-	
-	private double clamp(double x, double low, double high){
-		return Math.max(Math.min(x, high), low);
-	}
-	
+
 	protected boolean isFinished() {
 		return (false);
 	}
 
-	protected void end() {
-	}
+	protected void end() {}
 
-	protected void interrupted() {
-	}
+	protected void interrupted() {}
 }
