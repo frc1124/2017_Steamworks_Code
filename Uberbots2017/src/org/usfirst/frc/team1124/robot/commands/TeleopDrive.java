@@ -19,24 +19,26 @@ public class TeleopDrive extends Command {
 	}
 
 	protected void execute() {
-		if (resetPoint) {
+		if(resetPoint) { 
 			Robot.drive.setTurnPoint(Robot.drive.getNavx().getYaw());
 			resetPoint = false;
 		}
-		if (Math.abs(OI.stick.getRawAxis(4)) >= 0.1f || Math.abs(OI.stick.getRawAxis(5)) >= 0.1f) {
+		if(Math.abs(OI.stick.getRawAxis(4)) >= 0.1f || Math.abs(OI.stick.getRawAxis(5)) >= 0.1f) {
 			Drive.getFrontLeft().setInverted(true);
 			Drive.getRearLeft().setInverted(true);
-			Robot.drive.getDrive().mecanumDrive_Cartesian(OI.stick.getRawAxis(4), OI.stick.getRawAxis(5),
-					Robot.drive.getTurn().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getTurnPoint()),
-					Robot.drive.getNavx().getYaw());
-			NetworkTable.getTable("correction").putNumber("thing",Robot.drive.getTurn().getOutput(Robot.drive.getNavx().getYaw()));
-		} else {
+			if(Math.abs(OI.stick.getRawAxis(0)) >= 0.1f || Math.abs(OI.stick.getRawAxis(1)) >= 0.1f) { Robot.drive.setTurnPoint(Math.atan2(OI.stick.getRawAxis(0), OI.stick.getRawAxis(1))-90); }
+			Robot.drive.getDrive().mecanumDrive_Cartesian(OI.stick.getRawAxis(4), OI.stick.getRawAxis(5), Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getTurnPoint()), 0);
+		}else {
 			Drive.getFrontLeft().setInverted(false);
 			Drive.getRearLeft().setInverted(false);
 			this.arcadeDrive(-OI.stick.getRawAxis(1), OI.stick.getRawAxis(0), 0);
 			resetPoint = true;
 		}
-		NetworkTable.getTable("CommandTest").putBoolean("it go", true);
+//		NetworkTable.getTable("jsDashboard").putNumber("it go",7);
+//		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Drive.getFrontLeft().getOutputVoltage());
+//		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", Drive.getRearLeft().getOutputVoltage());
+//		NetworkTable.getTable("jsDashboard").putNumber("frontRight", Drive.getFrontRight().getOutputVoltage());
+//		NetworkTable.getTable("jsDashboard").putNumber("rearRight", Drive.getRearRight().getOutputVoltage());
 	}
 
 	public void arcadeDrive(double throttle, double turn, double correction){
@@ -48,18 +50,9 @@ public class TeleopDrive extends Command {
 		Drive.getFrontRight().set(rightSpeed);
 		Drive.getRearRight().set(rightSpeed);
 	}
+	private double clamp(double x, double low, double high){ return Math.max(Math.min(x, high), low); }
 	
-	private double clamp(double x, double low, double high){
-		return Math.max(Math.min(x, high), low);
-	}
-	
-	protected boolean isFinished() {
-		return (false);
-	}
-
-	protected void end() {
-	}
-
-	protected void interrupted() {
-	}
+	protected boolean isFinished() { return (false); }
+	protected void end() {}
+	protected void interrupted() {}
 }
