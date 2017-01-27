@@ -34,17 +34,21 @@ public class TeleopDrive extends Command {
 			this.arcadeDrive(-OI.stick.getRawAxis(1), OI.stick.getRawAxis(0), 0);
 			resetPoint = true;
 		}
-//		NetworkTable.getTable("jsDashboard").putNumber("it go",7);
-//		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Drive.getFrontLeft().getOutputVoltage());
-//		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", Drive.getRearLeft().getOutputVoltage());
-//		NetworkTable.getTable("jsDashboard").putNumber("frontRight", Drive.getFrontRight().getOutputVoltage());
-//		NetworkTable.getTable("jsDashboard").putNumber("rearRight", Drive.getRearRight().getOutputVoltage());
+		NetworkTable.getTable("jsDashboard").putNumber("it go",7);
+		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Drive.getFrontLeft().getOutputVoltage());
+		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", Drive.getRearLeft().getOutputVoltage());
+		NetworkTable.getTable("jsDashboard").putNumber("frontRight", Drive.getFrontRight().getOutputVoltage());
+		NetworkTable.getTable("jsDashboard").putNumber("rearRight", Drive.getRearRight().getOutputVoltage());
 	}
 
-	public void arcadeDrive(double throttle, double turn, double correction){
-		double leftSpeed = clamp(-turn - throttle - correction, -1, 1);
-		double rightSpeed = clamp(-turn + throttle - correction, -1, 1);
-		
+	public void arcadeDrive(double throttle, double turn, double correction) {
+		double leftSpeed = -turn - throttle + correction;
+		double rightSpeed = -turn + throttle + correction;
+		if (Math.abs(Math.max(leftSpeed, rightSpeed)) > 1) {
+			leftSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
+			rightSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
+		}
+
 		Drive.getFrontLeft().set(leftSpeed);
 		Drive.getRearLeft().set(leftSpeed);
 		Drive.getFrontRight().set(rightSpeed);
@@ -54,5 +58,6 @@ public class TeleopDrive extends Command {
 	
 	protected boolean isFinished() { return (false); }
 	protected void end() {}
+
 	protected void interrupted() {}
 }
