@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1124.robot.commands;
 
 import org.usfirst.frc.team1124.robot.Robot;
-import org.usfirst.frc.team1124.robot.subsystems.Drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -22,7 +21,7 @@ public class PIDTest extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		Robot.drive.getFrontLeft().set(0.5);
-		//NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Robot.drive.getFrontLeft().getOutputVoltage());
+		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Robot.drive.getFrontLeft().getOutputVoltage());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

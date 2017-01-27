@@ -13,10 +13,10 @@ public class Drive extends Subsystem {
 	private double turnPoint = 0.0;
 	private MiniPID turnController = new MiniPID(0.01, 0.006, 0.5);
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
-	private static CANTalon frontLeft = new CANTalon(1);
-	private static CANTalon rearLeft = new CANTalon(2);
-	private static CANTalon frontRight = new CANTalon(3);
-	private static CANTalon rearRight = new CANTalon(4);
+	private CANTalon frontLeft = new CANTalon(1);
+	private CANTalon rearLeft = new CANTalon(2);
+	private CANTalon frontRight = new CANTalon(3);
+	private CANTalon rearRight = new CANTalon(4);
 
 	private RobotDrive drive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 
@@ -52,10 +52,10 @@ public class Drive extends Subsystem {
 		frontLeft.configMaxOutputVoltage(24);
 	}
 
-	public static CANTalon getFrontLeft() { return frontLeft; }
-	public static CANTalon getFrontRight() { return frontRight; }
-	public static CANTalon getRearLeft() { return rearLeft; }
-	public static CANTalon getRearRight() { return rearRight; }
+	public CANTalon getFrontLeft() { return frontLeft; }
+	public CANTalon getFrontRight() { return frontRight; }
+	public CANTalon getRearLeft() { return rearLeft; }
+	public CANTalon getRearRight() { return rearRight; }
 
 	public double getTurnPoint() { return turnPoint; }
 	public MiniPID getTurnController() { return turnController; }

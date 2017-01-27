@@ -31,11 +31,10 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {}
 	public void autonomousInit() {}
 	public void teleopInit() {}
-	public void testInit() {testOp.start(); }
+	public void testInit() { testOp.start(); }
 
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
 	public void teleopPeriodic() { Scheduler.getInstance().run(); }
-	public void testPeriodic() { 
-		Scheduler.getInstance().run(); }
+	public void testPeriodic() { Scheduler.getInstance().run(); }
 }
