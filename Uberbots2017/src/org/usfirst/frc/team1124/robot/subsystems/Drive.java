@@ -1,18 +1,27 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import static org.usfirst.frc.team1124.robot.RobotMap.D;
+import static org.usfirst.frc.team1124.robot.RobotMap.FRONT_LEFT;
+import static org.usfirst.frc.team1124.robot.RobotMap.FRONT_RIGHT;
+import static org.usfirst.frc.team1124.robot.RobotMap.I;
+import static org.usfirst.frc.team1124.robot.RobotMap.P;
+import static org.usfirst.frc.team1124.robot.RobotMap.REAR_LEFT;
+import static org.usfirst.frc.team1124.robot.RobotMap.REAR_RIGHT;
+import static org.usfirst.frc.team1124.robot.RobotMap.TURN_PID;
+
 import org.usfirst.frc.team1124.robot.Robot;
-import static org.usfirst.frc.team1124.robot.RobotMap.*;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import utils.MiniPID;
 
 public class Drive extends Subsystem {
-	private double turnPoint = 0.0;
+	private double lockAngle = 0.0;
 	private MiniPID turnController = new MiniPID(P[TURN_PID], I[TURN_PID], D[TURN_PID]);
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
 
@@ -49,8 +58,8 @@ public class Drive extends Subsystem {
 		return wheels[REAR_RIGHT];
 	}
 
-	public double getTurnPoint() {
-		return turnPoint;
+	public double getLockAngle() {
+		return lockAngle;
 	}
 
 	public MiniPID getTurnController() {
@@ -65,8 +74,8 @@ public class Drive extends Subsystem {
 		return navX;
 	}
 
-	public void setTurnPoint(double point) {
-		this.turnPoint = point;
+	public void setLockAngle(double angle) {
+		this.lockAngle = angle;
 	}
 
 	public void initDefaultCommand() {
