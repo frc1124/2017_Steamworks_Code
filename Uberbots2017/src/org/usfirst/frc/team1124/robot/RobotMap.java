@@ -12,5 +12,8 @@ public class RobotMap {
 	public static final double[] I = new double[] { 0.006, 0, 0, 0, 0 };
 	public static final double[] D = new double[] { 0.5, 0.1, 0.1, 0.1, 0.1 };
 
+	public static final int CAMERA1_RES_X = 640;
+	public static final int CAMERA1_RES_Y = 480;
+	
 	public static void init() {}
 }
