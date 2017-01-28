@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1124.robot;
 
-import org.usfirst.frc.team1124.robot.commands.PIDTest;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.vision.*;
@@ -12,7 +11,6 @@ public class Robot extends IterativeRobot {
 	public static Drive drive;
 	public static OI oi;
 	public static Command teleopDrive;
-	public static PIDTest testOp;
 	public static Camera camera1;
 	
 	public void robotInit() {
@@ -24,14 +22,13 @@ public class Robot extends IterativeRobot {
 		drive.getNavx().reset();
 		drive.getNavx().zeroYaw();
 		teleopDrive = new TeleopDrive();
-		testOp = new PIDTest();
 		
 	}
 
 	public void disabledInit() {}
 	public void autonomousInit() {}
 	public void teleopInit() {}
-	public void testInit() { testOp.start(); }
+	public void testInit() {}
 
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
