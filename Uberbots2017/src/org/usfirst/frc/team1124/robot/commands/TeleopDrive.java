@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class TeleopDrive extends Command {
 	private boolean resetPoint = false;
 
-	public TeleopDrive() { requires(Robot.drive); }
+	public TeleopDrive() {
+		requires(Robot.drive);
+	}
 
 	protected void initilize() {
 		Robot.drive.setTurnPoint(Robot.drive.getNavx().getYaw());
@@ -33,7 +35,7 @@ public class TeleopDrive extends Command {
 		} else {
 			Robot.drive.getFrontLeft().setInverted(false);
 			Robot.drive.getRearLeft().setInverted(false);
-			this.arcadeDrive(-OI.stick.getRawAxis(1), OI.stick.getRawAxis(0), 0);
+			this.arcadeDrive(-OI.stick.getRawAxis(1), -OI.stick.getRawAxis(0), 0);
 			resetPoint = true;
 		}
 		NetworkTable.getTable("jsDashboard").putNumber("it go", 7);
@@ -44,8 +46,11 @@ public class TeleopDrive extends Command {
 	}
 
 	public void arcadeDrive(double throttle, double turn, double correction) {
-		double leftSpeed = -turn - throttle + correction;
-		double rightSpeed = -turn + throttle + correction;
+		turn *= throttle / Math.abs(throttle);
+		
+		double leftSpeed = turn - throttle + correction;
+		double rightSpeed = turn + throttle + correction;
+		
 		if (Math.abs(Math.max(leftSpeed, rightSpeed)) > 1) {
 			leftSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
 			rightSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
