@@ -4,48 +4,70 @@ import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import utils.TableManager;
 
 public class TeleopDrive extends Command {
-	private boolean resetPoint = false;
 
-	public TeleopDrive() { requires(Robot.drive); }
+	private static final boolean MEC = true;
+	private static final boolean ARCADE = false;
+
+	private boolean mode = ARCADE;
+
+	public TeleopDrive() {
+		requires(Robot.drive);
+	}
 
 	protected void initilize() {
-		Robot.drive.setTurnPoint(Robot.drive.getNavx().getYaw());
+		Robot.drive.setLockAngle(Robot.drive.getNavx().getYaw());
 	}
 
 	protected void execute() {
-		if (resetPoint) {
-			Robot.drive.setTurnPoint(Robot.drive.getNavx().getYaw());
-			resetPoint = false;
-		}
 		if (Math.abs(OI.stick.getRawAxis(4)) >= 0.1f || Math.abs(OI.stick.getRawAxis(5)) >= 0.1f) {
-			Robot.drive.getFrontLeft().setInverted(true);
-			Robot.drive.getRearLeft().setInverted(true);
-			if (Math.abs(OI.stick.getRawAxis(0)) >= 0.1f || Math.abs(OI.stick.getRawAxis(1)) >= 0.1f) {
-				Robot.drive.setTurnPoint(Math.atan2(OI.stick.getRawAxis(0), OI.stick.getRawAxis(1)) - 90);
-			}
-			Robot.drive.getDrive()
-					.mecanumDrive_Cartesian(OI.stick.getRawAxis(4), OI.stick.getRawAxis(5), Robot.drive
-							.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getTurnPoint()),
-							0);
+			executeMech();
 		} else {
-			Robot.drive.getFrontLeft().setInverted(false);
-			Robot.drive.getRearLeft().setInverted(false);
-			this.arcadeDrive(-OI.stick.getRawAxis(1), OI.stick.getRawAxis(0), 0);
-			resetPoint = true;
+			executeArcade();
 		}
-		NetworkTable.getTable("jsDashboard").putNumber("it go", 7);
-		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Robot.drive.getFrontLeft().getOutputVoltage());
-		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", Robot.drive.getRearLeft().getOutputVoltage());
-		NetworkTable.getTable("jsDashboard").putNumber("frontRight", Robot.drive.getFrontRight().getOutputVoltage());
-		NetworkTable.getTable("jsDashboard").putNumber("rearRight", Robot.drive.getRearRight().getOutputVoltage());
+		debug();
+	}
+
+	private void debug() {
+		TableManager.put("jsDashboard", "frontLeft", Robot.drive.getFrontLeft().getOutputVoltage());
+		TableManager.put("jsDashboard", "rearLeft", Robot.drive.getRearLeft().getOutputVoltage());
+		TableManager.put("jsDashboard", "frontRight", Robot.drive.getFrontRight().getOutputVoltage());
+		TableManager.put("jsDashboard", "rearRight", Robot.drive.getRearRight().getOutputVoltage());
+	}
+
+	private void executeArcade() {
+		mode = ARCADE;
+
+		Robot.drive.getFrontLeft().setInverted(false);
+		Robot.drive.getRearLeft().setInverted(false);
+
+		this.arcadeDrive(-OI.stick.getRawAxis(1), -OI.stick.getRawAxis(0), 0);
+	}
+
+	private void executeMech() {
+		if (mode == ARCADE)
+			Robot.drive.setLockAngle(Robot.drive.getNavx().getYaw());
+		mode = MEC;
+
+		Robot.drive.getFrontLeft().setInverted(true);
+		Robot.drive.getRearLeft().setInverted(true);
+
+		if (Math.abs(OI.stick.getRawAxis(0)) >= 0.1f || Math.abs(OI.stick.getRawAxis(1)) >= 0.1f) {
+			Robot.drive.setLockAngle(Math.atan2(OI.stick.getRawAxis(0), OI.stick.getRawAxis(1)) - 90);
+		}
+
+		double rotation = Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getLockAngle());
+		Robot.drive.getDrive().mecanumDrive_Cartesian(OI.stick.getRawAxis(4), OI.stick.getRawAxis(5), rotation, 0);
 	}
 
 	public void arcadeDrive(double throttle, double turn, double correction) {
-		double leftSpeed = -turn - throttle + correction;
-		double rightSpeed = -turn + throttle + correction;
+		turn *= throttle / Math.abs(throttle);
+
+		double leftSpeed = turn - throttle + correction;
+		double rightSpeed = turn + throttle + correction;
+
 		if (Math.abs(Math.max(leftSpeed, rightSpeed)) > 1) {
 			leftSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
 			rightSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
