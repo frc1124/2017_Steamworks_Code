@@ -3,9 +3,11 @@ package org.usfirst.frc.team1124.robot.commands;
 import org.usfirst.frc.team1124.robot.Robot;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import utils.TableManager;
 
 public class Autonomous extends Command {
+
+	double mag = 0.5;
 
 	public Autonomous() {
 		requires(Robot.drive);
@@ -17,38 +19,31 @@ public class Autonomous extends Command {
 		Robot.drive.getNavx().reset();
 		Robot.drive.getNavx().resetDisplacement();
 		Robot.drive.setLockAngle(navx.getYaw());
-		Robot.drive.setTransX(-0.5);
-		Robot.drive.setTransY(0);
+		Robot.drive.setTransAngle(180);
 	}
 
 	public void execute() {
 		AHRS navx = Robot.drive.getNavx();
 
-		Robot.drive.getFrontLeft().setInverted(true);
-		Robot.drive.getRearLeft().setInverted(true);
-
 		double rotation = Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getLockAngle());
 
-		double corrX = Robot.drive.getTransControllerX().getOutput(navx.getVelocityY(), Robot.drive.getTransX());
-		double corrY = Robot.drive.getTransControllerY().getOutput(navx.getVelocityX(), Robot.drive.getTransY());
+		double corr = Robot.drive.getTransAngleController().getOutput(Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY())), Robot.drive.getTransAngle());
 
-		double movX = Robot.drive.getTransX() + corrX;
-		double movY = Robot.drive.getTransY() + corrY;
-		if (Math.hypot(movX, movY) > 1) {
-			movX /= Math.hypot(movX, movY);
-			movY /= Math.hypot(movX, movY);
-		}
+		double angleOfTrans = Robot.drive.getTransAngle();
 
-		Robot.drive.getDrive().mecanumDrive_Cartesian(movX, movY, rotation, 0);
+		angleOfTrans += corr;
+		angleOfTrans %= 360;
+		angleOfTrans += 360;
+		angleOfTrans %= 360;
 
-		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", navx.getVelocityX());
-		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", navx.getVelocityY());
-		NetworkTable.getTable("jsDashboard").putNumber("frontRight", -0.5);
+		Robot.drive.getDrive().mecanumDrive_Cartesian(mag * Math.cos(Math.toRadians(angleOfTrans)), -mag * Math.sin(Math.toRadians(angleOfTrans)), rotation, 0);
 
-		NetworkTable.getTable("dataTable").putNumber("vx", navx.getVelocityX());
-		NetworkTable.getTable("dataTable").putNumber("vy", navx.getVelocityY());
-		NetworkTable.getTable("dataTable").putNumber("cx", corrX);
-		NetworkTable.getTable("dataTable").putNumber("cy", corrY);
+		TableManager.put("jsDashboard", "frontLeft", Math.atan2(navx.getVelocityX(), navx.getVelocityY())*10);
+
+		TableManager.put("dataTable", "forward", navx.getVelocityX());
+		TableManager.put("dataTable", "right", navx.getVelocityY());
+		TableManager.put("dataTable", "angle", angleOfTrans);
+		TableManager.put("dataTable", "corr", corr);
 	}
 
 	protected boolean isFinished() {

@@ -24,11 +24,9 @@ import static org.usfirst.frc.team1124.robot.RobotMap.*;
 
 public class Drive extends Subsystem {
 	private double lockAngle = 0;
-	private double transX = 0;
-	private double transY = 0;
+	private double transAngle = 0;
 	private MiniPID turnController = new MiniPID(P[TURN_PID], I[TURN_PID], D[TURN_PID]);
-	private MiniPID transControllerY = new MiniPID(P[TRANS_PID], I[TRANS_PID], D[TRANS_PID]);
-	private MiniPID transControllerX = new MiniPID(P[TRANS_PID], I[TRANS_PID], D[TRANS_PID]);
+	private MiniPID transAngleController = new MiniPID(P[TRANS_PID], I[TRANS_PID], D[TRANS_PID]);
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
 
 	private CANTalon[] wheels = new CANTalon[5];
@@ -37,8 +35,7 @@ public class Drive extends Subsystem {
 
 	public Drive() {
 		turnController.setOutputLimits(1.0);
-		transControllerY.setOutputLimits(1.0);
-		transControllerX.setOutputLimits(1.0);
+		transAngleController.setOutputLimits(1.0);
 
 		for (int i = 1; i <= 4; i++) {
 			wheels[i] = new CANTalon(i);
@@ -48,6 +45,7 @@ public class Drive extends Subsystem {
 			wheels[i].changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			wheels[i].configEncoderCodesPerRev(256);
 			wheels[i].configMaxOutputVoltage(24);
+			wheels[i].setInverted(INVERTED[i]);
 		}
 		drive = new RobotDrive(wheels[FRONT_LEFT], wheels[REAR_LEFT], wheels[FRONT_RIGHT], wheels[REAR_RIGHT]);
 	}
@@ -88,28 +86,16 @@ public class Drive extends Subsystem {
 		this.lockAngle = angle;
 	}
 
-	public MiniPID getTransControllerX() {
-		return transControllerX;
+	public MiniPID getTransAngleController() {
+		return transAngleController;
 	}
 
-	public MiniPID getTransControllerY() {
-		return transControllerY;
+	public double getTransAngle() {
+		return transAngle;
 	}
 
-	public double getTransX() {
-		return transX;
-	}
-
-	public void setTransX(double x) {
-		this.transX = x;
-	}
-
-	public double getTransY() {
-		return transY;
-	}
-
-	public void setTransY(double y) {
-		this.transY = y;
+	public void setTransAngle(double angle) {
+		this.transAngle = angle;
 	}
 
 	public void initDefaultCommand() {
