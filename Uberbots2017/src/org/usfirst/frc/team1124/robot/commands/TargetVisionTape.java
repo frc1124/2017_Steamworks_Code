@@ -44,14 +44,14 @@ public class TargetVisionTape extends Command{
 			strafe = 1;
 		}
 		Robot.drive.getDrive()
-		.mecanumDrive_Cartesian(strafe, 0.0, 0.0, Robot.drive.getTurnPoint()); 
+		.mecanumDrive_Cartesian(strafe, 0.0, 0.0, Robot.drive.getLockAngle()); 
 		
 	}
 	
 	@Override
 	protected boolean isFinished() {
 		Robot.drive.getDrive()
-		.mecanumDrive_Cartesian(0.0, 0.0, 0.0, Robot.drive.getTurnPoint()); 
+		.mecanumDrive_Cartesian(0.0, 0.0, 0.0, Robot.drive.getLockAngle()); 
 		return done;
 	}
 	
