@@ -15,11 +15,11 @@ public class DriveForward extends Command {
     }
     protected void initialize() {
     	Robot.drive.getNavx().reset();
-    	Robot.drive.setTurnPoint(Robot.drive.getNavx().getYaw());
+    	Robot.drive.setLockAngle(Robot.drive.getNavx().getYaw());
     }
     protected void execute() {
     	double actual = (-Robot.drive.getFrontLeft().getEncPosition() + -Robot.drive.getFrontRight().getEncPosition() + Robot.drive.getRearLeft().getEncPosition() + Robot.drive.getRearRight().getEncPosition())/4;
-    	Robot.drive.getDrive().mecanumDrive_Cartesian(0, controller.getOutput(actual), Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getTurnPoint()),0);
+    	Robot.drive.getDrive().mecanumDrive_Cartesian(0, controller.getOutput(actual), Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getLockAngle()),0);
     }
     protected boolean isFinished() { return false; }
     protected void end() {}
