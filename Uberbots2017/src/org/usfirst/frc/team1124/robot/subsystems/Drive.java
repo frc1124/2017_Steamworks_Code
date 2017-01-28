@@ -22,14 +22,14 @@ public class Drive extends Subsystem {
 
 	public Drive() {
 		turnController.setOutputLimits(1.0);
-		
+
 		frontLeft.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		frontLeft.setPID(1, 0, 0.1);
 		frontLeft.setF(5);
 		frontLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 		frontLeft.configEncoderCodesPerRev(256);
 		frontLeft.configMaxOutputVoltage(24);
-		
+
 		frontRight.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		frontRight.setPID(1, 0, 0.1);
 		frontRight.setF(5);
@@ -43,7 +43,7 @@ public class Drive extends Subsystem {
 		rearLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 		rearLeft.configEncoderCodesPerRev(256);
 		frontLeft.configMaxOutputVoltage(24);
-		
+
 		rearRight.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rearRight.setPID(1, 0, 0.1);
 		rearRight.setF(5);
@@ -52,17 +52,43 @@ public class Drive extends Subsystem {
 		frontLeft.configMaxOutputVoltage(24);
 	}
 
-	public CANTalon getFrontLeft() { return frontLeft; }
-	public CANTalon getFrontRight() { return frontRight; }
-	public CANTalon getRearLeft() { return rearLeft; }
-	public CANTalon getRearRight() { return rearRight; }
+	public CANTalon getFrontLeft() {
+		return frontLeft;
+	}
 
-	public double getTurnPoint() { return turnPoint; }
-	public MiniPID getTurnController() { return turnController; }
-	public RobotDrive getDrive() { return drive; }
-	public AHRS getNavx() { return navX; }
-	
-	public void setTurnPoint(double point) { this.turnPoint = point; }
+	public CANTalon getFrontRight() {
+		return frontRight;
+	}
 
-	public void initDefaultCommand() { this.setDefaultCommand(Robot.teleopDrive); }
+	public CANTalon getRearLeft() {
+		return rearLeft;
+	}
+
+	public CANTalon getRearRight() {
+		return rearRight;
+	}
+
+	public double getTurnPoint() {
+		return turnPoint;
+	}
+
+	public MiniPID getTurnController() {
+		return turnController;
+	}
+
+	public RobotDrive getDrive() {
+		return drive;
+	}
+
+	public AHRS getNavx() {
+		return navX;
+	}
+
+	public void setTurnPoint(double point) {
+		this.turnPoint = point;
+	}
+
+	public void initDefaultCommand() {
+		this.setDefaultCommand(Robot.teleopDrive);
+	}
 }
