@@ -7,33 +7,48 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Autonomous extends Command {
 
-	double lastDisplacement = 0;
-
 	public Autonomous() {
 		requires(Robot.drive);
+	}
+
+	public void initialize() {
+		AHRS navx = Robot.drive.getNavx();
+
+		Robot.drive.getNavx().reset();
+		Robot.drive.getNavx().resetDisplacement();
+		Robot.drive.setLockAngle(navx.getYaw());
+		Robot.drive.setTransX(-0.5);
+		Robot.drive.setTransY(0);
 	}
 
 	public void execute() {
 		AHRS navx = Robot.drive.getNavx();
 
-		Robot.drive.getFrontLeft().set(-0.25);
-		Robot.drive.getFrontRight().set(0.25);
-		Robot.drive.getRearLeft().set(-0.25);
-		Robot.drive.getRearRight().set(0.25);
+		Robot.drive.getFrontLeft().setInverted(true);
+		Robot.drive.getRearLeft().setInverted(true);
 
-		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", Robot.drive.getFrontLeft().getOutputVoltage());
-		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", Robot.drive.getRearLeft().getOutputVoltage());
-		NetworkTable.getTable("jsDashboard").putNumber("frontRight", Robot.drive.getFrontRight().getOutputVoltage());
-		NetworkTable.getTable("jsDashboard").putNumber("rearRight", Robot.drive.getRearRight().getOutputVoltage());
+		double rotation = Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getLockAngle());
 
-		NetworkTable.getTable("dataTable").putNumber("dx", Robot.drive.getNavx().getDisplacementX());
-		NetworkTable.getTable("dataTable").putNumber("dy", Robot.drive.getNavx().getDisplacementY());
-		NetworkTable.getTable("dataTable").putNumber("dz", Robot.drive.getNavx().getDisplacementZ());
+		double corrX = Robot.drive.getTransControllerX().getOutput(navx.getVelocityY(), Robot.drive.getTransX());
+		double corrY = Robot.drive.getTransControllerY().getOutput(navx.getVelocityX(), Robot.drive.getTransY());
 
-		double currDisplacement = Math.hypot(navx.getDisplacementX(), navx.getDisplacementY());
+		double movX = Robot.drive.getTransX() + corrX;
+		double movY = Robot.drive.getTransY() + corrY;
+		if (Math.hypot(movX, movY) > 1) {
+			movX /= Math.hypot(movX, movY);
+			movY /= Math.hypot(movX, movY);
+		}
 
-		NetworkTable.getTable("jsDashboard").putNumber("displacement", currDisplacement - lastDisplacement);
-		lastDisplacement = currDisplacement;
+		Robot.drive.getDrive().mecanumDrive_Cartesian(movX, movY, rotation, 0);
+
+		NetworkTable.getTable("jsDashboard").putNumber("frontLeft", navx.getVelocityX());
+		NetworkTable.getTable("jsDashboard").putNumber("rearLeft", navx.getVelocityY());
+		NetworkTable.getTable("jsDashboard").putNumber("frontRight", -0.5);
+
+		NetworkTable.getTable("dataTable").putNumber("vx", navx.getVelocityX());
+		NetworkTable.getTable("dataTable").putNumber("vy", navx.getVelocityY());
+		NetworkTable.getTable("dataTable").putNumber("cx", corrX);
+		NetworkTable.getTable("dataTable").putNumber("cy", corrY);
 	}
 
 	protected boolean isFinished() {

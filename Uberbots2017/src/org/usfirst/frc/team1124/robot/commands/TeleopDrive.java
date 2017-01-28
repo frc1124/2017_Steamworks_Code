@@ -68,7 +68,7 @@ public class TeleopDrive extends Command {
 		double leftSpeed = turn - throttle + correction;
 		double rightSpeed = turn + throttle + correction;
 
-		if (Math.abs(Math.max(leftSpeed, rightSpeed)) > 1) {
+		if (Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed)) > 1) {
 			leftSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
 			rightSpeed /= Math.abs(Math.max(leftSpeed, rightSpeed));
 		}

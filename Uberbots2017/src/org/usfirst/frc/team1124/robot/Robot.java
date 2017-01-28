@@ -1,10 +1,9 @@
 package org.usfirst.frc.team1124.robot;
 
+import org.usfirst.frc.team1124.robot.commands.Autonomous;
 import org.usfirst.frc.team1124.robot.commands.PIDTest;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
-import org.usfirst.frc.team1124.vision.*;
-import autoModules.DriveForward;
 import org.usfirst.frc.team1124.vision.Camera;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -28,7 +27,7 @@ public class Robot extends IterativeRobot {
 		drive.getNavx().zeroYaw();
 		teleopDrive = new TeleopDrive();
 		pidtest = new PIDTest();
-		autonomous = new DriveForward(255);
+		autonomous = new Autonomous();
 		
 	}
 
