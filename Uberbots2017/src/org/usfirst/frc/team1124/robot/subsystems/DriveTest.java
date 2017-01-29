@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import static org.usfirst.frc.team1124.robot.RobotMap.D;
+import static org.usfirst.frc.team1124.robot.RobotMap.I;
+import static org.usfirst.frc.team1124.robot.RobotMap.P;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 import com.ctre.CANTalon;
@@ -107,11 +110,12 @@ public class DriveTest extends PIDSubsystem {
 	 * 
 	 * @param	motor	wheel to initialize based on current control mode
 	 */
-    private void initMotor( CANTalon motor ) {
+    private void initMotor( CANTalon motor, int wheel) {
         try {
             if ( currControlMode == CANTalon.TalonControlMode.Speed ) {
                 motor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-                motor.setPID(.025, 0, 0);
+				motor.setPID(RobotMap.P[wheel], RobotMap.I[wheel], RobotMap.D[wheel]);
+				motor.setF(5);
                 motor.changeControlMode(CANTalon.TalonControlMode.Speed);
                 motor.setCloseLoopRampRate(0);
             } else {
@@ -140,10 +144,10 @@ public class DriveTest extends PIDSubsystem {
                 maxOutputSpeed = 1;
         }
         
-        initMotor(leftFrontSC);
-        initMotor(rightFrontSC);
-        initMotor(leftRearSC);
-        initMotor(rightRearSC);    
+        initMotor(leftFrontSC, RobotMap.FRONT_LEFT);
+        initMotor(rightFrontSC, RobotMap.FRONT_RIGHT);
+        initMotor(leftRearSC, RobotMap.REAR_LEFT);
+        initMotor(rightRearSC, RobotMap.REAR_RIGHT);    
     }    
 
     /**
@@ -158,12 +162,12 @@ public class DriveTest extends PIDSubsystem {
      * @param	motor	wheel to check
      * @param	strDescription	the output to send when it's clear
      */
-    private void checkForRestartedMotor( CANTalon motor, String strDescription ) {
+    private void checkForRestartedMotor( CANTalon motor, String strDescription, int wheel ) {
         if ( currControlMode != CANTalon.TalonControlMode.Speed ) {  // kSpeed is the default
             try {
             	if ( !motor.isAlive() ) {
                     Timer.delay(0.10); // Wait 100 ms
-                    initMotor( motor );
+                    initMotor( motor, wheel );
                     String error = "\n\n>>>>" + strDescription + "Talon Power Cycled - re-initializing";
                     System.out.println(error);
                 }
@@ -238,10 +242,10 @@ public class DriveTest extends PIDSubsystem {
             
             mecanumDriveInvKinematics( velocities, wheelSpeeds );
             
-            checkForRestartedMotor( leftFrontSC, "Front Left" );
-            checkForRestartedMotor( rightFrontSC, "Front Right" );
-            checkForRestartedMotor( leftRearSC, "Rear Left" );
-            checkForRestartedMotor( rightRearSC, "Rear Right" );
+            checkForRestartedMotor( leftFrontSC, "Front Left", RobotMap.FRONT_LEFT );
+            checkForRestartedMotor( rightFrontSC, "Front Right", RobotMap.FRONT_RIGHT );
+            checkForRestartedMotor( leftRearSC, "Rear Left", RobotMap.REAR_LEFT );
+            checkForRestartedMotor( rightRearSC, "Rear Right", RobotMap.REAR_RIGHT );
             
             leftFrontSC.set(maxOutputSpeed * wheelSpeeds[0] * -1 );
             rightFrontSC.set(maxOutputSpeed * wheelSpeeds[1]);
