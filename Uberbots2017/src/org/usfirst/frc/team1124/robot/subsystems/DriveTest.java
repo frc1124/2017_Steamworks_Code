@@ -3,6 +3,7 @@ package org.usfirst.frc.team1124.robot.subsystems;
 import static org.usfirst.frc.team1124.robot.RobotMap.D;
 import static org.usfirst.frc.team1124.robot.RobotMap.I;
 import static org.usfirst.frc.team1124.robot.RobotMap.P;
+import static org.usfirst.frc.team1124.robot.RobotMap.TURN_PID;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 import com.ctre.CANTalon;
@@ -54,9 +55,9 @@ public class DriveTest extends PIDSubsystem {
 
     // PID values
     private double nextAutorotateValue = 0.0;
-    private static final double autoRotateP = 1.0;
-    private static final double autoRotateI = 0.0;
-    private static final double autoRotateD = 0.0;
+    private static final double autoRotateP = RobotMap.P[RobotMap.TURN_PID];
+    private static final double autoRotateI = RobotMap.I[RobotMap.TURN_PID];
+    private static final double autoRotateD = RobotMap.D[RobotMap.TURN_PID];
     private static final double autoRotateOnTargetToleranceDegrees = 0.5;
 
     /**
