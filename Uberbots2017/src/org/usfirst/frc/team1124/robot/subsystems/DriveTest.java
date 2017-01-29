@@ -47,7 +47,7 @@ public class DriveTest extends PIDSubsystem {
     // Control mode variables
     public int maxOutputSpeed;
     public int maxTicksPer100MS;    
-    public final int ticksPerRev = 4*256;
+    public final int ticksPerRev = 4*1024;
     public final int num100msPerSec = 10;
     public final float motorRPMs = 2650.0f;
     public final float transRatio = 4.41f;
