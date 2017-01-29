@@ -50,7 +50,7 @@ public class DriveTest extends PIDSubsystem {
     public final int ticksPerRev = 4*1024;
     public final int num100msPerSec = 10;
     public final float motorRPMs = 2650.0f;
-    public final float transRatio = 4.41f;
+    public final float transRatio = 1.05f;
     private boolean fodEnable = true; // If true, in field-oriented drive mode. If false, in robot-centric mode.
 
     // PID values
