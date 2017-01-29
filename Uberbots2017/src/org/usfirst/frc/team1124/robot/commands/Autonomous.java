@@ -26,7 +26,11 @@ public class Autonomous extends Command {
 		AHRS navx = Robot.drive.getNavx();
 
 		double rotation = Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getLockAngle());
+		double rotation2 = rotation + 360;
+		double rotation3 = rotation - 360;
 
+		rotation2 = (Math.abs(rotation2) < Math.abs(rotation3)) ? rotation2 : rotation3;
+		rotation = (Math.abs(rotation) < Math.abs(rotation2)) ? rotation : rotation2;
 		double corr = Robot.drive.getTransAngleController().getOutput(Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY())), Robot.drive.getTransAngle());
 
 		double angleOfTrans = Robot.drive.getTransAngle();

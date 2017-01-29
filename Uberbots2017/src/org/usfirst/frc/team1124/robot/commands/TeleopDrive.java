@@ -6,7 +6,6 @@ import org.usfirst.frc.team1124.robot.Robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import utils.TableManager;
 
 public class TeleopDrive extends Command {
@@ -17,6 +16,7 @@ public class TeleopDrive extends Command {
 	private static final boolean ARCADE = false;
 
 	private boolean mode = ARCADE;
+	private double lastAngleOfTrans = 0;
 
 	public TeleopDrive() {
 		requires(Robot.drive);
@@ -47,22 +47,39 @@ public class TeleopDrive extends Command {
 		if (mode == ARCADE) {
 			Robot.drive.getNavx().reset();
 			Robot.drive.getNavx().resetDisplacement();
-			Robot.drive.setLockAngle(Robot.drive.getNavx().getYaw());
+			Robot.drive.setLockAngle(0);
+			lastAngleOfTrans = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
 		}
 		mode = MEC;
 
 		AHRS navx = Robot.drive.getNavx();
 
-		double rotation = Robot.drive.getTurnController().getOutput(Robot.drive.getNavx().getYaw(), Robot.drive.getLockAngle());
+		double yaw = Robot.drive.getNavx().getYaw();
+		double yaw2 = yaw + 360;
+		double yaw3 = yaw - 360;
 
-		double corr = Robot.drive.getTransAngleController().getOutput(Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY())), Robot.drive.getTransAngle());
-		double corr2 = corr + 360;
-		double corr3 = corr - 360;
+		yaw2 = (Math.abs(Robot.drive.getLockAngle() - yaw2) < Math.abs(Robot.drive.getLockAngle() - yaw3)) ? yaw2 : yaw3;
+		yaw = (Math.abs(Robot.drive.getLockAngle() - yaw) < Math.abs(Robot.drive.getLockAngle() - yaw2)) ? yaw : yaw2;
 
-		corr2 = (Math.abs(corr2) < Math.abs(corr3)) ? corr2 : corr3;
-		corr = (Math.abs(corr) < Math.abs(corr2)) ? corr : corr2;
+		double rotation = Robot.drive.getTurnController().getOutput(yaw, Robot.drive.getLockAngle());
 
-		double angleOfTrans = Math.toDegrees(-Math.atan2(OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
+		double nextTransAngle = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
+		if (nextTransAngle < 0)
+			nextTransAngle += 360;
+		Robot.drive.setTransAngle(nextTransAngle);
+
+		double actualAngle = Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY()));
+		if (actualAngle < 0)
+			actualAngle += 360;
+		double actualAngle2 = actualAngle + 360;
+		double actualAngle3 = actualAngle - 360;
+
+		actualAngle2 = (Math.abs(Robot.drive.getTransAngle() - actualAngle2) < Math.abs(Robot.drive.getTransAngle() - actualAngle3)) ? actualAngle2 : actualAngle3;
+		actualAngle = (Math.abs(Robot.drive.getTransAngle() - actualAngle) < Math.abs(Robot.drive.getTransAngle() - actualAngle2)) ? actualAngle : actualAngle2;
+
+		double corr = Robot.drive.getTransAngleController().getOutput(actualAngle, Robot.drive.getTransAngle());
+
+		double angleOfTrans = lastAngleOfTrans;
 
 		angleOfTrans += corr;
 		angleOfTrans %= 360;
@@ -72,7 +89,10 @@ public class TeleopDrive extends Command {
 		double mag = Math.hypot(OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)) * PID_BUFFER;
 
 		Robot.drive.getDrive().mecanumDrive_Cartesian(mag * Math.cos(Math.toRadians(angleOfTrans)), -mag * Math.sin(Math.toRadians(angleOfTrans)), rotation, 0);
-		TableManager.put("jsDashboard","graph1", rotation);
+		TableManager.put("dataTable", "actualAngle", actualAngle);
+		TableManager.put("dataTable", "angle", Robot.drive.getTransAngle());
+		TableManager.put("dataTable", "tryAngle", angleOfTrans);
+		lastAngleOfTrans = angleOfTrans;
 	}
 
 	public void arcadeDrive(double throttle, double turn, double correction) {
