@@ -1,38 +1,42 @@
 package org.usfirst.frc.team1124.robot;
 
-import org.usfirst.frc.team1124.robot.commands.Autonomous;
-import org.usfirst.frc.team1124.robot.commands.PIDTest;
 import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.vision.Camera;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
-	public static Drive drive;
+
+	// Operator Interface
 	public static OI oi;
-	public static Command teleopDrive;
-	public static Command pidtest;
-	public static Command autonomous;
+
+	// Subsystems
+	public static Drive drive;
 	public static Camera camera1;
 
+	// Commands
+	public static TeleopDrive teleopDrive;
+
 	public void robotInit() {
-		RobotMap.init();
+
+		oi = new OI();
 
 		drive = new Drive();
-		oi = new OI();
 		camera1 = new Camera();
+
+		teleopDrive = new TeleopDrive();
+
+		// reseting the NavX
 		drive.getNavx().reset();
 		drive.getNavx().zeroYaw();
-		teleopDrive = new TeleopDrive();
-		pidtest = new PIDTest();
-		autonomous = new Autonomous();
-		
 	}
 
 	public void disabledInit() {}
-	public void autonomousInit() { autonomous.start(); }
+
+	public void autonomousInit() {}
+
 	public void teleopInit() {}
 
 	public void testInit() {}

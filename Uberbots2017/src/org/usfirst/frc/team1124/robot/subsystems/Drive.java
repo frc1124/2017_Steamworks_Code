@@ -4,9 +4,11 @@ import static org.usfirst.frc.team1124.robot.RobotMap.D;
 import static org.usfirst.frc.team1124.robot.RobotMap.FRONT_LEFT;
 import static org.usfirst.frc.team1124.robot.RobotMap.FRONT_RIGHT;
 import static org.usfirst.frc.team1124.robot.RobotMap.I;
+import static org.usfirst.frc.team1124.robot.RobotMap.INVERTED;
 import static org.usfirst.frc.team1124.robot.RobotMap.P;
 import static org.usfirst.frc.team1124.robot.RobotMap.REAR_LEFT;
 import static org.usfirst.frc.team1124.robot.RobotMap.REAR_RIGHT;
+import static org.usfirst.frc.team1124.robot.RobotMap.TRANS_PID;
 import static org.usfirst.frc.team1124.robot.RobotMap.TURN_PID;
 
 import org.usfirst.frc.team1124.robot.Robot;
@@ -18,15 +20,19 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
 import utils.MiniPID;
-import static org.usfirst.frc.team1124.robot.RobotMap.*;
 
 public class Drive extends Subsystem {
-	private double lockAngle = 0;
-	private double transAngle = 0;
-	private MiniPID turnController = new MiniPID(P[TURN_PID], I[TURN_PID], D[TURN_PID]);
-	private MiniPID transAngleController = new MiniPID(P[TRANS_PID], I[TRANS_PID], D[TRANS_PID]);
+
+	// Set points for the turnController and transAngleController
+	private double wantedYaw = 0;
+	private double wantedDirection = 0;
+
+	// PIDs for the rotation and translation of the robot
+	private MiniPID yawController = new MiniPID(P[TURN_PID], I[TURN_PID], D[TURN_PID]);
+	private MiniPID directionController = new MiniPID(P[TRANS_PID], I[TRANS_PID], D[TRANS_PID]);
+
+	// The NavX
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
 
 	private CANTalon[] wheels = new CANTalon[5];
@@ -34,9 +40,12 @@ public class Drive extends Subsystem {
 	private RobotDrive drive;
 
 	public Drive() {
-		turnController.setOutputLimits(1.0);
-		transAngleController.setOutputLimits(1.0);
 
+		// Setting the output limits
+		yawController.setOutputLimits(1.0);
+		directionController.setOutputLimits(1.0);
+
+		// Initiating all of the wheels
 		for (int i = 1; i <= 4; i++) {
 			wheels[i] = new CANTalon(i);
 			wheels[i].setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -47,7 +56,13 @@ public class Drive extends Subsystem {
 			wheels[i].configMaxOutputVoltage(24);
 			wheels[i].setInverted(INVERTED[i]);
 		}
+
+		// Initiating the actual drive train
 		drive = new RobotDrive(wheels[FRONT_LEFT], wheels[REAR_LEFT], wheels[FRONT_RIGHT], wheels[REAR_RIGHT]);
+	}
+
+	public void initDefaultCommand() {
+		this.setDefaultCommand(Robot.teleopDrive);
 	}
 
 	public CANTalon getFrontLeft() {
@@ -66,8 +81,8 @@ public class Drive extends Subsystem {
 		return wheels[REAR_RIGHT];
 	}
 
-	public MiniPID getTurnController() {
-		return turnController;
+	public MiniPID getYawController() {
+		return yawController;
 	}
 
 	public RobotDrive getDrive() {
@@ -78,28 +93,24 @@ public class Drive extends Subsystem {
 		return navX;
 	}
 
-	public double getLockAngle() {
-		return lockAngle;
+	public double getWantedYaw() {
+		return wantedYaw;
 	}
 
-	public void setLockAngle(double angle) {
-		this.lockAngle = angle;
+	public void setWantedYaw(double yaw) {
+		this.wantedYaw = yaw;
 	}
 
-	public MiniPID getTransAngleController() {
-		return transAngleController;
+	public MiniPID getDirectionController() {
+		return directionController;
 	}
 
-	public double getTransAngle() {
-		return transAngle;
+	public double getWantedDirection() {
+		return wantedDirection;
 	}
 
-	public void setTransAngle(double angle) {
-		this.transAngle = angle;
-	}
-
-	public void initDefaultCommand() {
-		this.setDefaultCommand(Robot.teleopDrive);
+	public void setWantedDirection(double direction) {
+		this.wantedDirection = direction;
 	}
 
 }
