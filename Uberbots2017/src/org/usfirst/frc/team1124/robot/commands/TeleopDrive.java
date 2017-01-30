@@ -6,24 +6,26 @@ import org.usfirst.frc.team1124.robot.Robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.command.Command;
+import utils.MiniPID;
 import utils.TableManager;
 
 public class TeleopDrive extends Command {
 
+	// Buffer for PID error correction
 	private static final double PID_BUFFER = 0.9;
 
-	private static final boolean MEC = true;
-	private static final boolean ARCADE = false;
+	// To know what mode it is in
+	private Mode mode = Mode.ARCADE;
 
-	private boolean mode = ARCADE;
-	private double lastAngleOfTrans = 0;
+	// Which direction did the robot try last time?
+	private double lastTryAngle = 0;
 
 	public TeleopDrive() {
 		requires(Robot.drive);
 	}
 
 	protected void initilize() {
-		Robot.drive.setLockAngle(Robot.drive.getNavx().getYaw());
+		Robot.drive.setWantedYaw(Robot.drive.getNavx().getYaw());
 	}
 
 	protected void execute() {
@@ -38,64 +40,72 @@ public class TeleopDrive extends Command {
 	private void debug() {}
 
 	private void executeArcade() {
-		mode = ARCADE;
+		mode = Mode.ARCADE;
 
-		this.arcadeDrive(-OI.stick.getRawAxis(1), -OI.stick.getRawAxis(0), 0);
+		double stickX = OI.stick.getRawAxis(1);
+		double stickY = -OI.stick.getRawAxis(0);
+
+		this.arcadeDrive(-stickX, stickY);
 	}
 
 	private void executeMech() {
-		if (mode == ARCADE) {
+		// Things needed to be done when just getting into mecanum
+		if (mode == Mode.ARCADE) {
 			Robot.drive.getNavx().reset();
 			Robot.drive.getNavx().resetDisplacement();
-			Robot.drive.setLockAngle(0);
-			lastAngleOfTrans = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
+			Robot.drive.setWantedYaw(0);
+			lastTryAngle = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
 		}
-		mode = MEC;
+		mode = Mode.MEC;
 
 		AHRS navx = Robot.drive.getNavx();
 
+		updateWantedDirection();
+
+		// Finding out how much the robot needs to rotate to be correct
 		double yaw = Robot.drive.getNavx().getYaw();
-		double yaw2 = yaw + 360;
-		double yaw3 = yaw - 360;
+		double rotation = getFastAngularCorrection(yaw, Robot.drive.getWantedYaw(), Robot.drive.getYawController());
 
-		yaw2 = (Math.abs(Robot.drive.getLockAngle() - yaw2) < Math.abs(Robot.drive.getLockAngle() - yaw3)) ? yaw2 : yaw3;
-		yaw = (Math.abs(Robot.drive.getLockAngle() - yaw) < Math.abs(Robot.drive.getLockAngle() - yaw2)) ? yaw : yaw2;
+		// Finding out which the direction the robot should be trying to move in order to achieve the correct direction
+		double actualDirection = Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY()));
+		double tryAngleIncrease = getFastAngularCorrection(actualDirection, Robot.drive.getWantedDirection(), Robot.drive.getDirectionController());
+		double tryAngle = lastTryAngle + tryAngleIncrease;
+		lastTryAngle = tryAngle;
 
-		double rotation = Robot.drive.getTurnController().getOutput(yaw, Robot.drive.getLockAngle());
-
-		double nextTransAngle = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
-		if (nextTransAngle < 0)
-			nextTransAngle += 360;
-		Robot.drive.setTransAngle(nextTransAngle);
-
-		double actualAngle = Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY()));
-		if (actualAngle < 0)
-			actualAngle += 360;
-		double actualAngle2 = actualAngle + 360;
-		double actualAngle3 = actualAngle - 360;
-
-		actualAngle2 = (Math.abs(Robot.drive.getTransAngle() - actualAngle2) < Math.abs(Robot.drive.getTransAngle() - actualAngle3)) ? actualAngle2 : actualAngle3;
-		actualAngle = (Math.abs(Robot.drive.getTransAngle() - actualAngle) < Math.abs(Robot.drive.getTransAngle() - actualAngle2)) ? actualAngle : actualAngle2;
-
-		double corr = Robot.drive.getTransAngleController().getOutput(actualAngle, Robot.drive.getTransAngle());
-
-		double angleOfTrans = lastAngleOfTrans;
-
-		angleOfTrans += corr;
-		angleOfTrans %= 360;
-		angleOfTrans += 360;
-		angleOfTrans %= 360;
-
+		// moving
 		double mag = Math.hypot(OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)) * PID_BUFFER;
+		double rightMovement = mag * Math.cos(Math.toRadians(tryAngle));
+		double forwardMovement = -mag * Math.sin(Math.toRadians(tryAngle));
 
-		Robot.drive.getDrive().mecanumDrive_Cartesian(mag * Math.cos(Math.toRadians(angleOfTrans)), -mag * Math.sin(Math.toRadians(angleOfTrans)), rotation, 0);
-		TableManager.put("dataTable", "actualAngle", actualAngle);
-		TableManager.put("dataTable", "angle", Robot.drive.getTransAngle());
-		TableManager.put("dataTable", "tryAngle", angleOfTrans);
-		lastAngleOfTrans = angleOfTrans;
+		Robot.drive.getDrive().mecanumDrive_Cartesian(rightMovement, forwardMovement, rotation, 0);
+
+		// debugging
+		TableManager.put("dataTable", "actualDirection", actualDirection);
+		TableManager.put("dataTable", "wantedDirection", Robot.drive.getWantedDirection());
+		TableManager.put("dataTable", "tryAngle", tryAngle);
 	}
 
-	public void arcadeDrive(double throttle, double turn, double correction) {
+	private void updateWantedDirection() {
+		double wantedDirection = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
+		if (wantedDirection < 0)
+			wantedDirection += 360;
+		Robot.drive.setWantedDirection(wantedDirection);
+	}
+
+	private double getFastAngularCorrection(double angle, double setAngle, MiniPID pid) {
+		// Finding out which of, angle, angle + 360, and angle - 360, is closest to the set angle
+		double angle2 = angle + 360;
+		double angle3 = angle - 360;
+
+		angle2 = (Math.abs(Robot.drive.getWantedYaw() - angle2) < Math.abs(Robot.drive.getWantedYaw() - angle3)) ? angle2 : angle3;
+		angle = (Math.abs(Robot.drive.getWantedYaw() - angle) < Math.abs(Robot.drive.getWantedYaw() - angle2)) ? angle : angle2;
+
+		return pid.getOutput(angle, setAngle);
+	}
+
+	public void arcadeDrive(double throttle, double turn) {
+		// Basically a copy of the built in arcadeDrive
+
 		double leftMotorSpeed;
 		double rightMotorSpeed;
 
@@ -139,4 +149,8 @@ public class TeleopDrive extends Command {
 	protected void end() {}
 
 	protected void interrupted() {}
+
+	private static enum Mode {
+		ARCADE, MEC;
+	}
 }
