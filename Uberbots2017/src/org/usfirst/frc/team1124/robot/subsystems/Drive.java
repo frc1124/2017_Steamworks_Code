@@ -21,7 +21,7 @@ public class Drive extends Subsystem {
 	public int mode = 0; // 0:none, 1:arcade, 2:mec
 
 	public Drive() {
-		frontRight.setPID(1, 0, 1);
+		frontRight.setPID(2, 0, 1);
 		frontRight.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		frontRight.setF(2);
 		frontRight.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -35,7 +35,7 @@ public class Drive extends Subsystem {
 		frontLeft.configEncoderCodesPerRev(4000);
 		frontLeft.setEncPosition(0);
 
-		rearRight.setPID(1, 0, 1);
+		rearRight.setPID(2, 0, 1);
 		rearRight.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		rearRight.setF(2);
 		rearRight.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -48,6 +48,8 @@ public class Drive extends Subsystem {
 		rearLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 		rearLeft.configEncoderCodesPerRev(4000);
 		rearLeft.setEncPosition(0);
+		
+		turnController.setOutputLimits(1);
 
 	}
 

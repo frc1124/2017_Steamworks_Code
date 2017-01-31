@@ -11,7 +11,10 @@ public class Robot extends IterativeRobot {
     public static OI oi = new OI();
     public static Command teleop = new Teleop();
 
-    public void robotInit() { RobotMap.init(); }
+    public void robotInit() { 
+    	drive.navx.reset();
+    	RobotMap.init(); 
+    }
 
     public void disabledInit() {}
 	public void autonomousInit() {}
