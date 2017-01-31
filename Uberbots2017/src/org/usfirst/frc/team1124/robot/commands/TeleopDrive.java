@@ -51,9 +51,7 @@ public class TeleopDrive extends Command {
 	private void executeMech() {
 		// Things needed to be done when just getting into mecanum
 		if (mode == Mode.ARCADE) {
-			Robot.drive.getNavx().reset();
-			Robot.drive.getNavx().resetDisplacement();
-			Robot.drive.setWantedYaw(0);
+			Robot.drive.setWantedYaw(Robot.drive.getNavx().getYaw());
 			lastTryAngle = Math.toDegrees(Math.atan2(-OI.stick.getRawAxis(5), OI.stick.getRawAxis(4)));
 		}
 		mode = Mode.MEC;
@@ -67,9 +65,10 @@ public class TeleopDrive extends Command {
 		double rotation = getFastAngularCorrection(yaw, Robot.drive.getWantedYaw(), Robot.drive.getYawController());
 
 		// Finding out which the direction the robot should be trying to move in order to achieve the correct direction
-		double actualDirection = Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY()));
+		double actualDirection = Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY())) + navx.getYaw();
 		double tryAngleIncrease = getFastAngularCorrection(actualDirection, Robot.drive.getWantedDirection(), Robot.drive.getDirectionController());
 		double tryAngle = lastTryAngle + tryAngleIncrease;
+		tryAngle %= 360;
 		lastTryAngle = tryAngle;
 
 		// moving
@@ -83,6 +82,7 @@ public class TeleopDrive extends Command {
 		TableManager.put("dataTable", "actualDirection", actualDirection);
 		TableManager.put("dataTable", "wantedDirection", Robot.drive.getWantedDirection());
 		TableManager.put("dataTable", "tryAngle", tryAngle);
+		TableManager.put("dataTable", "tryAngleIncrease", tryAngleIncrease);
 	}
 
 	private void updateWantedDirection() {
@@ -97,8 +97,8 @@ public class TeleopDrive extends Command {
 		double angle2 = angle + 360;
 		double angle3 = angle - 360;
 
-		angle2 = (Math.abs(Robot.drive.getWantedYaw() - angle2) < Math.abs(Robot.drive.getWantedYaw() - angle3)) ? angle2 : angle3;
-		angle = (Math.abs(Robot.drive.getWantedYaw() - angle) < Math.abs(Robot.drive.getWantedYaw() - angle2)) ? angle : angle2;
+		angle2 = (Math.abs(setAngle - angle2) < Math.abs(setAngle - angle3)) ? angle2 : angle3;
+		angle = (Math.abs(setAngle - angle) < Math.abs(setAngle - angle2)) ? angle : angle2;
 
 		return pid.getOutput(angle, setAngle);
 	}

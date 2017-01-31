@@ -1,15 +1,5 @@
 package org.usfirst.frc.team1124.robot;
 
-/**
- * <p>
- * The class <span style = "font-family: Courier New">RobotMap</span> contains
- * all the constants needed for the robot code.
- * </p>
- * 
- * @since 2017
- * 
- * @author FRC Team 1124 Uberbots Programming Team
- */
 public class RobotMap {
 
 	// CANTalon IDs
@@ -26,9 +16,9 @@ public class RobotMap {
 	public static final int TRANS_PID = 5;
 
 	// P, I, and D values for PIDs
-	public static final double[] P = new double[] { 0.03, 1, 1, 1, 1, 0.3 };
+	public static final double[] P = new double[] { 0.03, 1, 1, 1, 1, 0.1 };
 	public static final double[] I = new double[] { 0.001, 0, 0, 0, 0, 0 };
-	public static final double[] D = new double[] { 0.1, 0.1, 0.1, 0.1, 0.1, -0.1 };
+	public static final double[] D = new double[] { 0.1, 0.1, 0.1, 0.1, 0.1, 0.01 };
 
 	// Camera Resolutions
 	public static final int CAMERA1_RES_X = 640;
