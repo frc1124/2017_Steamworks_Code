@@ -7,10 +7,12 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import utils.MiniPID;
 
 public class Drive extends Subsystem {
 	public MiniPID turnController = new MiniPID(0.1, 0, 0.1);
+	public MiniPID forController = new MiniPID(0.01, 0, 0.1);
 	public AHRS navx = new AHRS(SPI.Port.kMXP);
 	public CANTalon frontRight = new CANTalon(3);
 	public CANTalon frontLeft = new CANTalon(1);
@@ -50,6 +52,9 @@ public class Drive extends Subsystem {
 		rearLeft.setEncPosition(0);
 		
 		turnController.setOutputLimits(1);
+		
+		frontLeft.setInverted(true);
+		rearLeft.setInverted(true);
 
 	}
 
@@ -67,11 +72,6 @@ public class Drive extends Subsystem {
 			System.out.println("not in mec or arcade mode");
 			break;
 		case 1:
-			if (!frontLeft.getInverted() && !rearLeft.getInverted()) {
-				frontLeft.setInverted(true);
-				rearLeft.setInverted(true);
-			}
-
 			double correction = 0.0;
 			double turn = x * y / Math.abs(y);
 			double left = y - turn + correction;
@@ -83,11 +83,7 @@ public class Drive extends Subsystem {
 			rearRight.set(right);
 			break;
 		case 2:
-			if (frontLeft.getInverted() && rearLeft.getInverted()) {
-				frontLeft.setInverted(true);
-				rearLeft.setInverted(true);
-			}
-
+			NetworkTable.getTable("encoders").putNumber("rearRight", Robot.drive.rearRight.getEncPosition());
 			double rotation = turnController.getOutput(navx.getYaw(), lockAngle);
 			driveTrain.mecanumDrive_Cartesian(x, y, rotation, 0);
 			break;
