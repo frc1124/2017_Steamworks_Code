@@ -39,17 +39,17 @@ public class AutoTest extends Command {
 		}
 
 		// Figure out the velocities based on where we are and where we want to be
-		double vX = (xWithinTolerance) ? 0.0 : 10.0;
+		double vX = (xWithinTolerance) ? 0.0 : 0.1;
 		if (dx < 0.0) {
 			vX *= -1;
 		}
-		double vY = (yWithinTolerance) ? 0.0 : 10.0;
+		double vY = (yWithinTolerance) ? 0.0 : 0.1;
 		if (dy < 0.0) {
 			vY *= -1;
 		}
-		double vRot = (aWithinTolerance) ? 0.0 : 10.0;
+		double vRot = (aWithinTolerance) ? 0.0 : 0.10;
 		if (ada < 10.0) {
-			vRot = 1.0;
+			vRot = 0.01;
 		}
 		if (da < 0.0) {
 			vRot *= -1;
