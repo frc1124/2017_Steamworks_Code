@@ -11,6 +11,8 @@ public class TargetVisionTape extends Command {
 	private boolean done = false;
 
 	private int tolerance = 5;
+	
+	double buffer = .3;
 
 	private GripPipeline filter = null;
 
@@ -37,9 +39,9 @@ public class TargetVisionTape extends Command {
 		}
 		double strafe = dfif;
 		if (strafe <= -1.0) {
-			strafe = -1;
+			strafe = -1 * buffer;
 		} else if (strafe >= 1.0) {
-			strafe = 1;
+			strafe = 1 * buffer;
 		}
 		Robot.drive.getDrive()
 				.mecanumDrive_Cartesian(strafe, 0.0, 0.0, Robot.drive.getWantedYaw());
