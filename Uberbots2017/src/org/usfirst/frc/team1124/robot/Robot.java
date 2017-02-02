@@ -31,6 +31,11 @@ public class Robot extends IterativeRobot {
 		// reseting the NavX
 		drive.getNavx().reset();
 		drive.getNavx().zeroYaw();
+		drive.getNavx().zeroYaw();
+		drive.getNavx().zeroYaw();
+		drive.getNavx().zeroYaw();
+		drive.getNavx().zeroYaw();
+		drive.getNavx().zeroYaw();
 	}
 
 	public void disabledInit() {}

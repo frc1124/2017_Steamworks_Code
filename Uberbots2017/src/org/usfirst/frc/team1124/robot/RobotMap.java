@@ -16,9 +16,9 @@ public class RobotMap {
 	public static final int TRANS_PID = 5;
 
 	// P, I, and D values for PIDs
-	public static final double[] P = new double[] { 0.03, 1, 1, 1, 1, 0.1 };
+	public static final double[] P = new double[] { 0.03, 1, 0.1, 0.1, 1, 0.01 };
 	public static final double[] I = new double[] { 0.001, 0, 0, 0, 0, 0 };
-	public static final double[] D = new double[] { 0.1, 0.1, 0.1, 0.1, 0.1, 0.01 };
+	public static final double[] D = new double[] { 0.1, 0.1, 0.1, 0.1, 0.1, 0 };
 
 	// Camera Resolutions
 	public static final int CAMERA1_RES_X = 640;

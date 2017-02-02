@@ -52,8 +52,7 @@ public class Drive extends Subsystem {
 			wheels[i].setPID(P[i], I[i], D[i]);
 			wheels[i].setF(5);
 			wheels[i].changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			wheels[i].configEncoderCodesPerRev(256);
-			wheels[i].configMaxOutputVoltage(24);
+			wheels[i].configEncoderCodesPerRev(4000);
 			wheels[i].setInverted(INVERTED[i]);
 		}
 

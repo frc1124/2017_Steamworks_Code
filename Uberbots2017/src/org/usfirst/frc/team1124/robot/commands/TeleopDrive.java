@@ -12,7 +12,7 @@ import utils.TableManager;
 public class TeleopDrive extends Command {
 
 	// Buffer for PID error correction
-	private static final double PID_BUFFER = 0.9;
+	private static final double PID_BUFFER = 0.5;
 
 	// To know what mode it is in
 	private Mode mode = Mode.ARCADE;
@@ -65,8 +65,9 @@ public class TeleopDrive extends Command {
 		double rotation = getFastAngularCorrection(yaw, Robot.drive.getWantedYaw(), Robot.drive.getYawController());
 
 		// Finding out which the direction the robot should be trying to move in order to achieve the correct direction
+
 		double actualDirection = Math.toDegrees(Math.atan2(navx.getVelocityX(), navx.getVelocityY())) + navx.getYaw();
-		double tryAngleIncrease = getFastAngularCorrection(actualDirection, Robot.drive.getWantedDirection(), Robot.drive.getDirectionController());
+		double tryAngleIncrease = 0;// getFastAngularCorrection(actualDirection, Robot.drive.getWantedDirection(), Robot.drive.getDirectionController());
 		double tryAngle = lastTryAngle + tryAngleIncrease;
 		tryAngle %= 360;
 		lastTryAngle = tryAngle;
@@ -76,13 +77,17 @@ public class TeleopDrive extends Command {
 		double rightMovement = mag * Math.cos(Math.toRadians(tryAngle));
 		double forwardMovement = -mag * Math.sin(Math.toRadians(tryAngle));
 
-		Robot.drive.getDrive().mecanumDrive_Cartesian(rightMovement, forwardMovement, rotation, 0);
+		Robot.drive.getFrontLeft().set(0.5);
+		Robot.drive.getFrontRight().set(0.5);
+		Robot.drive.getRearLeft().set(0.5);
+		Robot.drive.getRearRight().set(0.5);
+		// Robot.drive.getDrive().mecanumDrive_Cartesian(OI.stick.getRawAxis(4), OI.stick.getRawAxis(5), rotation, 0);
 
 		// debugging
-		TableManager.put("dataTable", "actualDirection", actualDirection);
-		TableManager.put("dataTable", "wantedDirection", Robot.drive.getWantedDirection());
-		TableManager.put("dataTable", "tryAngle", tryAngle);
-		TableManager.put("dataTable", "tryAngleIncrease", tryAngleIncrease);
+		TableManager.put("dataTable", "frontLeft", Robot.drive.getFrontLeft().getOutputVoltage());
+		TableManager.put("dataTable", "frontRight", Robot.drive.getFrontRight().getOutputVoltage());
+		TableManager.put("dataTable", "rearLeft", Robot.drive.getRearLeft().getOutputVoltage());
+		TableManager.put("dataTable", "rearRight", Robot.drive.getRearRight().getOutputVoltage());
 	}
 
 	private void updateWantedDirection() {
@@ -97,10 +102,10 @@ public class TeleopDrive extends Command {
 		double angle2 = angle + 360;
 		double angle3 = angle - 360;
 
-		angle2 = (Math.abs(setAngle - angle2) < Math.abs(setAngle - angle3)) ? angle2 : angle3;
-		angle = (Math.abs(setAngle - angle) < Math.abs(setAngle - angle2)) ? angle : angle2;
+		double angle4 = (Math.abs(setAngle - angle2) < Math.abs(setAngle - angle3)) ? angle2 : angle3;
+		double angle5 = (Math.abs(setAngle - angle) < Math.abs(setAngle - angle4)) ? angle : angle4;
 
-		return pid.getOutput(angle, setAngle);
+		return pid.getOutput(angle5, setAngle);
 	}
 
 	public void arcadeDrive(double throttle, double turn) {
