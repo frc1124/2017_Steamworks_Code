@@ -1,13 +1,12 @@
 package org.usfirst.frc.team1124.vision;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.vision.VisionPipeline;
 
 import org.opencv.core.*;
-import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.*;
 
 
 /**
@@ -55,15 +54,15 @@ public class GripPipeline implements VisionPipeline {
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
 		double filterContoursMinArea = 13.0;
 		double filterContoursMinPerimeter = 77.0;
-		double filterContoursMinWidth = 0;
-		double filterContoursMaxWidth = 1000;
-		double filterContoursMinHeight = 0;
-		double filterContoursMaxHeight = 1000;
+		double filterContoursMinWidth = 0.0;
+		double filterContoursMaxWidth = 1000.0;
+		double filterContoursMinHeight = 0.0;
+		double filterContoursMaxHeight = 1000.0;
 		double[] filterContoursSolidity = {0, 100};
-		double filterContoursMaxVertices = 1000000;
-		double filterContoursMinVertices = 0;
-		double filterContoursMinRatio = 0;
-		double filterContoursMaxRatio = 1000;
+		double filterContoursMaxVertices = 1000000.0;
+		double filterContoursMinVertices = 0.0;
+		double filterContoursMinRatio = 0.0;
+		double filterContoursMaxRatio = 1000.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
 	}
@@ -251,9 +250,25 @@ public class GripPipeline implements VisionPipeline {
 			if (ratio < minRatio || ratio > maxRatio) continue;
 			output.add(contour);
 		}
+		
+
 	}
 
-
+	public double[] getXRange(){
+		double hx = -1.0, lx = -1.0;
+		for(Point p : (Point[])(filterContoursOutput.toArray())){
+			if(p.x < lx || lx == -1.0){
+				lx = p.x;
+			}
+			if(p.x > hx || hx == -1.0){
+				hx = p.x;
+			}
+		}
+		double[] r = new double[2];
+		r[0] = lx;
+		r[1] = hx;
+		return r;
+	}
 
 
 }
