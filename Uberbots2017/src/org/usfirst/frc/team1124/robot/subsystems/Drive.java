@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.Robot;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
@@ -11,8 +12,8 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import utils.MiniPID;
 
 public class Drive extends Subsystem {
-	public MiniPID turnController = new MiniPID(0.1, 0, 0.1);
-	public MiniPID forController = new MiniPID(0.01, 0, 0.1);
+	public MiniPID turnController = new MiniPID(0.06, 0, 0.1);
+	public MiniPID forController = new MiniPID(0.035, 0, 0.1);
 	public AHRS navx = new AHRS(SPI.Port.kMXP);
 	public CANTalon frontRight = new CANTalon(3);
 	public CANTalon frontLeft = new CANTalon(1);
@@ -72,10 +73,10 @@ public class Drive extends Subsystem {
 			System.out.println("not in mec or arcade mode");
 			break;
 		case 1:
-			double correction = 0.0;
+			double correction = 0;
 			double turn = x * y / Math.abs(y);
-			double left = y - turn + correction;
-			double right = y + turn + correction;
+			double left = y + turn + correction;
+			double right = y - turn + correction;
 
 			frontLeft.set(left);
 			rearLeft.set(left);
@@ -84,6 +85,8 @@ public class Drive extends Subsystem {
 			break;
 		case 2:
 			NetworkTable.getTable("encoders").putNumber("rearRight", Robot.drive.rearRight.getEncPosition());
+			//if(x <= -0.1) { y += 0.3; }
+			//if(x >= 0.1) { y -= 0.3; }
 			double rotation = turnController.getOutput(navx.getYaw(), lockAngle);
 			driveTrain.mecanumDrive_Cartesian(x, y, rotation, 0);
 			break;

@@ -18,10 +18,10 @@ public class Auto extends Command {
     }
 
     protected void execute() {
-    	Robot.drive.mode = 2;                       //mec mode
-    	if(Robot.drive.rearRight.getEncPosition() > -1000) {
-    		Robot.drive.run(0, -0.15);
-    	}
+    	Robot.drive.frontLeft.set(-0.4);
+    	Robot.drive.frontRight.set(0.4);
+    	Robot.drive.rearLeft.set(0.4);
+    	Robot.drive.rearRight.set(-0.4);
     }
 
     // Make this return true when this Command no longer needs to run execute()
