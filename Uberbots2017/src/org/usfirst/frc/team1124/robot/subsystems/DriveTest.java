@@ -1,11 +1,7 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import static org.usfirst.frc.team1124.robot.RobotMap.D;
-import static org.usfirst.frc.team1124.robot.RobotMap.I;
-import static org.usfirst.frc.team1124.robot.RobotMap.P;
-import static org.usfirst.frc.team1124.robot.RobotMap.TURN_PID;
 import org.usfirst.frc.team1124.robot.RobotMap;
-import org.usfirst.frc.team1124.robot.commands.TeleopDrive;
+import org.usfirst.frc.team1124.robot.commands.Teleop;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
@@ -55,9 +51,9 @@ public class DriveTest extends PIDSubsystem {
 
     // PID values
     private double nextAutorotateValue = 0.0;
-    private static final double autoRotateP = RobotMap.P[RobotMap.TURN_PID];
-    private static final double autoRotateI = RobotMap.I[RobotMap.TURN_PID];
-    private static final double autoRotateD = RobotMap.D[RobotMap.TURN_PID];
+    private static final double autoRotateP = RobotMap.TURN_P;
+    private static final double autoRotateI = RobotMap.TURN_I;
+    private static final double autoRotateD = RobotMap.TURN_D;
     private static final double autoRotateOnTargetToleranceDegrees = 0.5;
 
     /**
@@ -114,8 +110,33 @@ public class DriveTest extends PIDSubsystem {
     private void initMotor( CANTalon motor, int wheel) {
         try {
             if ( currControlMode == CANTalon.TalonControlMode.Speed ) {
+            	double p = 0.0;
+            	double i = 0.0;
+            	double d = 0.0;
+            	switch (wheel) {
+            	case RobotMap.FRONT_LEFT:
+            		p = RobotMap.FRONT_LEFT_P;
+            		i = RobotMap.FRONT_LEFT_I;
+            		d = RobotMap.FRONT_LEFT_D;
+            		break;
+            	case RobotMap.FRONT_RIGHT:
+            		p = RobotMap.FRONT_RIGHT_P;
+            		i = RobotMap.FRONT_RIGHT_I;
+            		d = RobotMap.FRONT_RIGHT_D;
+            		break;
+            	case RobotMap.REAR_LEFT:
+            		p = RobotMap.REAR_LEFT_P;
+            		i = RobotMap.REAR_LEFT_I;
+            		d = RobotMap.REAR_LEFT_D;
+            		break;
+            	case RobotMap.REAR_RIGHT:
+            		p = RobotMap.REAR_RIGHT_P;
+            		i = RobotMap.REAR_RIGHT_I;
+            		d = RobotMap.REAR_RIGHT_D;
+            		break;
+            	}
                 motor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-				motor.setPID(RobotMap.P[wheel], RobotMap.I[wheel], RobotMap.D[wheel]);
+				motor.setPID(p, i, d);
 				motor.setF(5);
                 motor.changeControlMode(CANTalon.TalonControlMode.Speed);
                 motor.setCloseLoopRampRate(0);
@@ -155,7 +176,7 @@ public class DriveTest extends PIDSubsystem {
      * Sets the default command.
      */
     public void initDefaultCommand() {
-        setDefaultCommand(new TeleopDrive());
+        setDefaultCommand(new Teleop());
     }
 
     /**
@@ -345,5 +366,10 @@ public class DriveTest extends PIDSubsystem {
 
 	public double getAngle() {
 		return this.navx.getAngle();
+	}
+
+	public void resetGyro() {
+		this.navx.reset();
+		this.navx.resetDisplacement();
 	}
 }

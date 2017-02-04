@@ -21,9 +21,9 @@ public class AutoTest extends Command {
 
 	protected void execute() {
 		// Find the difference between where we sta
-		double dx = this.targetX - Robot.drive.getX();
-		double dy = this.targetY - Robot.drive.getY();
-		double da = this.targetAngle - Robot.drive.getAngle();
+		double dx = this.targetX - Robot.driveTest.getX();
+		double dy = this.targetY - Robot.driveTest.getY();
+		double da = this.targetAngle - Robot.driveTest.getAngle();
 		double adx = Math.abs(dx);
 		double ady = Math.abs(dy);
 		double ada = Math.abs(da);
@@ -56,7 +56,7 @@ public class AutoTest extends Command {
 		}
 
 		// Drive towards target
-		Robot.drive.doMecanum(vX,vY,vRot);
+		Robot.driveTest.doMecanum(vX,vY,vRot);
 	}
 
 	@Override
