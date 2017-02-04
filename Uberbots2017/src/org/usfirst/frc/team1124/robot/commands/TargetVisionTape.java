@@ -2,8 +2,6 @@ package org.usfirst.frc.team1124.robot.commands;
 
 import org.opencv.core.Mat;
 import org.usfirst.frc.team1124.robot.Robot;
-import org.usfirst.frc.team1124.robot.RobotMap;
-import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.vision.Camera;
 import org.usfirst.frc.team1124.vision.GripPipeline;
 
@@ -13,7 +11,7 @@ public class TargetVisionTape extends Command {
 	private boolean done = false;
 
 	private int tolerance = 5;
-	
+
 	double buffer = .3;
 
 	private GripPipeline filter = null;
@@ -24,8 +22,12 @@ public class TargetVisionTape extends Command {
 		filter = new GripPipeline();
 
 	}
-	protected void initilize() { Robot.drive.mode = 2; } //mec mode
- 
+
+	protected void initilize() {
+		Robot.drive.mode = 2;
+		Robot.drive.lockAngle = Robot.drive.navx.getYaw();
+	} // mec mode
+
 	protected void execute() {
 
 		Mat img = Robot.camera1.getMat();
@@ -46,9 +48,9 @@ public class TargetVisionTape extends Command {
 		} else if (strafe >= 1.0) {
 			strafe = 1 * buffer;
 		}
-	
 		Robot.drive.run(strafe, 0);
-
+		if (Math.abs(strafe) < 0.1)
+			done = true;
 	}
 
 	@Override

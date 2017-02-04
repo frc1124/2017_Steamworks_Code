@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.Robot;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
@@ -89,8 +88,6 @@ public class Drive extends Subsystem {
 			break;
 		case 2:
 			NetworkTable.getTable("encoders").putNumber("rearRight", Robot.drive.rearRight.getEncPosition());
-			// if(x <= -0.1) { y += 0.3; }
-			// if(x >= 0.1) { y -= 0.3; }
 			double rotation = turnController.getOutput(navx.getYaw(), lockAngle);
 			driveTrain.mecanumDrive_Cartesian(x, -y, rotation, 0);
 			break;

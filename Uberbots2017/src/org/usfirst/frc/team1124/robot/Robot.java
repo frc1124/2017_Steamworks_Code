@@ -1,31 +1,48 @@
 package org.usfirst.frc.team1124.robot;
 
+import org.usfirst.frc.team1124.robot.commands.AutoQueue;
 import org.usfirst.frc.team1124.robot.commands.DriveForward;
 import org.usfirst.frc.team1124.robot.commands.Teleop;
+import org.usfirst.frc.team1124.robot.commands.Turn;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team1124.vision.Camera;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
-	public static Drive drive = new Drive();
-	public static Pneumatics pneumatics = new Pneumatics();
-	public static OI oi = new OI();
-	public static Command teleop = new Teleop();
-	public static DriveForward auto1 = new DriveForward(119);
-	public static DriveForward auto2 = new DriveForward(-119);
+	public static Drive drive;
+
+	public static Pneumatics pneumatics;
+
+	public static OI oi;
+
+	public static Command teleop;
+
+	public static AutoQueue auto;
+
+	public static Camera camera1;
 
 	public void robotInit() {
+		drive = new Drive();
+		pneumatics = new Pneumatics();
+		teleop = new Teleop();
+		camera1 = new Camera();
+
+		auto = new AutoQueue();
 		drive.navx.reset();
 		drive.navx.resetDisplacement();
 		RobotMap.init();
+
+		oi = new OI();
 	}
 
 	public void disabledInit() {}
 
 	public void autonomousInit() {
-		auto1.start();
+		new AutoQueue().start();
 	}
 
 	public void teleopInit() {}
@@ -37,12 +54,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		if (auto1.done()) {
-			auto1.cancel();
-			//auto2.start();
-		}
-		//if (auto2.done())
-		//	auto2.cancel();
 		Scheduler.getInstance().run();
 	}
 

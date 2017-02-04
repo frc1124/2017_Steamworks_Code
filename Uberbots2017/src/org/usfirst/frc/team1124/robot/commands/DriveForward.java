@@ -12,7 +12,7 @@ public class DriveForward extends Command {
 
 	private boolean done = false;
 
-	private static final double MAX_SPEED = 0.7;
+	private static final double MAX_SPEED = 0.9;
 
 	private static final double DISTANCE_PER_TICK = 4 * Math.PI / 4000;
 
@@ -22,6 +22,11 @@ public class DriveForward extends Command {
 
 	private int sign;
 
+	private int frontLeftStart;
+	private int frontRightStart;
+	private int rearLeftStart;
+	private int rearRightStart;
+
 	public DriveForward(double distance) {
 		sign = (int) (distance / Math.abs(distance));
 		this.distanceInTicks = sign * distance / DISTANCE_PER_TICK;
@@ -29,33 +34,32 @@ public class DriveForward extends Command {
 	}
 
 	protected void initialize() {
-		Robot.drive.rearRight.setEncPosition(0);
-		Robot.drive.rearLeft.setEncPosition(0);
-		Robot.drive.frontRight.setEncPosition(0);
-		Robot.drive.frontLeft.setEncPosition(0);
+		frontLeftStart = Robot.drive.frontLeft.getEncPosition();
+		frontRightStart = Robot.drive.frontRight.getEncPosition();
+		rearLeftStart = Robot.drive.rearLeft.getEncPosition();
+		rearRightStart = Robot.drive.rearRight.getEncPosition();
 		done = false;
+		Robot.drive.lockAngle = Robot.drive.navx.getYaw();
 	}
 
 	protected void execute() {
 		Drive drive = Robot.drive;
-		int average = sign * (-drive.frontLeft.getEncPosition() + drive.frontRight.getEncPosition() - drive.rearLeft.getEncPosition() + drive.rearRight.getEncPosition()) / 4;
+		int changeFR = drive.frontRight.getEncPosition() - frontRightStart;
+		int changeFL = drive.frontLeft.getEncPosition() - frontLeftStart;
+		int changeRR = drive.rearRight.getEncPosition() - rearRightStart;
+		int changeRL = drive.rearLeft.getEncPosition() - rearLeftStart;
+		int average = sign * (changeFR + changeRR - changeFL - changeRL) / 4;
 		double speed = sign * getSpeed(average);
-		if (Math.abs(speed) <= QUIT_SPEED)
+		if (Math.abs(distanceInTicks - average) < 3000)
 			quit();
 		else {
-			Robot.drive.mode = 2;
-			Robot.drive.run(0, speed);
+			drive.mode = 2;
+			drive.run(0, speed);
 		}
 
-		NetworkTable.getTable("encoders").putNumber("frontLeft", drive.frontLeft.getEncPosition());
-		NetworkTable.getTable("encoders").putNumber("frontRight", drive.frontRight.getEncPosition());
-		NetworkTable.getTable("encoders").putNumber("rearLeft", drive.rearLeft.getEncPosition());
-		NetworkTable.getTable("encoders").putNumber("rearRight", drive.rearRight.getEncPosition());
-		NetworkTable.getTable("ultrasonic").putNumber("u1", drive.ultrasonic1.getAverageVoltage());
-		NetworkTable.getTable("ultrasonic").putNumber("u2", drive.ultrasonic2.getAverageVoltage());
 		NetworkTable.getTable("encoders").putNumber("average", average);
-		NetworkTable.getTable("encoders").putNumber("needed", distanceInTicks);
 		NetworkTable.getTable("encoders").putNumber("trySpeed", speed);
+		NetworkTable.getTable("encoders").putNumber("distanceInTicks", distanceInTicks);
 	}
 
 	private void quit() {
@@ -86,14 +90,11 @@ public class DriveForward extends Command {
 		return done;
 	}
 
-	public boolean done() {
-		return done;
+	public boolean isRunning() {
+		return !done;
 	}
 
-	// Called once after isFinished returns true
 	protected void end() {}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
 	protected void interrupted() {}
 }
