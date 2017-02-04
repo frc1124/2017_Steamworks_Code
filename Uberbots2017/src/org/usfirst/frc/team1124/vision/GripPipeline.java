@@ -256,13 +256,15 @@ public class GripPipeline implements VisionPipeline {
 
 	public double[] getXRange(){
 		double hx = -1.0, lx = -1.0;
-		for(Point p : (Point[])(filterContoursOutput.toArray())){
+		for(int i = 0; i<filterContoursOutput.size(); i++){
+		for(Point p : filterContoursOutput.get(i).toArray()){
 			if(p.x < lx || lx == -1.0){
 				lx = p.x;
 			}
 			if(p.x > hx || hx == -1.0){
 				hx = p.x;
 			}
+		}
 		}
 		double[] r = new double[2];
 		r[0] = lx;
