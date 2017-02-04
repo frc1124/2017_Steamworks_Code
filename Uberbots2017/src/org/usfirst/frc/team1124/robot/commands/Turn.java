@@ -10,10 +10,10 @@ public class Turn extends Command {
 
 	private boolean done = false;
 
-	private static final double MAX_SPEED = 0.4;
+	private static final double MAX_SPEED = 0.6;
 
-	private static final double QUIT_SPEED = 0.1;
-	private double degrees;
+	private static final double QUIT_SPEED = 0.3;
+	public double degrees;
 
 	public Turn(double degrees) {
 		requires(Robot.drive);
@@ -21,7 +21,6 @@ public class Turn extends Command {
 	}
 
 	protected void initialize() {
-		Robot.drive.lockAngle = Robot.drive.navx.getYaw() - degrees;
 		done = false;
 	}
 

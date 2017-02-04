@@ -18,8 +18,6 @@ public class DriveForward extends Command {
 
 	private static final int TICKS_TIL_FULL = 16000;
 
-	private static final double QUIT_SPEED = 0.1;
-
 	private int sign;
 
 	private int frontLeftStart;
@@ -39,7 +37,6 @@ public class DriveForward extends Command {
 		rearLeftStart = Robot.drive.rearLeft.getEncPosition();
 		rearRightStart = Robot.drive.rearRight.getEncPosition();
 		done = false;
-		Robot.drive.lockAngle = Robot.drive.navx.getYaw();
 	}
 
 	protected void execute() {
@@ -54,12 +51,24 @@ public class DriveForward extends Command {
 			quit();
 		else {
 			drive.mode = 2;
-			drive.run(0, speed);
+			drive.driveTrain.mecanumDrive_Cartesian(0,-speed, drive.turnController.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()), drive.lockAngle), 0);
 		}
 
 		NetworkTable.getTable("encoders").putNumber("average", average);
 		NetworkTable.getTable("encoders").putNumber("trySpeed", speed);
 		NetworkTable.getTable("encoders").putNumber("distanceInTicks", distanceInTicks);
+	}
+
+	private double closeToLockAngle(double yaw) {
+		double yaw2 = yaw + 360;
+		double yaw3 = yaw - 360;
+		if (Math.abs(yaw3 - Robot.drive.lockAngle) < Math.abs(yaw2 - Robot.drive.lockAngle)) {
+			yaw2 = yaw3;
+		}
+		if (Math.abs(yaw2 - Robot.drive.lockAngle) < Math.abs(yaw - Robot.drive.lockAngle)) {
+			yaw = yaw2;
+		}
+		return yaw;
 	}
 
 	private void quit() {

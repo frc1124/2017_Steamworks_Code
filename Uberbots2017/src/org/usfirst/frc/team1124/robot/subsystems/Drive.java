@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import utils.MiniPID;
 
 public class Drive extends Subsystem {
-	public MiniPID turnController = new MiniPID(0.06, 0, 0.1);
+	public MiniPID turnController = new MiniPID(0.03, 0, 0.1);
 	public MiniPID forController = new MiniPID(0.035, 0, 0.1);
 	public AHRS navx = new AHRS(SPI.Port.kMXP);
 	public CANTalon frontRight = new CANTalon(3);
