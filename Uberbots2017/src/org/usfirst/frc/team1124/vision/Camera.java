@@ -5,22 +5,22 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.opencv.core.Mat;
+import org.usfirst.frc.team1124.robot.Robot;
 
 public class Camera extends Subsystem {
 	public static UsbCamera camera;
 	public static CvSink cvSink;
 
-	public static final int CAMERA_EXPOSURE = 80;
-
-	public static final int CAMERA1_RES_X = 640;
-	public static final int CAMERA1_RES_Y = 480;
+	public static final int CAMERA_RES_X = 640;
+	public static final int CAMERA_RES_Y = 480;
+	public static final int CAMERA_EXPOSURE = 5;
 
 	public Camera() {
 		camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(CAMERA1_RES_X, CAMERA1_RES_Y);
-		camera.setExposureManual(CAMERA_EXPOSURE);
+		camera.setResolution(CAMERA_RES_X, CAMERA_RES_Y);
+		camera.setExposureManual(CAMERA_EXPOSURE);;
 		cvSink = CameraServer.getInstance().getVideo();
-		CameraServer.getInstance().putVideo("visionCamera1", 640, 480);
+		CameraServer.getInstance().putVideo("visionCamera", 640, 480);
 	}
 
 	public Mat getMat() {
@@ -28,6 +28,6 @@ public class Camera extends Subsystem {
 		cvSink.grabFrame(source);
 		return source;
 	}
-
+	
 	protected void initDefaultCommand() {}
 }

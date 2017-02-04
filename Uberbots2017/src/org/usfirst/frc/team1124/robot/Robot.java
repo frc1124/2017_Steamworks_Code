@@ -23,13 +23,13 @@ public class Robot extends IterativeRobot {
 
 	public static AutoQueue auto;
 
-	public static Camera camera1;
+	public static Camera camera;
 
 	public void robotInit() {
 		drive = new Drive();
 		pneumatics = new Pneumatics();
 		teleop = new Teleop();
-		camera1 = new Camera();
+		camera = new Camera();
 
 		auto = new AutoQueue();
 		drive.navx.reset();
