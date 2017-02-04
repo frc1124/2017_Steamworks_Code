@@ -4,6 +4,8 @@ import org.usfirst.frc.team1124.robot.commands.DriveForward;
 import org.usfirst.frc.team1124.robot.commands.Teleop;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team1124.vision.Camera;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -11,10 +13,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 public class Robot extends IterativeRobot {
 	public static Drive drive = new Drive();
 	public static Pneumatics pneumatics = new Pneumatics();
-	public static OI oi = new OI();
 	public static Command teleop = new Teleop();
+	public static Camera camera1 = new Camera();
 	public static DriveForward auto1 = new DriveForward(119);
 	public static DriveForward auto2 = new DriveForward(-119);
+	public static OI oi = new OI();
 
 	public void robotInit() {
 		drive.navx.reset();
