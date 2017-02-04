@@ -5,6 +5,8 @@ import org.usfirst.frc.team1124.robot.Robot;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -19,6 +21,8 @@ public class Drive extends Subsystem {
 	public CANTalon frontLeft = new CANTalon(1);
 	public CANTalon rearRight = new CANTalon(4);
 	public CANTalon rearLeft = new CANTalon(2);
+	public AnalogInput ultrasonic1 = new AnalogInput(0);
+	public AnalogInput ultrasonic2 = new AnalogInput(1);
 	public double lockAngle = 0.0;
 	public RobotDrive driveTrain = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 	public int mode = 0; // 0:none, 1:arcade, 2:mec
@@ -51,9 +55,9 @@ public class Drive extends Subsystem {
 		rearLeft.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 		rearLeft.configEncoderCodesPerRev(4000);
 		rearLeft.setEncPosition(0);
-		
+
 		turnController.setOutputLimits(1);
-		
+
 		frontLeft.setInverted(true);
 		rearLeft.setInverted(true);
 
@@ -74,7 +78,7 @@ public class Drive extends Subsystem {
 			break;
 		case 1:
 			double correction = 0;
-			double turn = x * y / Math.abs(y);
+			double turn = x;
 			double left = y + turn + correction;
 			double right = y - turn + correction;
 
@@ -85,10 +89,10 @@ public class Drive extends Subsystem {
 			break;
 		case 2:
 			NetworkTable.getTable("encoders").putNumber("rearRight", Robot.drive.rearRight.getEncPosition());
-			//if(x <= -0.1) { y += 0.3; }
-			//if(x >= 0.1) { y -= 0.3; }
+			// if(x <= -0.1) { y += 0.3; }
+			// if(x >= 0.1) { y -= 0.3; }
 			double rotation = turnController.getOutput(navx.getYaw(), lockAngle);
-			driveTrain.mecanumDrive_Cartesian(x, y, rotation, 0);
+			driveTrain.mecanumDrive_Cartesian(x, -y, rotation, 0);
 			break;
 		default:
 			System.out.println("This case litteraly cannot happen");
