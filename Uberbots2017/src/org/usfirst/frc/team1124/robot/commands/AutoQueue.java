@@ -46,9 +46,6 @@ public class AutoQueue extends Command {
 				done = true;
 				return;
 			}
-			if (commands[currentCommand] instanceof Turn)
-				Robot.drive.lockAngle -= ((Turn) commands[currentCommand]).degrees;
-			Robot.drive.lockAngle = Robot.drive.lockAngle % 360;
 			commands[currentCommand].start();
 		}
 		NetworkTable.getTable("queue").putNumber("commandNumber", currentCommand);

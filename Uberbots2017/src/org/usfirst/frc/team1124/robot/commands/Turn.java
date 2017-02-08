@@ -21,6 +21,8 @@ public class Turn extends Command {
 	}
 
 	protected void initialize() {
+		Robot.drive.lockAngle -= degrees;
+		Robot.drive.lockAngle = Robot.drive.lockAngle % 360;
 		done = false;
 	}
 
