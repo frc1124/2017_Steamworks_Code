@@ -10,6 +10,8 @@ public class PressToWin extends CommandGroup {
     	requires(Robot.drive);
     	requires(Robot.gearDoor);
         addSequential(new TargetVisionTape());
+        addSequential(new Turn(Robot.drive.calcAngle()));
+        addSequential(new DriveForward(Robot.drive.calcDist()));
         addSequential(new ToggleGearDoor());
         addSequential(new DriveForward(-27));
         addSequential(new ToggleGearDoor());

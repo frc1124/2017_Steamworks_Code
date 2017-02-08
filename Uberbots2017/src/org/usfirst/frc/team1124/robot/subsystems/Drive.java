@@ -61,14 +61,10 @@ public class Drive extends Subsystem {
 		rearLeft.setInverted(true);
 
 	}
-
-	public void initDefaultCommand() {
-		this.setDefaultCommand(Robot.teleop);
-	}
-
-	public void lockAngle() {
-		lockAngle = navx.getYaw();
-	}
+	public double calcAngle() { return(Math.toDegrees(Math.atan2(ultrasonic1.getVoltage()*1-ultrasonic2.getVoltage()*1, 20))); }
+	public double calcDist() { return((ultrasonic1.getVoltage() + ultrasonic1.getVoltage()) /2); }
+	public void initDefaultCommand() { this.setDefaultCommand(Robot.teleop); }
+	public void lockAngle() { lockAngle = navx.getYaw(); }
 
 	public void run(double x, double y) {
 		switch (mode) {
