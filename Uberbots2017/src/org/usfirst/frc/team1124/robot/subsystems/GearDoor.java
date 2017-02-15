@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class GearDoor extends Subsystem {
-	private DoubleSolenoid gearDoor = new DoubleSolenoid(0, 0, 1);
+	private DoubleSolenoid gearDoor = new DoubleSolenoid(0, 0, 2);
 	
 	public GearDoor() {}
 	
     public void initDefaultCommand() {}
-    public void toggle() { gearDoor.set((gearDoor.get()==Value.kForward) ? Value.kReverse : Value.kForward); }
+    public void toggle() { gearDoor.set((gearDoor.get().equals(Value.kForward)) ? Value.kReverse : Value.kForward); }
 }
 
