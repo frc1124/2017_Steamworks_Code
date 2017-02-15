@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.opencv.core.Mat;
-import org.usfirst.frc.team1124.robot.Robot;
 
 public class Camera extends Subsystem {
 	public static UsbCamera camera;
