@@ -105,5 +105,5 @@ public class DriveForward extends Command {
 
 	protected void end() {}
 
-	protected void interrupted() {}
+	protected void interrupted() { this.end(); }
 }

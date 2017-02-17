@@ -18,6 +18,7 @@ public class AutoQueue extends Command {
 	}
 
 	public AutoQueue() {
+		
 		commands[0] = new DriveForward(50);
 		commands[1] = new Turn(90);
 		commands[2] = new DriveForward(50);

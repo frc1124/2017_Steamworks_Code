@@ -16,4 +16,5 @@ public class PressToWin extends CommandGroup {
         addSequential(new DriveForward(-27));
         addSequential(new ToggleGearDoor());
     }
+    protected void interrupted() { this.end(); }
 }
