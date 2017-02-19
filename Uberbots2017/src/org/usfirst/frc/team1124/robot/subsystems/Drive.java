@@ -78,6 +78,14 @@ public class Drive extends Subsystem {
 		return (((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)
 				+ (ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)) / 2);
 	}
+	
+	public double ultrasonic1MM(){
+		return ultrasonic1.getVoltage() * 1000;
+	}
+	
+	public double ultrasonic2MM(){
+		return ultrasonic2.getVoltage() * 1000;
+	}
 
 	public void initDefaultCommand() {
 		this.setDefaultCommand(Robot.teleop);
