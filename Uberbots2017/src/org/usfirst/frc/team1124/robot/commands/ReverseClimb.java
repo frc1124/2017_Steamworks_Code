@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class ReverseClimb extends Command {
 
-    public ReverseClimb() { requires(Robot.climber); }
+    public ReverseClimb() {}
     protected void initialize() {}
-    protected void execute() { Robot.climber.getMotor().set(-0.5); }
+    protected void execute() { Robot.climber.motorDown(); }
     protected boolean isFinished() { return false; }
-    protected void end() { Robot.climber.getMotor().set(0.0); }
+    protected void end() { Robot.climber.motorStop(); }
     protected void interrupted() { this.end(); }
 }

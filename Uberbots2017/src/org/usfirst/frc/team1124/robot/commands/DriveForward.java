@@ -14,7 +14,7 @@ public class DriveForward extends Command {
 
 	private static final double MAX_SPEED = 0.9;
 
-	private static final double DISTANCE_PER_TICK = 4 * Math.PI / 4000;
+	private static final double DISTANCE_PER_TICK = 4 * Math.PI / 4096;
 
 	private static final int TICKS_TIL_FULL = 16000;
 
@@ -45,7 +45,7 @@ public class DriveForward extends Command {
 		int changeFL = drive.frontLeft.getEncPosition() - frontLeftStart;
 		int changeRR = drive.rearRight.getEncPosition() - rearRightStart;
 		int changeRL = drive.rearLeft.getEncPosition() - rearLeftStart;
-		int average = sign * (changeFR + changeRR - changeFL - changeRL) / 4;
+		int average = sign * ((changeFR + changeRR) - (changeFL - changeRL)) / 4;
 		double speed = sign * getSpeed(average);
 		if (Math.abs(distanceInTicks - average) < 3000)
 			quit();

@@ -6,6 +6,7 @@ import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import utils.MiniPID;
 
 public class Drive extends Subsystem {
+	public static final double ULTRASONIC_SCALE = 39.37;
 	public MiniPID turnController = new MiniPID(0.03, 0, 0.1);
 	public MiniPID forController = new MiniPID(0.035, 0, 0.1);
 	public AHRS navx = new AHRS(SPI.Port.kMXP);
@@ -61,10 +63,29 @@ public class Drive extends Subsystem {
 		rearLeft.setInverted(true);
 
 	}
-	public double calcAngle() { return(Math.toDegrees(Math.atan2(ultrasonic1.getVoltage()*1-4.5-ultrasonic2.getVoltage()*1-4.5, 20))); }
-	public double calcDist() { return((ultrasonic1.getVoltage()-4.5 + ultrasonic1.getVoltage()-4.5) /2); }
-	public void initDefaultCommand() { this.setDefaultCommand(Robot.teleop); }
-	public void lockAngle() { lockAngle = navx.getYaw(); }
+
+	public double calcAngle() {
+		NetworkTable.getTable("debug").putNumber("rand", Math.random());
+		NetworkTable.getTable("debug").putNumber("left", ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 11);
+		NetworkTable.getTable("debug").putNumber("right", ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE - 11);
+		double degrees = (Math.toDegrees(Math.atan2((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE)
+				- (ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE), 20)));
+		NetworkTable.getTable("debug").putNumber("turn", degrees);
+		return degrees;
+	}
+
+	public double calcDist() {
+		return (((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)
+				+ (ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)) / 2);
+	}
+
+	public void initDefaultCommand() {
+		this.setDefaultCommand(Robot.teleop);
+	}
+
+	public void lockAngle() {
+		lockAngle = navx.getYaw();
+	}
 
 	public void run(double x, double y) {
 		switch (mode) {

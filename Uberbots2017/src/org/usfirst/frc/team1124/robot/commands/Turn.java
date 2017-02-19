@@ -27,11 +27,20 @@ public class Turn extends Command {
 	}
 
 	protected void execute() {
-		if (Math.abs(Robot.drive.turnController.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()), Robot.drive.lockAngle)) * MAX_SPEED < QUIT_SPEED)
+
+		NetworkTable.getTable("debug").putNumber("test", 13);
+		NetworkTable.getTable("debug").putNumber("rand", Math.random());
+		NetworkTable.getTable("debug").putNumber("left",
+				Robot.drive.ultrasonic1.getAverageVoltage() * Drive.ULTRASONIC_SCALE - 11);
+		NetworkTable.getTable("debug").putNumber("right",
+				Robot.drive.ultrasonic2.getAverageVoltage() * Drive.ULTRASONIC_SCALE - 11);
+		if (Math.abs(Robot.drive.turnController.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()),
+				Robot.drive.lockAngle)) * MAX_SPEED < QUIT_SPEED)
 			quit();
 		else {
 			Robot.drive.mode = 2;
-			Robot.drive.driveTrain.mecanumDrive_Cartesian(0, 0, Robot.drive.turnController.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()), Robot.drive.lockAngle) * MAX_SPEED, 0);
+			Robot.drive.driveTrain.mecanumDrive_Cartesian(0, 0, Robot.drive.turnController
+					.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()), Robot.drive.lockAngle) * MAX_SPEED, 0);
 		}
 
 		NetworkTable.getTable("turn").putNumber("angle", Robot.drive.navx.getYaw());
@@ -68,7 +77,9 @@ public class Turn extends Command {
 		return !done;
 	}
 
-	protected void end() {}
+	protected void end() {
+	}
 
-	protected void interrupted() {}
+	protected void interrupted() {
+	}
 }

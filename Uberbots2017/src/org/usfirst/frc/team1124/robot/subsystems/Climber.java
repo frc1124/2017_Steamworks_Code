@@ -15,6 +15,8 @@ public class Climber extends Subsystem {
 	
     public void initDefaultCommand() {}
     public void toggle() { ropeDoor.set((ropeDoor.get()==Value.kForward) ? Value.kReverse : Value.kForward); }
-    public SpeedController getMotor() { return climbMotor; }
+    public void motorUp() { climbMotor.set(1.0); }
+    public void motorDown() { climbMotor.set(-1.0); }
+    public void motorStop() { climbMotor.set(0.0); }
 }
 

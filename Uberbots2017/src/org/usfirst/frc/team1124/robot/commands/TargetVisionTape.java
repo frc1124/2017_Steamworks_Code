@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class TargetVisionTape extends Command {
 	private boolean done = false;
-	
+
 	public static final int CAMERA_EXPOSURE = 3;
-	
+
 	private int tolerance = 2;
 	double buffer = .4;
-	
+
 	private GripPipeline filter = null;
 
 	public TargetVisionTape() {
@@ -24,13 +24,21 @@ public class TargetVisionTape extends Command {
 
 	}
 
+	protected void end() {
+		Robot.drive.frontLeft.set(0);
+		Robot.drive.frontRight.set(0);
+		Robot.drive.rearLeft.set(0);
+		Robot.drive.rearRight.set(0);
+		this.done = true;
+	}
+
 	protected void initialize() {
 		Robot.drive.mode = 2;
 		Robot.drive.lockAngle = Robot.drive.navx.getYaw();
 	} // mec mode
 
 	protected void execute() {
-		
+
 		Mat img = Robot.camera.getMat();
 		this.filter.process(img);
 		double[] range = filter.getXRange();
@@ -42,17 +50,30 @@ public class TargetVisionTape extends Command {
 		if (Math.abs(dfif) <= tolerance) {
 			done = true;
 			return;
-		}else if(Math.abs(dfif) >= tolerance){
-		double strafe = dfif;
-		if (strafe <= -1.0) {strafe = -1 * buffer;}//left
-		else if (strafe >= 1.0) {strafe = 1 * buffer;}//right
-		do{
-			Robot.drive.run(strafe, 0);
-		}while(Math.abs(dfif) > tolerance);
-			done = true;
+		} else if (Math.abs(dfif) >= tolerance) {
+			double strafe = dfif;
+			if (strafe <= -1.0) {
+				strafe = -1 * buffer;
+			} // left
+			else if (strafe >= 1.0) {
+				strafe = 1 * buffer;
+			} // right
+			if (Math.abs(dfif) > tolerance)
+				Robot.drive.run(strafe, 0);
+			else
+				done = true;
 			return;
 		}
 	}
+
+	public void interrupted() {
+		Robot.drive.frontLeft.set(0);
+		Robot.drive.frontRight.set(0);
+		Robot.drive.rearLeft.set(0);
+		Robot.drive.rearRight.set(0);
+		this.done = true;
+	}
+
 	@Override
 	protected boolean isFinished() {
 		return done;

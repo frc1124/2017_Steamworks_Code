@@ -12,7 +12,7 @@ public class Camera extends Subsystem {
 
 	public static final int CAMERA_RES_X = 640;
 	public static final int CAMERA_RES_Y = 480;
-	public static final int CAMERA_EXPOSURE = 5;
+	public static final int CAMERA_EXPOSURE = 30;
 
 	public Camera() {
 		camera = CameraServer.getInstance().startAutomaticCapture();

@@ -3,8 +3,10 @@ package org.usfirst.frc.team1124.robot;
 
 
 import org.usfirst.frc.team1124.robot.commands.Climb;
+import org.usfirst.frc.team1124.robot.commands.DriveForward;
 import org.usfirst.frc.team1124.robot.commands.PressToWin;
 import org.usfirst.frc.team1124.robot.commands.ReverseClimb;
+import org.usfirst.frc.team1124.robot.commands.TargetVisionTape;
 import org.usfirst.frc.team1124.robot.commands.ToggleClimbDoor;
 import org.usfirst.frc.team1124.robot.commands.ToggleGearDoor;
 
@@ -21,13 +23,13 @@ public class OI {
 	Button toggleGearDoor = new JoystickButton(stick, 2);
 	Button toggleClimbDoor = new JoystickButton(stickTwo, 5);
 	Button climbButton = new JoystickButton(stickTwo, 6);
-	Button climbReverse = new JoystickButton(stickTwo, 3);
+	Button climbReverse = new JoystickButton(stickTwo, 8);
 
 	public OI() {
 		pressToWin.whileHeld(new PressToWin());
 		toggleGearDoor.whenPressed(new ToggleGearDoor());
 		toggleClimbDoor.whenPressed(new ToggleClimbDoor());
 		climbButton.whileHeld(new Climb());
-		climbButton.whileHeld(new ReverseClimb());
+		climbReverse.whileHeld(new ReverseClimb());
 	}
 }

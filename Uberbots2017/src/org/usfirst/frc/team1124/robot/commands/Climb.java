@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Climb extends Command {
 
-    public Climb() { requires(Robot.climber); }
+    public Climb() {}
     protected void initialize() {}
-    protected void execute() { Robot.climber.getMotor().set(1); }
+    protected void execute() { Robot.climber.motorUp(); }
     protected boolean isFinished() { return false; }
-    protected void end() { Robot.climber.getMotor().set(0.0); }
+    protected void end() { Robot.climber.motorStop(); }
     protected void interrupted() { this.end(); }
 }
