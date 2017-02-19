@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1124.robot;
 
+import java.util.Calendar;
+
 import org.usfirst.frc.team1124.robot.commands.AutoQueue;
 import org.usfirst.frc.team1124.robot.commands.DriveForward;
 import org.usfirst.frc.team1124.robot.commands.Teleop;
@@ -9,6 +11,7 @@ import org.usfirst.frc.team1124.robot.subsystems.GearDoor;
 import org.usfirst.frc.team1124.vision.Camera;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -18,6 +21,7 @@ public class Robot extends IterativeRobot {
 	public static GearDoor gearDoor;
 	public static Climber climber;
 	public static OI oi;
+	public static long lastTime;
 	public static Command teleop;
 	public static AutoQueue auto;
 	public static Camera camera;
@@ -39,6 +43,8 @@ public class Robot extends IterativeRobot {
 		RobotMap.init();
 
 		oi = new OI();
+		lastTime = Calendar.getInstance().getTimeInMillis();
+		
 	}
 
 	public void disabledInit() {}
@@ -57,11 +63,17 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
 	public void teleopPeriodic() { 
-		NetworkTable.getTable("dash").putNumber("front_right_encoder", drive.frontRight.getEncPosition());
-		NetworkTable.getTable("dash").putNumber("front_right_encoder", drive.frontRight.getEncPosition());
-		NetworkTable.getTable("dash").putNumber("front_right_encoder", drive.frontRight.getEncPosition());
-		NetworkTable.getTable("dash").putNumber("front_right_encoder", drive.frontRight.getEncPosition());
+		updateDashboard();
 		Scheduler.getInstance().run();
 	}
 	public void testPeriodic() { Scheduler.getInstance().run(); }
+	
+	public void updateDashboard() {
+//		long curTime = Calendar.getInstance().getTimeInMillis();
+//		long diff = curTime - lastTime;
+//		lastTime = curTime;
+//		double speed = Math.PI * 4;
+		double speed = (( Math.abs(drive.frontLeft.getSpeed()) + Math.abs(drive.frontRight.getSpeed() + Math.abs(drive.rearRight.getSpeed()) + Math.abs(drive.rearLeft.getSpeed())) )/4) * (4*Math.PI) / 60;
+		NetworkTable.getTable("dash").putNumber("speed", speed);
+	}
 }
