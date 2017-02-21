@@ -49,6 +49,14 @@ public class TargetVisionTape extends Command {
 		double lx, hx;
 		lx = range[0];
 		hx = range[1];
+
+		// If we can't see the vision tape, bail
+		if (lx < 0 || hx < 0) {
+			done = true;
+			return;
+		}
+
+		// Find the middle
 		double mx = (lx + hx) / 2;
 		double dfif = mx - (Camera.CAMERA_RES_X / 2);
 		if (Math.abs(dfif) <= tolerance) {
