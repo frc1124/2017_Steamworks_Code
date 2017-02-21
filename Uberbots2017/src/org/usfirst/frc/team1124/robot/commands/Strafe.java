@@ -25,7 +25,9 @@ public class Strafe extends Command {
 	private int frontRightStart;
 	private int rearLeftStart;
 	private int rearRightStart;
-	
+
+	private double accerlationSlope = 0.25/4096;
+
 	public Strafe(double distance){
 		// Store the actual distance to travel
 		this.distance = distance;
@@ -119,18 +121,14 @@ public class Strafe extends Command {
 	}
 
 	private double getSpeed(int ticksSoFar) {
-		// Figure out the speed based on how close to being done, maxing at MAX_SPEED
-		if (ticksSoFar < distanceInTicks / 2) {
-			if (ticksSoFar >= TICKS_TIL_FULL)
-				return MAX_SPEED;
-			else
-				return Math.max(0.3, MAX_SPEED / TICKS_TIL_FULL * ticksSoFar);
-		} else {
-			if (ticksSoFar >= distanceInTicks - TICKS_TIL_FULL)
-				return MAX_SPEED / TICKS_TIL_FULL * (distanceInTicks - ticksSoFar);
-			else
-				return MAX_SPEED;
+		// Use the difference from the end to calculate the speed
+		double speed = accerlationSlope * Math.abs(distanceInTicks - ticksSoFar);
+
+		// Cap the speed
+		if (speed > MAX_SPEED) {
+			speed = MAX_SPEED;
 		}
+		return speed;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
