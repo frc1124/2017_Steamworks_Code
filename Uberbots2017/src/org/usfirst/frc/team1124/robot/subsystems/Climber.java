@@ -25,5 +25,16 @@ public class Climber extends Subsystem {
     }
     public void motorDown() { climbMotor.set(-1.0); }
     public void motorStop() { climbMotor.set(0.0); }
+	public boolean isDoorOpen() {
+		return this.ropeDoor.get().equals(Value.kReverse);
+	}
+
+	public void setDoorOpen(boolean doorOpen) {
+		ropeDoor.set((doorOpen) ? Value.kReverse : Value.kForward);
+	}
+
+	public boolean isSwitchPressed() {
+		return (limit.getAverageVoltage() > 2);
+	}
 }
 
