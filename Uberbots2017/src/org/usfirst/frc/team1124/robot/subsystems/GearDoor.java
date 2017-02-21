@@ -35,4 +35,8 @@ public class GearDoor extends Subsystem {
 //			gearDoor.set(Value.kReverse);
 //		}
 	}
+
+	public boolean hasGear() {
+		return optical.get();
+	}
 }
