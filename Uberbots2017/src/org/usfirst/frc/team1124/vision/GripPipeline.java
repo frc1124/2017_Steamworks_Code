@@ -33,6 +33,7 @@ public class GripPipeline implements VisionPipeline {
 	 */
 	@Override
 	public void process(Mat source0) {
+		try{
 		// Step Blur0:
 		Mat blurInput = source0;
 		BlurType blurType = BlurType.get("Gaussian Blur");
@@ -66,6 +67,8 @@ public class GripPipeline implements VisionPipeline {
 		double filterContoursMaxRatio = 1000.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio,
 				filterContoursMaxRatio, filterContoursOutput);
+		}
+		catch(Exception e) { System.out.println(e); }
 
 	}
 

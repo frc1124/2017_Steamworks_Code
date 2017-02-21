@@ -20,6 +20,7 @@ public class Camera extends Subsystem {
 		camera.setExposureManual(CAMERA_EXPOSURE);;
 		cvSink = CameraServer.getInstance().getVideo();
 		CameraServer.getInstance().putVideo("visionCamera", 640, 480);
+		camera.setFPS(15);
 	}
 
 	public Mat getMat() {

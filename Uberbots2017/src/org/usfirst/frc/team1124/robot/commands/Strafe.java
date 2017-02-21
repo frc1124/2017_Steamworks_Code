@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Strafe extends Command {
 	
+	@SuppressWarnings("unused")
 	private double distance;
 	
 	public Strafe(double distance){

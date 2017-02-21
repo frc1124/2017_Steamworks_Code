@@ -1,9 +1,6 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.Robot;
-import org.usfirst.frc.team1124.robot.commands.ToggleGearDoor;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -34,8 +31,8 @@ public class GearDoor extends Subsystem {
 	}
 
 	public void checkWall() {
-		if ((Robot.drive.ultrasonic1MM() <= 200 && Robot.drive.ultrasonic2MM() <= 200) && gearDoor.get() == Value.kForward && !optical.get()) {
-			gearDoor.set(Value.kReverse);
-		}
+//		if ((Robot.drive.ultrasonic1MM() <= 400 && Robot.drive.ultrasonic2MM() <= 400) && gearDoor.get() == Value.kForward && !optical.get()) {
+//			gearDoor.set(Value.kReverse);
+//		}
 	}
 }

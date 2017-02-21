@@ -82,4 +82,10 @@ public class Turn extends Command {
 
 	protected void interrupted() {
 	}
+	public void setDegrees(double x) {
+		this.degrees = x;
+		Robot.drive.lockAngle -= degrees;
+		Robot.drive.lockAngle = Robot.drive.lockAngle % 360;
+		done = false;
+	}
 }

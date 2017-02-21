@@ -2,8 +2,8 @@ package org.usfirst.frc.team1124.robot;
 
 
 
+import org.usfirst.frc.team1124.robot.commands.AlignToWall;
 import org.usfirst.frc.team1124.robot.commands.Climb;
-import org.usfirst.frc.team1124.robot.commands.DriveForward;
 import org.usfirst.frc.team1124.robot.commands.PressToWin;
 import org.usfirst.frc.team1124.robot.commands.ReverseClimb;
 import org.usfirst.frc.team1124.robot.commands.TargetVisionTape;
@@ -24,6 +24,8 @@ public class OI {
 	Button toggleClimbDoor = new JoystickButton(stickTwo, 5);
 	Button climbButton = new JoystickButton(stickTwo, 6);
 	Button climbReverse = new JoystickButton(stickTwo, 8);
+	Button visionTest = new JoystickButton(stick, 3);
+	Button turnTest = new JoystickButton(stick, 4);
 
 	public OI() {
 		pressToWin.whileHeld(new PressToWin());
@@ -31,5 +33,7 @@ public class OI {
 		toggleClimbDoor.whenPressed(new ToggleClimbDoor());
 		climbButton.whileHeld(new Climb());
 		climbReverse.whileHeld(new ReverseClimb());
+		visionTest.whenPressed(new TargetVisionTape()); 
+		turnTest.whenPressed(new AlignToWall());
 	}
 }

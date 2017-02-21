@@ -16,6 +16,7 @@ public class TargetVisionTape extends Command {
 	double buffer = .4;
 
 	private GripPipeline filter = null;
+	private int backupMode = 2;
 
 	public TargetVisionTape() {
 		requires(Robot.camera);
@@ -30,11 +31,14 @@ public class TargetVisionTape extends Command {
 		Robot.drive.rearLeft.set(0);
 		Robot.drive.rearRight.set(0);
 		this.done = true;
+		Robot.drive.mode = backupMode;
 	}
 
 	protected void initialize() {
-		Robot.drive.mode = 2;
+		backupMode = Robot.drive.mode;
+		Robot.drive.mode = 3;
 		Robot.drive.lockAngle = Robot.drive.navx.getYaw();
+		done = false;
 	} // mec mode
 
 	protected void execute() {

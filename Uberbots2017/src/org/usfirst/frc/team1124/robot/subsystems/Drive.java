@@ -6,7 +6,6 @@ import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -68,8 +67,7 @@ public class Drive extends Subsystem {
 		NetworkTable.getTable("debug").putNumber("rand", Math.random());
 		NetworkTable.getTable("debug").putNumber("left", ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 11);
 		NetworkTable.getTable("debug").putNumber("right", ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE - 11);
-		double degrees = (Math.toDegrees(Math.atan2((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE)
-				- (ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE), 20)));
+		double degrees = (Math.toDegrees(Math.atan2((ultAv1MM() - ultAv2MM()), 472)));
 		NetworkTable.getTable("debug").putNumber("turn", degrees);
 		return degrees;
 	}
@@ -86,6 +84,8 @@ public class Drive extends Subsystem {
 	public double ultrasonic2MM(){
 		return ultrasonic2.getVoltage() * 1000;
 	}
+	public double ultAv1MM() { return ultrasonic1.getAverageVoltage()*1000; }
+	public double ultAv2MM() { return ultrasonic2.getAverageVoltage()*1000; }
 
 	public void initDefaultCommand() {
 		this.setDefaultCommand(Robot.teleop);
@@ -93,7 +93,8 @@ public class Drive extends Subsystem {
 
 	public void lockAngle() {
 		lockAngle = navx.getYaw();
-	}
+	} 
+	
 
 	public void run(double x, double y) {
 		switch (mode) {
@@ -116,6 +117,8 @@ public class Drive extends Subsystem {
 			double rotation = turnController.getOutput(navx.getYaw(), lockAngle);
 			driveTrain.mecanumDrive_Cartesian(x, -y, rotation, 0);
 			break;
+		case 3:
+			driveTrain.mecanumDrive_Cartesian(x, 0, lockAngle, navx.getYaw());
 		default:
 			System.out.println("This case litteraly cannot happen");
 			break;
