@@ -12,12 +12,13 @@ public class Camera extends Subsystem {
 
 	public static final int CAMERA_RES_X = 640;
 	public static final int CAMERA_RES_Y = 480;
-	public static final int CAMERA_EXPOSURE = 30;
+	public static final int CAMERA_EXPOSURE = 45;
 
 	public Camera() {
 		camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(CAMERA_RES_X, CAMERA_RES_Y);
 		camera.setExposureManual(CAMERA_EXPOSURE);;
+		camera.setFPS(15);
 		cvSink = CameraServer.getInstance().getVideo();
 		CameraServer.getInstance().putVideo("visionCamera", 640, 480);
 		camera.setFPS(15);
