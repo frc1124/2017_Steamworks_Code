@@ -34,6 +34,9 @@ public class Robot extends IterativeRobot {
 	public static Command placeGearOnCenterAndRight;
 	public static Command placeGearOnLeft;
 	public static Command placeGearOnRight;
+	private static double velocityX = 0;
+	private static double velocityY = 0;
+	private static double velocityZ = 0;
 
 	public void robotInit() {
 		drive = new Drive();
@@ -80,6 +83,18 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {}
 	public void testInit() {}
 
+	public static double speedX(){
+		return velocityX;
+	}
+	
+	public static double speedY(){
+		return velocityY;
+	}
+	
+	public static double speedZ(){
+		return velocityZ;
+	}
+	
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
 	public void teleopPeriodic() { 
@@ -94,10 +109,18 @@ public class Robot extends IterativeRobot {
 //		long diff = curTime - lastTime;
 //		lastTime = curTime;
 //		double speed = Math.PI * 4;
+		
+		velocityX -= drive.distancer.getAccelerometerX();
+		velocityY += drive.distancer.getAccelerometerY();
+		velocityZ += drive.distancer.getAccelerometerZ();
+		
 		NetworkTable.getTable("dash").putBoolean("limit", climber.limit.getAverageVoltage()>2);
 		double speed = (( Math.abs(drive.frontLeft.getSpeed()) + Math.abs(drive.frontRight.getSpeed() + Math.abs(drive.rearRight.getSpeed()) + Math.abs(drive.rearLeft.getSpeed())) )/4) * (4*Math.PI) / 60;
 		NetworkTable.getTable("dash").putNumber("speed", speed);
 		NetworkTable.getTable("dash").putNumber("us1", drive.ultrasonic1MM());
 		NetworkTable.getTable("dash").putNumber("us2", drive.ultrasonic2MM());
+		NetworkTable.getTable("dash").putNumber("Accelerometer X", drive.distancer.getAccelerometerX());
+		NetworkTable.getTable("dash").putNumber("Accelerometer Y", drive.distancer.getAccelerometerY());
+		NetworkTable.getTable("dash").putNumber("Accelerometer Z", drive.distancer.getAccelerometerZ());
 	}
 }
