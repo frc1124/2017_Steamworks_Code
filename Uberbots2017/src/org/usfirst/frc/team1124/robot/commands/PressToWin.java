@@ -21,6 +21,10 @@ public class PressToWin extends CommandGroup {
 		addSequential(new Terminate(this));
 	}
 
+	public void cancel() {
+		done = true;
+	}
+
 	public boolean isFinished() {
 		return done;
 	}

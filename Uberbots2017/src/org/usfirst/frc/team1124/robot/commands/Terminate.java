@@ -4,20 +4,18 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Terminate extends Command {
 
-	private PressToWin pressToWin;
+	private Command cmdGroup;
 
-	public Terminate(PressToWin pressToWin) {
-		this.pressToWin = pressToWin;
+	public Terminate(Command cmdGroup) {
+		this.cmdGroup = cmdGroup;
 	}
 
-	public void intialize() {
-		pressToWin.done = true;
-		pressToWin.cancel();
+	public void initialize() {
+		cmdGroup.cancel();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
