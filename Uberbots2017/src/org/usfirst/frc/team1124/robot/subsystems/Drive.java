@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.hal.AccelerometerJNI;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import utils.MiniPID;
 
@@ -26,7 +27,10 @@ public class Drive extends Subsystem {
 	public double lockAngle = 0.0;
 	public RobotDrive driveTrain = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 	public int mode = 0; // 0:none, 1:arcade, 2:mec
-
+	public AccelerometerJNI distancer = new AccelerometerJNI();
+	public double strafeAdd;
+	
+	
 	public Drive() {
 		frontRight.setPID(2, 0, 1);
 		frontRight.setFeedbackDevice(FeedbackDevice.QuadEncoder);
