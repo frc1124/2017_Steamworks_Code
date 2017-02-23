@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.usfirst.frc.team1124.robot.commands.AutoQueue;
 import org.usfirst.frc.team1124.robot.commands.DriveForward;
+import org.usfirst.frc.team1124.robot.commands.Initialize;
 import org.usfirst.frc.team1124.robot.commands.Teleop;
 import org.usfirst.frc.team1124.robot.commands.autonomous.*;
 import org.usfirst.frc.team1124.robot.subsystems.Climber;
@@ -62,6 +63,7 @@ public class Robot extends IterativeRobot {
 		placeGearOnRight = new PlaceGearOnRight();
 		placeGearOnLeft = new PlaceGearOnLeft();
 		
+		Scheduler.getInstance().add(new Initialize());
 	}
 
 	public void disabledInit() {}

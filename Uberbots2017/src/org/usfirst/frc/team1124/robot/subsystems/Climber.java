@@ -19,6 +19,9 @@ public class Climber extends Subsystem {
 	
     public void initDefaultCommand() {}
     public void toggle() { ropeDoor.set((ropeDoor.get()==Value.kForward) ? Value.kReverse : Value.kForward); }
+    public void setDoorOpen(boolean open) {
+    	ropeDoor.set((open) ? Value.kReverse : Value.kForward); 
+    }
     public void motorUp() { 
     	
     	if(limit.getVoltage()>2) { climbMotor.set(1.0); } else { climbMotor.set(0); } 
