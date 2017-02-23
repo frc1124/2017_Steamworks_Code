@@ -3,22 +3,21 @@ package org.usfirst.frc.team1124.robot.commands;
 import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Strafe extends Command {
 	
 	@SuppressWarnings("unused")
 	private double distance;
 	private double distanceInTicks;
-
-	private boolean done = false;
+	private double distanceX;
+	private double distanceInTicksX;
+	private double distanceY;
+	private double distanceInTicksY;
 
 	private static final double MAX_SPEED = 0.9;
-
 	private static final double DISTANCE_PER_TICK = 4 * Math.PI / 4096;
 
-	private static final int TICKS_TIL_FULL = 16000;
-
+	private boolean done = false;
 	private int sign;
 
 	private int frontLeftStart;
@@ -27,6 +26,7 @@ public class Strafe extends Command {
 	private int rearRightStart;
 
 	private double accerlationSlope = 0.25/4096;
+	private int backupMode;
 
 	public Strafe(double distance){
 		// Store the actual distance to travel
@@ -48,6 +48,17 @@ public class Strafe extends Command {
 		rearLeftStart = Robot.drive.rearLeft.getEncPosition();
 		rearRightStart = Robot.drive.rearRight.getEncPosition();
 
+		// Lock the angle
+		Robot.drive.lockAngle();
+
+		// Figure out the distanceX, distanceInTicksX, distanceY, and distanceInTicksY
+		distanceX = distanceX * Math.cos(Robot.drive.lockAngle);
+		distanceY = -1 * distanceY * Math.sin(Robot.drive.lockAngle);
+		distanceInTicksX = distanceInTicksX * Math.cos(Robot.drive.lockAngle);
+		distanceInTicksY = -1 * distanceInTicksY * Math.sin(Robot.drive.lockAngle);
+
+		this.backupMode = Robot.drive.mode;
+		Robot.drive.mode = 2;
 		done = false;
 	}
 
@@ -72,31 +83,43 @@ public class Strafe extends Command {
 		 */
 
 		// Get the offsets
-		int changeFR = Math.abs(drive.frontRight.getEncPosition() - frontRightStart);
-		int changeFL = Math.abs(drive.frontLeft.getEncPosition() - frontLeftStart);
-		int changeRR = Math.abs(drive.rearRight.getEncPosition() - rearRightStart);
-		int changeRL = Math.abs(drive.rearLeft.getEncPosition() - rearLeftStart);
+		int changeFR = drive.frontRight.getEncPosition() - frontRightStart;
+		int changeFL = drive.frontLeft.getEncPosition() - frontLeftStart;
+		int changeRR = drive.rearRight.getEncPosition() - rearRightStart;
+		int changeRL = drive.rearLeft.getEncPosition() - rearLeftStart;
+
+		// Find the averageX and averageY over all four wheels
+		double sinCos45 = Math.sin(45);
+		double changeFLX = -1 * sinCos45 * changeFL; // forward motion produces negative X force
+		double changeFLY = sinCos45 * changeFL;
+		double changeFRX = sinCos45 * changeFR;
+		double changeFRY = sinCos45 * changeFR;
+		double changeRLX = sinCos45 * changeRL;
+		double changeRLY = sinCos45 * changeRL;
+		double changeRRX = -1 * sinCos45 * changeRR; // forward motion produces negative X force
+		double changeRRY = sinCos45 * changeRR;
 
 		// Find the average change over all wheels
-		int average = sign * (changeFR + changeRR + changeFL + changeRL) / 4;
+		double averageX = sign * (changeFRX + changeRRX + changeFLX + changeRLX) / 4;
+		double averageY = -1 * sign * (changeFRY + changeRRY + changeFLY + changeRLY) / 4;
+		int ticksSoFar = (int)Math.sqrt(averageX * averageX + averageY * averageY);
 
-		// Calculate the speed based on the average and direction
-		double speed = sign * getSpeed(average);
-
-		// If we're within 100 ticks (1 inch), finish
-		if (Math.abs(distanceInTicks - average) < 325)
-			quit();
-		else {
-			// Strafe using mecanum
-			drive.mode = 2;
-			drive.driveTrain.mecanumDrive_Cartesian(speed,0, drive.turnController.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()), drive.lockAngle), 0);
+		// If we're within 325 ticks (1 inch), finish
+		if (Math.abs(distanceInTicks - ticksSoFar) < 325) {
+			end();
+			return;
 		}
 
-		NetworkTable.getTable("encoders").putNumber("average", average);
-		NetworkTable.getTable("encoders").putNumber("trySpeed", speed);
-		NetworkTable.getTable("encoders").putNumber("distanceInTicks", distanceInTicks);
+		// Calculate the speed based on the average and direction
+		double speed = sign * getSpeed(ticksSoFar);
+		double speedX = sign * speed * Math.cos(Robot.drive.lockAngle);
+		double speedY = -1 * sign * speed * Math.sin(Robot.drive.lockAngle);
+
+		// Strafe using mecanum
+		Robot.drive.run(speedX,speedY);
 	}
 
+	@SuppressWarnings("unused")
 	private double closeToLockAngle(double yaw) {
 		// Figure out the lock angle based on current yaw so we don't drift
 		double yaw2 = yaw + 360;
@@ -110,13 +133,14 @@ public class Strafe extends Command {
 		return yaw;
 	}
 
-	private void quit() {
+	protected void end() {
 		// Turn off motors
 		Drive drive = Robot.drive;
 		drive.frontLeft.set(0);
 		drive.frontRight.set(0);
 		drive.rearLeft.set(0);
 		drive.rearRight.set(0);
+		drive.mode = backupMode;
 		done = true;
 	}
 
@@ -139,8 +163,6 @@ public class Strafe extends Command {
 	public boolean isRunning() {
 		return !done;
 	}
-
-	protected void end() {}
 
 	protected void interrupted() { this.end(); }
 }
