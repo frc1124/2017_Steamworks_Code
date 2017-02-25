@@ -55,21 +55,14 @@ public class TargetVisionTape extends Command {
 			done = true;
 			return;
 		} else if (Math.abs(dfif) >= tolerance) {
-			double strafe = dfif;
-			if (strafe <= -1.0) {
-				strafe = -1 * buffer;
-			} // left
-			else if (strafe >= 1.0) {
-				strafe = 1 * buffer;
-			} // right
 			if (Math.abs(dfif) > tolerance)
-				Robot.drive.run(strafe, 0);
+				Robot.drive.run(Math.signum(dfif)*buffer, 0);
 			else
 				done = true;
 			return;
 		}
 	}
-
+	
 	public void interrupted() {
 		Robot.drive.frontLeft.set(0);
 		Robot.drive.frontRight.set(0);

@@ -122,7 +122,8 @@ public class Drive extends Subsystem {
 			driveTrain.mecanumDrive_Cartesian(x, -y, rotation, 0);
 			break;
 		case 3:
-			driveTrain.mecanumDrive_Cartesian(x, 0, lockAngle, navx.getYaw());
+			double r = turnController.getOutput(navx.getYaw(), lockAngle);
+			driveTrain.mecanumDrive_Cartesian(x, 0, r, 0);
 		default:
 			System.out.println("This case litteraly cannot happen");
 			break;
