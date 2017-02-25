@@ -22,8 +22,6 @@ public class Teleop extends Command {
         rightX = OI.stick.getRawAxis(4);
         rightY = -OI.stick.getRawAxis(5);
         
-        Robot.gearDoor.checkWall();
-
 		if (Math.abs(rightX) >= 0.1 || Math.abs(rightY) >= 0.1) {
             if(Robot.drive.mode != 2) {
                 Robot.drive.lockAngle();
