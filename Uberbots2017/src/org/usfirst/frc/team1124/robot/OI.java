@@ -19,13 +19,6 @@ public class OI {
 	// The Controllers
 	public static Joystick stick = new Joystick(0);
 	public static Joystick stickTwo = new Joystick(1);
-	Button pressToWin = new JoystickButton(stick, 1);
-	Button toggleGearDoor = new JoystickButton(stick, 2);
-	Button toggleClimbDoor = new JoystickButton(stickTwo, 5);
-	Button climbButton = new JoystickButton(stickTwo, 6);
-	Button climbReverse = new JoystickButton(stickTwo, 8);
-	Button visionTest = new JoystickButton(stick, 3);
-	Button turnTest = new JoystickButton(stick, 4);
 
 	public OI() {
 		pressToWin.whileHeld(new PressToWin());

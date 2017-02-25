@@ -1,17 +1,13 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.commands.TestGearDoor;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class GearDoor extends Subsystem {
 	private DoubleSolenoid gearDoor = new DoubleSolenoid(0, 0, 2);
-
-	private DigitalInput optical = new DigitalInput(0);
 
 	public GearDoor() {
 		this.setDefaultCommand(new TestGearDoor());
