@@ -22,8 +22,8 @@ public class Drive extends Subsystem {
 	public CANTalon frontLeft = new CANTalon(1);
 	public CANTalon rearRight = new CANTalon(4);
 	public CANTalon rearLeft = new CANTalon(2);
-	public AnalogInput ultrasonic1 = new AnalogInput(0);
-	public AnalogInput ultrasonic2 = new AnalogInput(1);
+	//public AnalogInput ultrasonic1 = new AnalogInput(0);
+	//public AnalogInput ultrasonic2 = new AnalogInput(1);
 	public double lockAngle = 0.0;
 	public RobotDrive driveTrain = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 	public int mode = 0; // 0:none, 1:arcade, 2:mec
@@ -67,29 +67,29 @@ public class Drive extends Subsystem {
 
 	}
 
-	public double calcAngle() {
-		NetworkTable.getTable("debug").putNumber("rand", Math.random());
-		NetworkTable.getTable("debug").putNumber("left", ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 11);
-		NetworkTable.getTable("debug").putNumber("right", ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE - 11);
-		double degrees = (Math.toDegrees(Math.atan2((ultAv1MM() - ultAv2MM()), 472)));
-		NetworkTable.getTable("debug").putNumber("turn", degrees);
-		return degrees;
-	}
+//	public double calcAngle() {
+//		NetworkTable.getTable("debug").putNumber("rand", Math.random());
+//		NetworkTable.getTable("debug").putNumber("left", ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 11);
+//		NetworkTable.getTable("debug").putNumber("right", ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE - 11);
+//		double degrees = (Math.toDegrees(Math.atan2((ultAv1MM() - ultAv2MM()), 472)));
+//		NetworkTable.getTable("debug").putNumber("turn", degrees);
+//		return degrees;
+//	}
 
-	public double calcDist() {
-		return (((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)
-				+ (ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)) / 2);
-	}
-	
-	public double ultrasonic1MM(){
-		return ultrasonic1.getVoltage() * 1000;
-	}
-	
-	public double ultrasonic2MM(){
-		return ultrasonic2.getVoltage() * 1000;
-	}
-	public double ultAv1MM() { return ultrasonic1.getAverageVoltage()*1000; }
-	public double ultAv2MM() { return ultrasonic2.getAverageVoltage()*1000; }
+//	public double calcDist() {
+//		return (((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)
+//				+ (ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)) / 2);
+//	}
+//	
+//	public double ultrasonic1MM(){
+//		return ultrasonic1.getVoltage() * 1000;
+//	}
+//	
+//	public double ultrasonic2MM(){
+//		return ultrasonic2.getVoltage() * 1000;
+//	}
+//	public double ultAv1MM() { return ultrasonic1.getAverageVoltage()*1000; }
+//	public double ultAv2MM() { return ultrasonic2.getAverageVoltage()*1000; }
 
 	public void initDefaultCommand() {
 		this.setDefaultCommand(Robot.teleop);

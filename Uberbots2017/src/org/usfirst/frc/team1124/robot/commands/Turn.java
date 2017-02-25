@@ -30,10 +30,10 @@ public class Turn extends Command {
 
 		NetworkTable.getTable("debug").putNumber("test", 13);
 		NetworkTable.getTable("debug").putNumber("rand", Math.random());
-		NetworkTable.getTable("debug").putNumber("left",
-				Robot.drive.ultrasonic1.getAverageVoltage() * Drive.ULTRASONIC_SCALE - 11);
-		NetworkTable.getTable("debug").putNumber("right",
-				Robot.drive.ultrasonic2.getAverageVoltage() * Drive.ULTRASONIC_SCALE - 11);
+		//NetworkTable.getTable("debug").putNumber("left",
+		//		Robot.drive.ultrasonic1.getAverageVoltage() * Drive.ULTRASONIC_SCALE - 11);
+		//NetworkTable.getTable("debug").putNumber("right",
+		//		Robot.drive.ultrasonic2.getAverageVoltage() * Drive.ULTRASONIC_SCALE - 11);
 		if (Math.abs(Robot.drive.turnController.getOutput(closeToLockAngle(Robot.drive.navx.getYaw()),
 				Robot.drive.lockAngle)) * MAX_SPEED < QUIT_SPEED)
 			quit();
