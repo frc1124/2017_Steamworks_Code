@@ -15,7 +15,7 @@ public class AlignToWall extends CommandGroup {
     	addSequential(turnCommand);
     }
     protected void initialize() {
-    	//turnCommand.setDegrees(-1*Robot.drive.calcAngle());
+    	turnCommand.setDegrees(-1*Robot.drive.calcAngle());
     	
     }
     
