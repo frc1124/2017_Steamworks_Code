@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1124.robot;
 
+import java.nio.ByteBuffer;
 import java.util.Calendar;
 
 import org.usfirst.frc.team1124.robot.commands.AutoQueue;
@@ -13,6 +14,9 @@ import org.usfirst.frc.team1124.robot.subsystems.GearDoor;
 import org.usfirst.frc.team1124.vision.Camera;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -30,6 +34,8 @@ public class Robot extends IterativeRobot {
 	public static Command dumbAuto;
 	public static Command noAuto;
 	public static AnalogInput gearDoorDetect;
+	public static I2C arduinoConnection;
+	public static byte commandMode = 6;
 	
 	//autos
 	public static Command placeGearOnCenter;
@@ -58,7 +64,9 @@ public class Robot extends IterativeRobot {
 
 		oi = new OI();
 		lastTime = Calendar.getInstance().getTimeInMillis();
-		
+
+		Robot.arduinoConnection = new I2C(I2C.Port.kOnboard,0);
+
 		//autos
 		placeGearOnCenter = new PlaceGearOnCenter();
 		placeGearOnCenterAndLeft = new PlaceGearOnCenterAndLeft();
@@ -127,5 +135,46 @@ public class Robot extends IterativeRobot {
 		NetworkTable.getTable("dash").putNumber("Accelerometer Y", drive.distancer.getAccelerometerY());
 		NetworkTable.getTable("dash").putNumber("Accelerometer Z", drive.distancer.getAccelerometerZ());
 		NetworkTable.getTable("dash").putNumber("gearDetect", gearDoor.detect());
+	}
+
+	void updateArduino() {
+		byte[] buffer = new byte[3];
+
+		/**
+		 * Format message
+		 */
+		byte mode = commandMode;
+		if (Robot.commandMode != 6) {
+		} else {
+			if (isOperatorControl()) {
+				if (isDisabled()) {
+					mode = 1;
+				} else if (isEnabled()) {
+					mode = 2;
+				}
+			} else if (isAutonomous()) {
+				if (isDisabled()) {
+					mode = 3;
+				} else if (isEnabled()) {
+					mode = 4;
+				}
+			} else if (!DriverStation.getInstance().isDSAttached()) {
+				mode = 5;
+			}
+		}
+		buffer[0] = mode;
+
+		char color = 'I';
+		if (DriverStation.getInstance().getAlliance().equals(DriverStation.Alliance.Red)) {
+			color = 'R';
+		} else if (DriverStation.getInstance().getAlliance().equals(DriverStation.Alliance.Blue)) {
+			color = 'B';
+		}
+		buffer[1] = (byte)color;
+
+		buffer[3] = (byte)((Robot.gearDoor.get().equals(Value.kReverse)) ? 0x1 : 0x0);
+
+		// Send the buffer
+		Robot.arduinoConnection.writeBulk(buffer);
 	}
 }

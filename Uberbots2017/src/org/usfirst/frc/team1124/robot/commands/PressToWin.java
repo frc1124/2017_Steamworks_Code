@@ -21,8 +21,16 @@ public class PressToWin extends CommandGroup {
 		addSequential(new Terminate(this));
 	}
 
+	protected void initialize() {
+		Robot.commandMode = 10;
+	}
+
 	public boolean isFinished() {
 		return done;
+	}
+	
+	protected void end() {
+		Robot.commandMode = 6;
 	}
 
 	protected void interrupted() {
