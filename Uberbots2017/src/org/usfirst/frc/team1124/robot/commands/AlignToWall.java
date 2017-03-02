@@ -16,7 +16,9 @@ public class AlignToWall extends CommandGroup {
     }
     protected void initialize() {
     	//turnCommand.setDegrees(-1*Robot.drive.calcAngle());
-    	
+    	Robot.modeFlag = 7;
     }
-    
+    protected void end(){
+    	Robot.modeFlag = 0;
+    }
 }

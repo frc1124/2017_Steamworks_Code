@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1124.robot;
 
+import java.nio.ByteBuffer;
 import java.util.Calendar;
 
 import org.usfirst.frc.team1124.robot.commands.AutoQueue;
@@ -13,6 +14,8 @@ import org.usfirst.frc.team1124.robot.subsystems.GearDoor;
 import org.usfirst.frc.team1124.vision.Camera;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -30,7 +33,8 @@ public class Robot extends IterativeRobot {
 	public static Command dumbAuto;
 	public static Command noAuto;
 	public static AnalogInput gearDoorDetect;
-	
+	public static I2C arduinoConnection;
+	public static int modeFlag = 0;
 	//autos
 	public static Command placeGearOnCenter;
 	public static Command placeGearOnCenterAndLeft;
@@ -55,6 +59,7 @@ public class Robot extends IterativeRobot {
 		dumbAuto = new DriveForward(96);
 		noAuto = new DriveForward(0);
 		RobotMap.init();
+		arduinoConnection = new I2C(I2C.Port.kOnboard, 0);
 
 		oi = new OI();
 		lastTime = Calendar.getInstance().getTimeInMillis();
@@ -99,14 +104,52 @@ public class Robot extends IterativeRobot {
 		return velocityZ;
 	}
 	
-	public void disabledPeriodic() { Scheduler.getInstance().run(); }
-	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
+	public void disabledPeriodic() { Scheduler.getInstance().run(); updateArduino(); }
+	public void autonomousPeriodic() { Scheduler.getInstance().run();updateArduino(); }
 	public void teleopPeriodic() { 
 		updateDashboard();
 		Scheduler.getInstance().run();
-
+		updateArduino();
 	}
-	public void testPeriodic() { Scheduler.getInstance().run(); }
+	public void testPeriodic() { Scheduler.getInstance().run(); updateArduino(); }
+	
+	public void updateArduino(){
+		boolean allienceIsRed = (DriverStation.getInstance().getAlliance().equals(DriverStation.Alliance.Red));
+		int teleopD = 1, teleopE = 2, autoD = 3, autoE = 4, eStop = 5;
+		int disconnected  = 6, searchFeeder = 7, gearReady = 8, gearIn = 9, searchLift = 10, climb = 11;
+		int mode = disconnected;
+		boolean hasGear = gearDoorDetect.getVoltage() != 0;
+		if(!DriverStation.getInstance().isSysActive()){
+			mode = eStop;
+		}else{
+			if(modeFlag > 0){
+				mode = modeFlag;
+			}else{
+				if(isEnabled()){
+					if(isOperatorControl()){
+						mode = teleopE;
+					}
+					else if(isAutonomous()){
+						mode = autoE;
+					}
+				}else{
+					if(isOperatorControl()){
+						mode = teleopD;
+					}
+					else if(isAutonomous()){
+						mode = autoD;
+					}
+				}
+			}
+		}
+		
+		ByteBuffer data =  ByteBuffer.allocate(4);
+		data.put(0, (byte) 0xFF);
+		data.put(1, (byte)((allienceIsRed) ? 1:0));
+		data.put(2, (byte)(mode));
+		data.put(3, (byte)((hasGear) ? 1:0));
+		arduinoConnection.writeBulk(data , 3);
+	}
 	
 	public void updateDashboard() {
 //		long curTime = Calendar.getInstance().getTimeInMillis();

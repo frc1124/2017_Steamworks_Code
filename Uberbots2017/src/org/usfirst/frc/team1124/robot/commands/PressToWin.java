@@ -25,6 +25,14 @@ public class PressToWin extends CommandGroup {
 		return done;
 	}
 
+	protected void initialize(){
+		Robot.modeFlag = 10;
+	}
+	
+	protected void end(){
+		Robot.modeFlag = 0;
+	}
+	
 	protected void interrupted() {
 		this.end();
 		NetworkTable.getTable("debug").putBoolean("working", true);
