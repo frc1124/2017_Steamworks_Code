@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.usfirst.frc.team1124.robot.commands.AutoQueue;
 import org.usfirst.frc.team1124.robot.commands.DriveForward;
+import org.usfirst.frc.team1124.robot.commands.TargetVisionTape;
 import org.usfirst.frc.team1124.robot.commands.Teleop;
 import org.usfirst.frc.team1124.robot.commands.TestGearDoor;
 import org.usfirst.frc.team1124.robot.commands.autonomous.*;
@@ -13,7 +14,12 @@ import org.usfirst.frc.team1124.robot.subsystems.GearDoor;
 import org.usfirst.frc.team1124.vision.Camera;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.Utility;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -30,6 +36,14 @@ public class Robot extends IterativeRobot {
 	public static Command dumbAuto;
 	public static Command noAuto;
 	public static AnalogInput gearDoorDetect;
+	public static Utility dataStuff;
+	public static PowerDistributionPanel pdp;
+	public static Command targetVisionTape;
+	
+	//dio
+	public static AnalogInput leftUltrasonic;
+	public static AnalogInput rightUltrasonic;
+	public static DigitalInput limitSwitch;
 	
 	//autos
 	public static Command placeGearOnCenter;
@@ -44,7 +58,6 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		drive = new Drive();
 		gearDoor = new GearDoor();
-		gearDoor.setDefaultCommand(new TestGearDoor());
 		climber = new Climber();
 		teleop = new Teleop();
 		camera = new Camera();
@@ -54,6 +67,13 @@ public class Robot extends IterativeRobot {
 		drive.navx.resetDisplacement();
 		dumbAuto = new DriveForward(96);
 		noAuto = new DriveForward(0);
+		pdp = new PowerDistributionPanel();
+		
+		//dio
+		leftUltrasonic = new AnalogInput(1);
+		rightUltrasonic = new AnalogInput(0);
+		gearDoorDetect = new AnalogInput(2);
+		limitSwitch = new DigitalInput(6);
 		RobotMap.init();
 
 		oi = new OI();
@@ -65,10 +85,13 @@ public class Robot extends IterativeRobot {
 		placeGearOnCenterAndRight = new PlaceGearOnCenterAndRight();
 		placeGearOnRight = new PlaceGearOnRight();
 		placeGearOnLeft = new PlaceGearOnLeft();
-		
+		gearDoor.setDefaultCommand(new TestGearDoor());
+		targetVisionTape = new TargetVisionTape();
 	}
 
-	public void disabledInit() {}
+	public void disabledInit() {
+		Scheduler.getInstance().removeAll();
+	}
 	@SuppressWarnings("deprecation")
 	public void autonomousInit() {
 		
@@ -101,7 +124,7 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
-	public void teleopPeriodic() { 
+	public void teleopPeriodic() {
 		updateDashboard();
 		Scheduler.getInstance().run();
 
@@ -118,14 +141,21 @@ public class Robot extends IterativeRobot {
 		velocityY += drive.distancer.getAccelerometerY();
 		velocityZ += drive.distancer.getAccelerometerZ();
 		
-		NetworkTable.getTable("dash").putBoolean("limit", climber.limit.getAverageVoltage()>2);
+		//NetworkTable.getTable("dash").putBoolean("limit", climber.limit.getAverageVoltage()>2);
 		double speed = (( Math.abs(drive.frontLeft.getSpeed()) + Math.abs(drive.frontRight.getSpeed() + Math.abs(drive.rearRight.getSpeed()) + Math.abs(drive.rearLeft.getSpeed())) )/4) * (4*Math.PI) / 60;
 		NetworkTable.getTable("dash").putNumber("speed", speed);
-//		NetworkTable.getTable("dash").putNumber("us1", drive.ultrasonic1MM());
-//		NetworkTable.getTable("dash").putNumber("us2", drive.ultrasonic2MM());
+		NetworkTable.getTable("dash").putNumber("usRight", (rightUltrasonic.getAverageVoltage()*1000));
+		NetworkTable.getTable("dash").putNumber("usLeft", (leftUltrasonic.getAverageVoltage()*1000));
 		NetworkTable.getTable("dash").putNumber("Accelerometer X", drive.distancer.getAccelerometerX());
 		NetworkTable.getTable("dash").putNumber("Accelerometer Y", drive.distancer.getAccelerometerY());
 		NetworkTable.getTable("dash").putNumber("Accelerometer Z", drive.distancer.getAccelerometerZ());
-		NetworkTable.getTable("dash").putNumber("gearDetect", gearDoor.detect());
+		NetworkTable.getTable("dash").putNumber("fleft", drive.frontLeft.getEncPosition());
+		NetworkTable.getTable("dash").putNumber("bleft", drive.rearLeft.getEncPosition());
+		NetworkTable.getTable("dash").putNumber("fright", drive.frontRight.getEncPosition());
+		NetworkTable.getTable("dash").putNumber("bright", drive.rearRight.getEncPosition());
+		//NetworkTable.getTable("dash").putNumber("gearDetect", gearDoor.detect());
+		NetworkTable.getTable("dash").putNumber("time", dataStuff.getFPGATime()/1000000);
+		NetworkTable.getTable("dash").putNumber("battery", pdp.getVoltage());
+		NetworkTable.getTable("dash").putNumber("Detect", gearDoorDetect.getVoltage());
 	}
 }

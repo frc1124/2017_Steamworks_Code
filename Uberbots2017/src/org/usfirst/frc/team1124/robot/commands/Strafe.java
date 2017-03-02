@@ -10,17 +10,21 @@ public class Strafe extends Command {
 	private double distance;
 	private double curDistance = 0;
 	
-	private double speed = 0.4;
+	private double speed = 0;
 	
 	private long deltaTime = 0;
 	
-	public Strafe(double distance){
-		this.distance = distance;
+	public Strafe(double d){
+		
+	}
+	public Strafe() {
+		
 	}
 	
 	public Strafe(double distance, double speed){
 		this.distance = distance;
 		this.speed = speed;
+		requires(Robot.drive);
 	}
 
 	@Override
@@ -37,14 +41,17 @@ public class Strafe extends Command {
 	protected void execute() {
 		long time1 = System.nanoTime();
 		super.execute();
+		Robot.drive.mode = 2;
+		Robot.drive.run(Robot.drive.strafeDist, 0);
 		curDistance += Robot.speedX() * deltaTime;
 		deltaTime = System.nanoTime() - time1;
+		
 		
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return curDistance >= distance;
+		return false;
 	}
 }

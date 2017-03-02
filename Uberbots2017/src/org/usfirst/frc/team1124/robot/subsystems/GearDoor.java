@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class GearDoor extends Subsystem {
 	private DoubleSolenoid gearDoor = new DoubleSolenoid(0, 0, 2);
-	private AnalogInput anaIn = new AnalogInput(0);
+	//private AnalogInput anaIn = new AnalogInput(0);
 
 	public GearDoor() {
 		//this.setDefaultCommand(new TestGearDoor());
@@ -35,5 +35,5 @@ public class GearDoor extends Subsystem {
 	public Value get() {
 		return gearDoor.get();
 	}
-	public double detect() { return(anaIn.getVoltage()); }
+	//public double detect() { return(anaIn.getVoltage()); }
 }

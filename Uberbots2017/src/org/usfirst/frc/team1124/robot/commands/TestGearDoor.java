@@ -7,8 +7,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class TestGearDoor extends Command {
-
-	private DigitalInput optical = new DigitalInput(0);
+	
 	public TestGearDoor() {
 		requires(Robot.gearDoor);
 	}
@@ -16,9 +15,9 @@ public class TestGearDoor extends Command {
 	@Override
 	protected void execute() {
 		super.execute();
-//		if ((Robot.drive.ultrasonic1MM() <= 400 && Robot.drive.ultrasonic2MM() <= 400) && Robot.gearDoor.get() == Value.kForward && !optical.get()) {
-//			Robot.gearDoor.set(Value.kReverse);
-//		}
+		if ((Robot.drive.leftMM() <= 300 && Robot.drive.rightMM() <= 300) && Robot.gearDoor.get() == Value.kReverse && (Robot.gearDoorDetect.getVoltage() < 2.5)) {
+			Robot.gearDoor.set(Value.kForward);
+		}
 	}
 
 	@Override

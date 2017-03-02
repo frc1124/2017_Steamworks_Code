@@ -29,6 +29,7 @@ public class Drive extends Subsystem {
 	public int mode = 0; // 0:none, 1:arcade, 2:mec
 	public AccelerometerJNI distancer = new AccelerometerJNI();
 	public double strafeAdd;
+	public double strafeDist;
 	
 	
 	public Drive() {
@@ -64,32 +65,32 @@ public class Drive extends Subsystem {
 
 		frontLeft.setInverted(true);
 		rearLeft.setInverted(true);
+		
+		strafeDist = 0.0;
 
 	}
 
-//	public double calcAngle() {
-//		NetworkTable.getTable("debug").putNumber("rand", Math.random());
-//		NetworkTable.getTable("debug").putNumber("left", ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 11);
-//		NetworkTable.getTable("debug").putNumber("right", ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE - 11);
-//		double degrees = (Math.toDegrees(Math.atan2((ultAv1MM() - ultAv2MM()), 472)));
-//		NetworkTable.getTable("debug").putNumber("turn", degrees);
-//		return degrees;
-//	}
+	public double calcAngle() {
+		//NetworkTable.getTable("debug").putNumber("rand", Math.random());
+		//NetworkTable.getTable("debug").putNumber("left", ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 11);
+		//NetworkTable.getTable("debug").putNumber("right", ultrasonic2.getAverageVoltage() * ULTRASONIC_SCALE - 11);
+		double degrees = (Math.toDegrees(Math.atan2(((Robot.leftUltrasonic.getVoltage()*1000) - (Robot.rightUltrasonic.getVoltage()*1000)), 472)));
+		//NetworkTable.getTable("debug").putNumber("turn", degrees);
+		return degrees;
+	}
+	
+	public double leftMM(){
+		return Robot.leftUltrasonic.getVoltage() * 1024;
+	}
+	
+	public double rightMM(){
+		return Robot.rightUltrasonic.getVoltage() * 1024;
+	}
 
-//	public double calcDist() {
-//		return (((ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)
-//				+ (ultrasonic1.getAverageVoltage() * ULTRASONIC_SCALE - 4.5 - 11)) / 2);
-//	}
-//	
-//	public double ultrasonic1MM(){
-//		return ultrasonic1.getVoltage() * 1000;
-//	}
-//	
-//	public double ultrasonic2MM(){
-//		return ultrasonic2.getVoltage() * 1000;
-//	}
-//	public double ultAv1MM() { return ultrasonic1.getAverageVoltage()*1000; }
-//	public double ultAv2MM() { return ultrasonic2.getAverageVoltage()*1000; }
+	public double calcDist() {
+		return(((Robot.leftUltrasonic.getVoltage()/1024*5)+Robot.rightUltrasonic.getVoltage()/1024*5)/2);
+	}
+
 
 	public void initDefaultCommand() {
 		this.setDefaultCommand(Robot.teleop);
@@ -97,7 +98,11 @@ public class Drive extends Subsystem {
 
 	public void lockAngle() {
 		lockAngle = navx.getYaw();
-	} 
+	}
+	public void visionStrafe(double speed) {
+		double r = turnController.getOutput(navx.getYaw(), lockAngle);
+		driveTrain.mecanumDrive_Cartesian(speed, 0, r, 0);
+	}
 	
 
 	public void run(double x, double y) {

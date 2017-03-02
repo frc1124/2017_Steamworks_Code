@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import org.usfirst.frc.team1124.robot.Robot;
+
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -13,7 +15,6 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Climber extends Subsystem {
 	private DoubleSolenoid ropeDoor = new DoubleSolenoid(0, 1, 3);
 	private SpeedController climbMotor = new CANTalon(5);
-	public AnalogInput limit = new AnalogInput(3);
 	
 	public Climber() {}
 	
@@ -21,9 +22,9 @@ public class Climber extends Subsystem {
     public void toggle() { ropeDoor.set((ropeDoor.get()==Value.kForward) ? Value.kReverse : Value.kForward); }
     public void motorUp() { 
     	
-    	if(limit.getVoltage()>2) { climbMotor.set(1.0); } else { climbMotor.set(0); } 
+    	if(!Robot.limitSwitch.get()) { climbMotor.set(0.7); } else { climbMotor.set(0); } 
     }
-    public void motorDown() { climbMotor.set(-1.0); }
+    public void motorDown() { climbMotor.set(-0.7); }
     public void motorStop() { climbMotor.set(0.0); }
 }
 

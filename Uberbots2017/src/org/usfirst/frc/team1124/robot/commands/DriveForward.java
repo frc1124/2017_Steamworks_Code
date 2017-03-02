@@ -28,7 +28,7 @@ public class DriveForward extends Command {
 	public DriveForward(double distance) {
 		sign = (int) (distance / Math.abs(distance));
 		this.distanceInTicks = sign * distance / DISTANCE_PER_TICK;
-		requires(Robot.drive);
+		//requires(Robot.drive);
 	}
 
 	protected void initialize() {
