@@ -307,4 +307,22 @@ public class GripPipeline implements VisionPipeline {
 		return r;
 	}
 
+	public double[] getYRange() {
+		double hy = -1.0, ly = -1.0;
+		for (int i = 0; i < filterContoursOutput.size(); i++) {
+			for (Point p : filterContoursOutput.get(i).toArray()) {
+				if (p.y < ly || ly == -1.0) {
+					ly = p.y;
+				}
+				if (p.y > hy || hy == -1.0) {
+					hy = p.y;
+				}
+			}
+		}
+		double[] r = new double[2];
+		r[0] = ly;
+		r[1] = hy;
+		return r;
+	}
+
 }
