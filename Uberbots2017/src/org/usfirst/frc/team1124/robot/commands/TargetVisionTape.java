@@ -66,6 +66,7 @@ public class TargetVisionTape extends Command {
 
 		// Calculate distance to strafe
 		this.strafeDistance = dfif * HORIZONTAL_PER_PIXEL * verticalScale;
+		this.strafeDistance *= Math.sqrt(2.0);
 
 		// Find initialial encoder positions
 		this.initEncFl = Robot.drive.frontLeft.getEncPosition();
