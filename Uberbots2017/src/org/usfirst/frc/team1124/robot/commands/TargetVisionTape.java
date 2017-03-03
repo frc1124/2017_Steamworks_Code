@@ -13,7 +13,7 @@ public class TargetVisionTape extends Command {
 	private double MAX_HORIZONTAL_DISTANCE = 18; // inches
 	private double MAX_SPEED = 0.45;
 
-	private double HORIZONTAL_PER_PIXEL = MAX_HORIZONTAL_DISTANCE / 320; // middle of the robot off center when vision tape is at right edge
+	private double HORIZONTAL_PER_PIXEL = MAX_HORIZONTAL_DISTANCE / (Camera.CAMERA_RES_X / 2); // middle of the robot off center when vision tape is at right edge
 
 	private double strafeDistance;
 	private int initEncFl;
