@@ -14,6 +14,7 @@ import org.usfirst.frc.team1124.robot.subsystems.GearDoor;
 import org.usfirst.frc.team1124.vision.Camera;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -73,7 +74,7 @@ public class Robot extends IterativeRobot {
 		
 	}
 
-	public void disabledInit() {}
+	public void disabledInit() { climber.set(Value.kForward); }
 	@SuppressWarnings("deprecation")
 	public void autonomousInit() {
 		
@@ -88,8 +89,9 @@ public class Robot extends IterativeRobot {
 		case 6: placeGearOnLeft.start(); break;
 		default: noAuto.start(); break;
 		}
+		climber.set(Value.kForward);
 	}
-	public void teleopInit() {}
+	public void teleopInit() { climber.set(Value.kForward); }
 	public void testInit() {}
 
 	public static double speedX(){
@@ -104,14 +106,17 @@ public class Robot extends IterativeRobot {
 		return velocityZ;
 	}
 	
-	public void disabledPeriodic() { Scheduler.getInstance().run(); updateArduino(); }
-	public void autonomousPeriodic() { Scheduler.getInstance().run();updateArduino(); }
+	public void disabledPeriodic() { Scheduler.getInstance().run(); /*updateArduino();*/ }
+	public void autonomousPeriodic() { 
+		Scheduler.getInstance().run();
+		/*updateArduino();*/ 
+	}
 	public void teleopPeriodic() { 
 		updateDashboard();
 		Scheduler.getInstance().run();
-		updateArduino();
+		/*updateArduino();*/
 	}
-	public void testPeriodic() { Scheduler.getInstance().run(); updateArduino(); }
+	public void testPeriodic() { Scheduler.getInstance().run(); /*updateArduino();*/ }
 	
 	public void updateArduino(){
 		boolean allienceIsRed = (DriverStation.getInstance().getAlliance().equals(DriverStation.Alliance.Red));
@@ -119,26 +124,16 @@ public class Robot extends IterativeRobot {
 		int disconnected  = 6, searchFeeder = 7, gearReady = 8, gearIn = 9, searchLift = 10, climb = 11;
 		int mode = disconnected;
 		boolean hasGear = gearDoorDetect.getVoltage() != 0;
-		if(!DriverStation.getInstance().isSysActive()){
-			mode = eStop;
-		}else{
-			if(modeFlag > 0){
-				mode = modeFlag;
-			}else{
+		if(!DriverStation.getInstance().isSysActive()) { mode = eStop; }
+		else{
+			if(modeFlag > 0) { mode = modeFlag; }
+			else{
 				if(isEnabled()){
-					if(isOperatorControl()){
-						mode = teleopE;
-					}
-					else if(isAutonomous()){
-						mode = autoE;
-					}
-				}else{
-					if(isOperatorControl()){
-						mode = teleopD;
-					}
-					else if(isAutonomous()){
-						mode = autoD;
-					}
+					if(isOperatorControl()) { mode = teleopE; }
+					else if(isAutonomous()) { mode = autoE; }
+				}else {
+					if(isOperatorControl()) { mode = teleopD; }
+					else if(isAutonomous()) { mode = autoD; }
 				}
 			}
 		}
@@ -161,14 +156,14 @@ public class Robot extends IterativeRobot {
 		velocityY += drive.distancer.getAccelerometerY();
 		velocityZ += drive.distancer.getAccelerometerZ();
 		
-		NetworkTable.getTable("dash").putBoolean("limit", climber.limit.getAverageVoltage()>2);
+		NetworkTable.getTable("dash").putNumber("limit", climber.limit.getAverageVoltage());
 		double speed = (( Math.abs(drive.frontLeft.getSpeed()) + Math.abs(drive.frontRight.getSpeed() + Math.abs(drive.rearRight.getSpeed()) + Math.abs(drive.rearLeft.getSpeed())) )/4) * (4*Math.PI) / 60;
 		NetworkTable.getTable("dash").putNumber("speed", speed);
-//		NetworkTable.getTable("dash").putNumber("us1", drive.ultrasonic1MM());
-//		NetworkTable.getTable("dash").putNumber("us2", drive.ultrasonic2MM());
+		NetworkTable.getTable("dash").putNumber("us1", drive.ultrasonic1.getAverageVoltage()*1024);
+		NetworkTable.getTable("dash").putNumber("us2", drive.ultrasonic2.getAverageVoltage()*1024);
 		NetworkTable.getTable("dash").putNumber("Accelerometer X", drive.distancer.getAccelerometerX());
 		NetworkTable.getTable("dash").putNumber("Accelerometer Y", drive.distancer.getAccelerometerY());
 		NetworkTable.getTable("dash").putNumber("Accelerometer Z", drive.distancer.getAccelerometerZ());
-		NetworkTable.getTable("dash").putNumber("gearDetect", gearDoor.detect());
+		NetworkTable.getTable("dash").putBoolean("gearDoor", (gearDoor.get() == Value.kForward) ? true : false);
 	}
 }

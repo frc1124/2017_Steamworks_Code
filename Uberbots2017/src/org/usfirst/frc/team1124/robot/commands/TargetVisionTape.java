@@ -5,6 +5,7 @@ import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.vision.Camera;
 import org.usfirst.frc.team1124.vision.GripPipeline;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class TargetVisionTape extends Command {
 	private boolean done = false;
@@ -92,6 +93,7 @@ public class TargetVisionTape extends Command {
 
 		// Calculate the distance in inches
 		double distance = (ave * 4 * Math.PI) / 4096;
+		NetworkTable.getTable("dash").putNumber("distance", distance);
 
 		// If we're at or overshot, finish
 		if (this.strafeDistance > 0 && distance >= this.strafeDistance) {

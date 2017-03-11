@@ -4,6 +4,8 @@ package org.usfirst.frc.team1124.robot;
 
 import org.usfirst.frc.team1124.robot.commands.AlignToWall;
 import org.usfirst.frc.team1124.robot.commands.Climb;
+import org.usfirst.frc.team1124.robot.commands.ClimbOverride;
+import org.usfirst.frc.team1124.robot.commands.JsVision;
 import org.usfirst.frc.team1124.robot.commands.PressToWin;
 import org.usfirst.frc.team1124.robot.commands.ReverseClimb;
 import org.usfirst.frc.team1124.robot.commands.TargetVisionTape;
@@ -26,6 +28,8 @@ public class OI {
 	Button climbReverse = new JoystickButton(stickTwo, 8);    //Start, D2
 	Button visionTest = new JoystickButton(stick, 3);         //X, D1
 	Button turnTest = new JoystickButton(stick, 4);           //Y, D1
+	Button jsTest = new JoystickButton(stick, 5);
+	Button climbOverride = new JoystickButton(stickTwo, 2);
 
 	public OI() {
 		pressToWin.whileHeld(new PressToWin());
@@ -35,5 +39,7 @@ public class OI {
 		climbReverse.whileHeld(new ReverseClimb());
 		visionTest.whenPressed(new TargetVisionTape()); 
 		turnTest.whenPressed(new AlignToWall());
+		jsTest.whenPressed(new JsVision());
+		climbOverride.whileHeld(new ClimbOverride());
 	}
 }
