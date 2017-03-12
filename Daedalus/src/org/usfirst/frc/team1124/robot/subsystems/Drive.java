@@ -22,6 +22,16 @@ public class Drive extends Subsystem {
 		leftBack.changeControlMode(CANTalon.TalonControlMode.Speed);
 		rightFront.changeControlMode(CANTalon.TalonControlMode.Speed);
 		rightBack.changeControlMode(CANTalon.TalonControlMode.Speed);
+		
+		leftFront.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		leftBack.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		rightFront.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		rightBack.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		
+		leftFront.setPID(0.01, 0.0, 0.01);
+		leftBack.setPID(0.01, 0.0, 0.01);
+		rightFront.setPID(0.01, 0.0, 0.01);
+		rightBack.setPID(0.01, 0.0, 0.01);
 	}
 	
 	public void allStop() {
@@ -31,8 +41,8 @@ public class Drive extends Subsystem {
 		rightBack.set(0.0);
 	}
 	public void setLeftSpeed(double spd) {
-		leftFront.set(speedPID.getOutput(this.getLeftSpeed(), spd));
-		leftBack.set(speedPID.getOutput(this.getLeftSpeed(), spd));
+		leftFront.set(spd);
+		leftBack.set(spd);
 	}
 	public void setRightSpeed(double spd) {
 		rightFront.set(speedPID.getOutput(this.getRightSpeed(), spd));
