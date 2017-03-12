@@ -4,15 +4,15 @@ import org.usfirst.frc.team1124.robot.RobotMap;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class VisionComms {
-	private DigitalInput sign = new DigitalInput(RobotMap.visionSign);
-	private DigitalInput bitOne = new DigitalInput(RobotMap.visionBitOne);
-	private DigitalInput bitTwo = new DigitalInput(RobotMap.visionBitTwo);
-	private DigitalInput bitThree = new DigitalInput(RobotMap.visionBitThree);
-	private DigitalInput bitFour = new DigitalInput(RobotMap.visionBitFour);
-	private DigitalInput bitFive = new DigitalInput(RobotMap.visionBitFive);
-	private double scaleFactor = 40.0;
+	private static DigitalInput sign = new DigitalInput(RobotMap.visionSign);
+	private static DigitalInput bitOne = new DigitalInput(RobotMap.visionBitOne);
+	private static DigitalInput bitTwo = new DigitalInput(RobotMap.visionBitTwo);
+	private static DigitalInput bitThree = new DigitalInput(RobotMap.visionBitThree);
+	private static DigitalInput bitFour = new DigitalInput(RobotMap.visionBitFour);
+	private static DigitalInput bitFive = new DigitalInput(RobotMap.visionBitFive);
+	private static double scaleFactor = 40.0;
 	
-	public double read() {
+	public static double read() {
 		double val = 0.0;
 		val += (bitOne.get()) ? 1 : 0;
 		val += (bitTwo.get()) ? 2 : 0;
@@ -22,4 +22,5 @@ public class VisionComms {
 		return((sign.get()) ? -val/scaleFactor : val/scaleFactor);
 	}
 	//I will make this a single line... one day...
+	//maybe a reallllllly long string of ternaries
 }
