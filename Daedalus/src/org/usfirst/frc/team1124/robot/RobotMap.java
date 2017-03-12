@@ -47,4 +47,10 @@ public class RobotMap {
 	public static int gyro = 0;
 	
 	//dio pins
+	public static int visionSign = 0;
+	public static int visionBitOne = 1;
+	public static int visionBitTwo = 2;
+	public static int visionBitThree = 3;
+	public static int visionBitFour = 4;
+	public static int visionBitFive = 5;
 }
