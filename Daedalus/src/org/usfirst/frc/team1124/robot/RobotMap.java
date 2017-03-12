@@ -38,10 +38,9 @@ public class RobotMap {
 	//CAN addresses
 	public static int leftFront = 0;
 	public static int leftBack = 1;
-	public static int leftMini = 2;
 	public static int rightFront = 3;
 	public static int rightBack = 4;
-	public static int rightMini = 5;
+	public static int climber = 5;
 	
 	//analog pins
 	public static int gyro = 0;

@@ -1,28 +1,17 @@
 package org.usfirst.frc.team1124.robot;
 
-import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team1124.robot.commands.TankDrive;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.robot.utils.StateManager;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Robot extends IterativeRobot {
-	//subsystems
 	public static Drive chassis;
-	//commands
-	public static Command tankDrive;
-	public static Command arcadeDrive;
-	//misc
 	public static OI oi;
 
 	public void robotInit() {
 		chassis = new Drive();
-		tankDrive = new TankDrive();
-		arcadeDrive = new ArcadeDrive();
 		oi = new OI();
 	}
 
@@ -34,7 +23,7 @@ public class Robot extends IterativeRobot {
 			case 2: break;
 			default: break;	
 		}
-		StateManager.updateArduino();
+		StateManager.updateAll();
 	}
 	public void disabledInit() { Scheduler.getInstance().removeAll(); }
 	public void teleopInit() {}

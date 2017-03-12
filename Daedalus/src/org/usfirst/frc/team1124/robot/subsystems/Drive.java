@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
 import org.usfirst.frc.team1124.robot.RobotMap;
-import org.usfirst.frc.team1124.robot.commands.TankDrive;
+import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -45,8 +45,8 @@ public class Drive extends Subsystem {
 		leftBack.set(spd);
 	}
 	public void setRightSpeed(double spd) {
-		rightFront.set(speedPID.getOutput(this.getRightSpeed(), spd));
-		rightBack.set(speedPID.getOutput(this.getRightSpeed(), spd));
+		rightFront.set(spd);
+		rightBack.set(spd);
 	}
 	public void strafe(double spd) {
 		double rot = 0.0;
@@ -57,6 +57,6 @@ public class Drive extends Subsystem {
 	}
 	public double getLeftSpeed() { return(0); }
 	public double getRightSpeed() { return(0); }
-    public void initDefaultCommand() { this.setDefaultCommand(new TankDrive()); }
+    public void initDefaultCommand() { this.setDefaultCommand(new ArcadeDrive()); } //try tank drive as well
 }
 
