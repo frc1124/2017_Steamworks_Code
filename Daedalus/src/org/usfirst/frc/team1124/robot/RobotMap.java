@@ -44,6 +44,7 @@ public class RobotMap {
 	
 	//analog pins
 	public static int gyro = 0;
+	public static int limit = 1;
 	
 	//dio pins
 	public static int visionSign = 0;
