@@ -11,6 +11,7 @@ public class Climber extends Subsystem {
 	
     public void initDefaultCommand() {}
     public void climb(boolean up) { motor.set((up&&limit.getVoltage()<2.4) ? 1.0 : -0.7); }
+    public void limitOverride(boolean up) { motor.set(up ? 1.0 : -0.7); }
     public void allStop() { motor.set(0.0); }
 }
 

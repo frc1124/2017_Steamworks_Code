@@ -5,6 +5,7 @@ import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
@@ -16,6 +17,7 @@ public class Drive extends Subsystem {
 	public static CANTalon rightBack = new CANTalon(RobotMap.rightBack);
 	public static Gyro gyro = new AnalogGyro(RobotMap.gyro);
 	public static MiniPID speedPID = new MiniPID(0.01,0.00,0.01).setOutputLimits(1);
+	public static RobotDrive mec = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
     
 	public Drive() {
 		leftFront.changeControlMode(CANTalon.TalonControlMode.Speed);

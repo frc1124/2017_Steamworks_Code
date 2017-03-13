@@ -12,8 +12,8 @@ public class ArcadeDrive extends Command {
 
     protected void initialize() {}
     protected void execute() {
-    	Robot.chassis.setRightSpeed(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
-    	Robot.chassis.setLeftSpeed(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
+    	Robot.chassis.setRightSpeed( Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),2.2) );
+    	Robot.chassis.setLeftSpeed( Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),2.2) );
     }
     protected boolean isFinished() { return(false); }
     protected void end() {}
