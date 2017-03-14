@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class DriveForward extends Command {
 
+	Drive drive = Robot.drive;
+	
 	private double distanceInTicks;
 
 	private boolean done = false;
@@ -19,8 +21,18 @@ public class DriveForward extends Command {
 	private static final int TICKS_TIL_FULL = 16000;
 
 	private static final double QUIT_SPEED = 0.1;
+	
 
+	public static final int DRIVE_MODE_NONE = 0;
+	
+	public static final int DRIVE_MODE_ARCADE = 1;
+
+	public static final int DRIVE_MODE_MECANUM = 2;
 	private int sign;
+	
+	int totalEncPosition = -drive.frontLeft.getEncPosition() + drive.frontRight.getEncPosition()
+	- drive.rearLeft.getEncPosition() + drive.rearRight.getEncPosition();
+	
 
 	public DriveForward(double distance) {
 		sign = (int) (distance / Math.abs(distance));
@@ -36,14 +48,13 @@ public class DriveForward extends Command {
 		done = false;
 	}
 
-	protected void execute() {
-		Drive drive = Robot.drive;
-		int average = sign * (-drive.frontLeft.getEncPosition() + drive.frontRight.getEncPosition() - drive.rearLeft.getEncPosition() + drive.rearRight.getEncPosition()) / 4;
+	protected void execute() {		
+		int average = sign * (totalEncPosition) / 4;
 		double speed = sign * getSpeed(average);
 		if (Math.abs(speed) <= QUIT_SPEED)
 			quit();
 		else {
-			Robot.drive.mode = 2;
+			Robot.drive.mode = DRIVE_MODE_MECANUM;
 			Robot.drive.run(0, speed);
 		}
 
@@ -81,7 +92,6 @@ public class DriveForward extends Command {
 		}
 	}
 
-	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
 		return done;
 	}
@@ -90,10 +100,7 @@ public class DriveForward extends Command {
 		return done;
 	}
 
-	// Called once after isFinished returns true
 	protected void end() {}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	protected void interrupted() {}
+	protected void interrupted() { this.cancel(); }
 }
