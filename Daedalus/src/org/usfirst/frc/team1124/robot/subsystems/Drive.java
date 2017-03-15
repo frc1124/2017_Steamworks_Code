@@ -4,10 +4,10 @@ import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
 import com.ctre.CANTalon;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 public class Drive extends Subsystem {
 	//components
@@ -15,9 +15,11 @@ public class Drive extends Subsystem {
 	public static CANTalon leftBack = new CANTalon(RobotMap.leftBack);
 	public static CANTalon rightFront = new CANTalon(RobotMap.rightFront);
 	public static CANTalon rightBack = new CANTalon(RobotMap.rightBack);
-	public static Gyro gyro = new AnalogGyro(RobotMap.gyro);
+	public static AHRS navx = new AHRS(Port.kMXP);
 	public static MiniPID speedPID = new MiniPID(0.01,0.00,0.01).setOutputLimits(1);
 	public static RobotDrive mec = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
+	public MiniPID turnController = new MiniPID(0.03, 0, 0.1).setOutputLimits(1);
+	public static double lockAngle = 0.0;
     
 	public Drive() {
 		leftFront.changeControlMode(CANTalon.TalonControlMode.Speed);
@@ -59,6 +61,7 @@ public class Drive extends Subsystem {
 	}
 	public double getLeftSpeed() { return(0); }
 	public double getRightSpeed() { return(0); }
+	public static void lockAngle() { Drive.lockAngle = Drive.navx.getYaw(); }
     public void initDefaultCommand() { this.setDefaultCommand(new ArcadeDrive()); } //try tank drive as well
 }
 

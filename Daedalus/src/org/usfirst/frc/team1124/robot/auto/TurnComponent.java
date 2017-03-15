@@ -13,7 +13,7 @@ public class TurnComponent extends Command {
     }
     protected void initialize() {}
     protected void execute() {}
-    protected boolean isFinished() { return(Math.abs(Drive.gyro.getAngle()-angle) < 10); }
+    protected boolean isFinished() { return(Math.abs(Drive.navx.getYaw()-angle) < 10); }
     protected void end() {}
     protected void interrupted() {}
 }
