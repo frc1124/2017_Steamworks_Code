@@ -11,34 +11,40 @@ public class TurnComponent extends Command {
 	private boolean done = false;
 
 	private static final double MAX_SPEED = 0.6;
-
 	private static final double QUIT_SPEED = 0.3;
-	public double degrees;
+
+	public double turnAmount; // In degrees
 
 	public TurnComponent(double degrees) {
 		requires(Robot.chassis);
-		this.degrees = degrees;
+		turnAmount = degrees;
 	}
 
+	@Override
 	protected void initialize() {
-		Drive.lockAngle -= degrees;
+		// Telling the drive train what angle we want
+		Drive.lockAngle -= turnAmount;
 		Drive.lockAngle = Drive.lockAngle % 360;
 		done = false;
 	}
 
+	@Override
 	protected void execute() {
-		
+		// If we are going so slow we are not even moving
 		if (Math.abs(Robot.chassis.turnController.getOutput(closeToLockAngle(Drive.navx.getYaw()), Drive.lockAngle)) * MAX_SPEED < QUIT_SPEED)
 			quit();
 		else
+			// Take advantage of the turn correction
 			Drive.mec.mecanumDrive_Cartesian(0, 0, Robot.chassis.turnController.getOutput(closeToLockAngle(Drive.navx.getYaw()), Drive.lockAngle) * MAX_SPEED, 0);
 
+		// Debug
 		NetworkTable.getTable("turn").putNumber("angle", Drive.navx.getYaw());
 		NetworkTable.getTable("turn").putNumber("lockAngle", Drive.lockAngle);
 		NetworkTable.getTable("debug").putNumber("test", 13);
 		NetworkTable.getTable("debug").putNumber("rand", Math.random());
 	}
 
+	// Making sure that we use a lock angle that is numerically closest to the wanted angle
 	private double closeToLockAngle(double yaw) {
 		double yaw2 = yaw + 360;
 		double yaw3 = yaw - 360;
@@ -51,6 +57,7 @@ public class TurnComponent extends Command {
 		return yaw;
 	}
 
+	// Stopping the wheels
 	private void quit() {
 		Drive.leftFront.set(0);
 		Drive.rightFront.set(0);
@@ -59,18 +66,26 @@ public class TurnComponent extends Command {
 		done = true;
 	}
 
-	protected boolean isFinished() { return done; }
+	protected boolean isFinished() {
+		// Are we done?
+		return done;
+	}
 
-	public boolean isRunning() { return !done; }
+	@Override
+	public boolean isRunning() {
+		// We need this method to override 
+		return !done;
+	}
 
-	protected void end() {}
+	@Override
+	protected void end() {
+		// We need this method to override 
+		// Bad things happen if this method is not here
+	}
 
-	protected void interrupted() {}
-
-	public void setDegrees(double x) {
-		this.degrees = x;
-		Drive.lockAngle -= degrees;
-		Drive.lockAngle = Drive.lockAngle % 360;
-		done = false;
+	@Override
+	protected void interrupted() {
+		// We need this method to override 
+		// Bad things happen if this method is not here
 	}
 }
