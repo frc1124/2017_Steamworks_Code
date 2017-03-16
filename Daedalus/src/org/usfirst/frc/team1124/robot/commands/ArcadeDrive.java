@@ -54,9 +54,9 @@ public class ArcadeDrive extends Command {
         rearLeft += (arcadeLeft / 2);
         rearRight += (arcadeRight / 2);
 
-        Robot.chassis.leftBack.set(rearLeft);
-        Robot.chassis.leftFront.set(frontLeft);
-        Robot.chassis.rightBack.set(rearRight);
-        Robot.chassis.rightFront.set(frontRight);
+        Drive.leftBack.set(rearLeft);
+        Drive.leftFront.set(frontLeft);
+        Drive.rightBack.set(rearRight);
+        Drive.rightFront.set(frontRight);
     }
 }

@@ -59,19 +59,13 @@ public class TurnComponent extends Command {
 		done = true;
 	}
 
-	protected boolean isFinished() {
-		return done;
-	}
+	protected boolean isFinished() { return done; }
 
-	public boolean isRunning() {
-		return !done;
-	}
+	public boolean isRunning() { return !done; }
 
-	protected void end() {
-	}
+	protected void end() {}
 
-	protected void interrupted() {
-	}
+	protected void interrupted() {}
 
 	public void setDegrees(double x) {
 		this.degrees = x;
