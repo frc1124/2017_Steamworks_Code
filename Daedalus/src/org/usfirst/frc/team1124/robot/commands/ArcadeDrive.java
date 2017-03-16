@@ -44,7 +44,7 @@ public class ArcadeDrive extends Command {
         frontLeft = (Math.sin(Math.toRadians(angleMec)) + rx) / 2;
         frontRight = (Math.cos(Math.toRadians(angleMec)) - rx) / 2;
         rearLeft = (Math.cos(Math.toRadians(angleMec)) + rx) / 2;
-        rearRight = (Math.sin(Math.toRadians(angleMec)) - rx / 2;
+        rearRight = (Math.sin(Math.toRadians(angleMec)) - rx) / 2;
 
         arcadeLeft = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
         arcadeRight = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
