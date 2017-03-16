@@ -31,7 +31,32 @@ public class ArcadeDrive extends Command {
     	double rotation = Robot.chassis.turnController.getOutput(Drive.navx.getYaw(), Drive.lockAngle);
     	Drive.mec.mecanumDrive_Cartesian(x, y, rotation, 0);
     }
+    
     private void hybrid() {
-    	
+    	double frontLeft, rearLeft, frontRight, rearRight;
+        double arcadeLeft, arcadeRight;
+
+        double rx = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX), 3);
+    	double ry = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY), 3);
+
+        double angleMec = Math.atan2(ry, rx);
+
+        frontLeft = (Math.sin(Math.toRadians(angleMec)) + rx) / 2;
+        frontRight = (Math.cos(Math.toRadians(angleMec)) - rx) / 2;
+        rearLeft = (Math.cos(Math.toRadians(angleMec)) + rx) / 2;
+        rearRight = (Math.sin(Math.toRadians(angleMec)) - rx / 2;
+
+        arcadeLeft = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
+        arcadeRight = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
+
+        frontLeft += (arcadeLeft / 2);
+        frontRight += (arcadeRight / 2);
+        rearLeft += (arcadeLeft / 2);
+        rearRight += (arcadeRight / 2);
+
+        Robot.chassis.leftBack.set(rearLeft);
+        Robot.chassis.leftFront.set(frontLeft);
+        Robot.chassis.rightBack.set(rearRight);
+        Robot.chassis.rightFront.set(frontRight);
     }
 }
