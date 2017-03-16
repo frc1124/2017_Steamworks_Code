@@ -2,6 +2,7 @@ package org.usfirst.frc.team1124.robot;
 
 import org.usfirst.frc.team1124.robot.subsystems.Climber;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
+import org.usfirst.frc.team1124.robot.subsystems.Camera;
 import org.usfirst.frc.team1124.robot.utils.StateManager;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -11,11 +12,13 @@ public class Robot extends IterativeRobot {
 	public static Drive chassis;
 	public static Climber climber;
 	public static OI oi;
+	public static Camera camera;
 
 	public void robotInit() {
 		chassis = new Drive();
 		climber = new Climber();
 		oi = new OI();
+		camera = new Camera;
 	}
 
 	@SuppressWarnings("deprecation")
