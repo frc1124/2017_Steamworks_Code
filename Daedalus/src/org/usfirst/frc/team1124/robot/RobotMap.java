@@ -36,8 +36,8 @@ public class RobotMap {
 	public static int secondDriverY = 3;
 	
 	//CAN addresses
-	public static int leftFront = 0;
-	public static int leftBack = 1;
+	public static int leftFront = 1;
+	public static int leftBack = 2;
 	public static int rightFront = 3;
 	public static int rightBack = 4;
 	public static int climber = 5;
@@ -53,4 +53,8 @@ public class RobotMap {
 	public static int visionBitThree = 3;
 	public static int visionBitFour = 4;
 	public static int visionBitFive = 5;
+	
+	//pnumatics
+	public static int[] gearDoor = {0,0,2}; 
+	public static int[] ropeDoor = {0,1,3};
 }
