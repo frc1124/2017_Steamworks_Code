@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
@@ -22,10 +23,10 @@ public class Drive extends Subsystem {
 	public static double lockAngle = 0.0;
     
 	public Drive() {
-		leftFront.changeControlMode(CANTalon.TalonControlMode.Speed);
-		leftBack.changeControlMode(CANTalon.TalonControlMode.Speed);
-		rightFront.changeControlMode(CANTalon.TalonControlMode.Speed);
-		rightBack.changeControlMode(CANTalon.TalonControlMode.Speed);
+		leftFront.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+		leftBack.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+		rightFront.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+		rightBack.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 		
 		leftFront.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		leftBack.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -36,6 +37,9 @@ public class Drive extends Subsystem {
 		leftBack.setPID(0.01, 0.0, 0.01);
 		rightFront.setPID(0.01, 0.0, 0.01);
 		rightBack.setPID(0.01, 0.0, 0.01);
+		
+		leftFront.setInverted(true);
+		leftBack.setInverted(true);
 	}
 	
 	public void allStop() {
@@ -62,6 +66,6 @@ public class Drive extends Subsystem {
 	public double getLeftSpeed() { return(0); }
 	public double getRightSpeed() { return(0); }
 	public static void lockAngle() { Drive.lockAngle = Drive.navx.getYaw(); }
-    public void initDefaultCommand() { this.setDefaultCommand(new ArcadeDrive()); } //try tank drive as well
+    public void initDefaultCommand() { this.setDefaultCommand(Robot.arcadeDrive); } //try tank drive as well
 }
 

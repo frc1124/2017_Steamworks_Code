@@ -4,6 +4,7 @@ import org.usfirst.frc.team1124.robot.OI;
 import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
+import edu.wpi.first.wpilibj.networktables.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -13,13 +14,14 @@ public class ArcadeDrive extends Command {
 
     protected void initialize() {}
     protected void execute() {
+    	NetworkTable.getTable("debug").putNumber("Joystick X", OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
     	if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) && (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { hybrid(); }
     	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) ) { arcade(); }
     	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { mecanum(true); }
     }
     protected boolean isFinished() { return(false); }
     protected void end() {}
-    protected void interrupted() { this.cancel(); }
+    protected void interrupted() { }//this.cancel(); }
     private void arcade() {
     	Robot.chassis.setRightSpeed( Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3) );
     	Robot.chassis.setLeftSpeed( Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3) );
