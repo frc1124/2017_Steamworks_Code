@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
-import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
@@ -66,6 +65,6 @@ public class Drive extends Subsystem {
 	public double getLeftSpeed() { return(0); }
 	public double getRightSpeed() { return(0); }
 	public static void lockAngle() { Drive.lockAngle = Drive.navx.getYaw(); }
-    public void initDefaultCommand() { this.setDefaultCommand(Robot.arcadeDrive); } //try tank drive as well
+    public void initDefaultCommand() { this.setDefaultCommand(new ArcadeDrive()); } //try tank drive as well
 }
 
