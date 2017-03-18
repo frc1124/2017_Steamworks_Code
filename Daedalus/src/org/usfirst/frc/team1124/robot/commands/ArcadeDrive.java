@@ -15,9 +15,16 @@ public class ArcadeDrive extends Command {
     protected void initialize() {}
     protected void execute() {
     	NetworkTable.getTable("debug").putNumber("Joystick X", OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
-    	if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) && (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { hybrid(); }
-    	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) ) { arcade(); }
-    	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { mecanum(true); }
+    	if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 
+    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) 
+    			&& (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 
+    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { hybrid(); }
+    	
+    	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 
+    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) ) { arcade(); }
+    	
+    	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 
+    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { mecanum(true); }
     }
     protected boolean isFinished() { return(false); }
     protected void end() {}

@@ -2,6 +2,7 @@ package org.usfirst.frc.team1124.robot.utils;
 
 import org.usfirst.frc.team1124.robot.RobotMap;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class VisionComms {
 	private static DigitalInput sign = new DigitalInput(RobotMap.visionSign);
@@ -19,6 +20,9 @@ public class VisionComms {
 		val += (bitThree.get()) ? 4 : 0;
 		val += (bitFour.get()) ? 8 : 0;
 		val += (bitFive.get()) ? 16 : 0;
+		
+		NetworkTable.getTable("vis").putBoolean("sign", bitOne.get());
+		
 		return((sign.get()) ? -val/scaleFactor : val/scaleFactor);
 	}
 	//I will make this a single line... one day...

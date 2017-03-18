@@ -5,6 +5,8 @@ import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
 import com.ctre.CANTalon;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -20,6 +22,8 @@ public class Drive extends Subsystem {
 	public static RobotDrive mec = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
 	public MiniPID turnController = new MiniPID(0.03, 0, 0.1).setOutputLimits(1);
 	public static double lockAngle = 0.0;
+	public static AnalogInput leftUltrasonic = new AnalogInput(RobotMap.leftUltrasonic);
+	public static AnalogInput rightUltrasonic = new AnalogInput(RobotMap.rightUltrasonic);
     
 	public Drive() {
 		leftFront.changeControlMode(CANTalon.TalonControlMode.PercentVbus);

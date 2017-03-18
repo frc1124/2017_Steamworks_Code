@@ -43,8 +43,8 @@ public class RobotMap {
 	public static int climber = 5;
 	
 	//analog pins
-	public static int gyro = 0;
-	public static int limit = 1;
+	public static int leftUltrasonic = 1;
+	public static int rightUltrasonic = 0;
 	
 	//dio pins
 	public static int visionSign = 0;
@@ -53,6 +53,7 @@ public class RobotMap {
 	public static int visionBitThree = 3;
 	public static int visionBitFour = 4;
 	public static int visionBitFive = 5;
+	public static int limit = 7;
 	
 	//pnumatics
 	public static int[] gearDoor = {0,0,2}; 

@@ -4,6 +4,8 @@ import org.usfirst.frc.team1124.robot.subsystems.Climber;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.robot.subsystems.Camera;
 import org.usfirst.frc.team1124.robot.utils.StateManager;
+import org.usfirst.frc.team1124.robot.utils.VisionComms;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -38,6 +40,11 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {}
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
-	public void teleopPeriodic() { Scheduler.getInstance().run(); }
+	public void teleopPeriodic() {
+		NetworkTable.getTable("debug").putNumber("leftUlt", Math.round(Drive.leftUltrasonic.getAverageVoltage()*1024*5)/5);
+		NetworkTable.getTable("debug").putNumber("rightUlt", Math.round(Drive.rightUltrasonic.getAverageVoltage()*1024*5)/5);
+		NetworkTable.getTable("debug").putNumber("visionVal", VisionComms.read());
+		Scheduler.getInstance().run(); 
+	}
 	public void testPeriodic() {}
 }
