@@ -25,6 +25,17 @@ public class VisionComms {
 		
 		return((sign.get()) ? -val/scaleFactor : val/scaleFactor);
 	}
+	public static boolean read(int pin) {
+		switch(pin) {
+			case 1: return(bitOne.get());
+			case 2: return(bitTwo.get());
+			case 3: return(bitThree.get());
+			case 4: return(bitFour.get());
+			case 5: return(bitFive.get());
+			case 0: return(sign.get());
+		}
+		return(false);
+	}
 	//I will make this a single line... one day...
 	//maybe a reallllllly long string of ternaries
 }

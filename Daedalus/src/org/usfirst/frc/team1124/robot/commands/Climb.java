@@ -4,7 +4,7 @@ import org.usfirst.frc.team1124.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Climb extends Command {
-	private boolean up = false;
+	private boolean up;
 
     public Climb(boolean up) {
     	this.requires(Robot.climber);
@@ -12,8 +12,11 @@ public class Climb extends Command {
     }
 
     protected void initialize() {}
-    protected void execute() { Robot.climber.climb(up); }
+    protected void execute() { Robot.climber.limitOverride(up); }
     protected boolean isFinished() { return(false); }
     protected void end() { Robot.climber.allStop(); }
-    protected void interrupted() { this.cancel(); }
+    protected void interrupted() { 
+    	this.end();
+    	this.cancel();
+    }
 }

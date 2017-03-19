@@ -26,14 +26,14 @@ public class RobotMap {
 	public static int secondDriverLeftY = 1;
 	
 	//buttons
-	public static int firstDriverA = 0;
-	public static int firstDriverB = 1;
-	public static int firstDriverX = 2;
-	public static int firstDriverY = 3;
-	public static int secondDriverA = 0;
-	public static int secondDriverB = 1;
-	public static int secondDriverX = 2;
-	public static int secondDriverY = 3;
+	public static int firstDriverA = 1;
+	public static int firstDriverB = 2;
+	public static int firstDriverX = 3;
+	public static int firstDriverY = 4;
+	public static int secondDriverA = 1;
+	public static int secondDriverB = 2;
+	public static int secondDriverX = 3;
+	public static int secondDriverY = 4;
 	
 	//CAN addresses
 	public static int leftFront = 1;

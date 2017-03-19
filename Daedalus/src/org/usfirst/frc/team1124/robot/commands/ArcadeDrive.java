@@ -10,53 +10,49 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class ArcadeDrive extends Command {
 
+	private double leftX, leftY, rightX, rightY;
+
     public ArcadeDrive() { this.requires(Robot.chassis); }
 
-    protected void initialize() {}
-    protected void execute() {
+	protected void initialize() {}
+
+	protected void execute() {
+		leftX = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX), 3);
+		rightX = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX), 3);
+		leftY = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY), 3);
+		rightY = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY), 3);
     	NetworkTable.getTable("debug").putNumber("Joystick X", OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
-    	if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 
-    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) 
-    			&& (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 
-    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { hybrid(); }
     	
-    	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX))>0.02 
-    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))>0.02) ) { arcade(); }
-    	
-    	else if( (Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX))>0.02 
-    			|| Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY))>0.02) ) { mecanum(true); }
+		if ((Math.abs(leftX) > 0.02 || Math.abs(leftY) > 0.02) && (Math.abs(rightY) > 0.02 || Math.abs(rightX) > 0.02)) hybrid();
+    	else if(Math.abs(leftX) > 0.02 || Math.abs(leftY) > 0.02) arcade();
+    	else if(Math.abs(rightY) > 0.02 || Math.abs(rightX) > 0.02) mecanum(true);
     }
     protected boolean isFinished() { return(false); }
     protected void end() {}
-    protected void interrupted() { }//this.cancel(); }
-    private void arcade() {
-    	Robot.chassis.setRightSpeed( Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3) );
-    	Robot.chassis.setLeftSpeed( Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3) );
-    }
+    protected void interrupted() {}//this.cancel(); }
+	private void arcade() {
+		Robot.chassis.setRightSpeed(-leftY - leftX);
+		Robot.chassis.setLeftSpeed(-leftY + leftX);
+	}
     private void mecanum(boolean reset) {
     	if(reset) { Drive.lockAngle(); }
-    	double x = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX), 3);
-    	double y = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY), 3);
     	double rotation = Robot.chassis.turnController.getOutput(Drive.navx.getYaw(), Drive.lockAngle);
-    	Drive.mec.mecanumDrive_Cartesian(x, y, rotation, 0);
+    	Drive.mec.mecanumDrive_Cartesian(rightX, rightY, rotation, 0);
     }
     
     private void hybrid() {
     	double frontLeft, rearLeft, frontRight, rearRight;
         double arcadeLeft, arcadeRight;
 
-        double rx = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX), 3);
-    	double ry = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY), 3);
+        double angleMec = Math.atan2(rightY, rightX);
 
-        double angleMec = Math.atan2(ry, rx);
+        frontLeft = (Math.sin(Math.toRadians(angleMec)) + rightX) / 2;
+        frontRight = (Math.cos(Math.toRadians(angleMec)) - rightX) / 2;
+        rearLeft = (Math.cos(Math.toRadians(angleMec)) + rightX) / 2;
+        rearRight = (Math.sin(Math.toRadians(angleMec)) - rightX) / 2;
 
-        frontLeft = (Math.sin(Math.toRadians(angleMec)) + rx) / 2;
-        frontRight = (Math.cos(Math.toRadians(angleMec)) - rx) / 2;
-        rearLeft = (Math.cos(Math.toRadians(angleMec)) + rx) / 2;
-        rearRight = (Math.sin(Math.toRadians(angleMec)) - rx) / 2;
-
-        arcadeLeft = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
-        arcadeRight = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
+        arcadeLeft = -leftY+leftX;
+        arcadeRight = -leftY-leftX;
 
         frontLeft += (arcadeLeft / 2);
         frontRight += (arcadeRight / 2);

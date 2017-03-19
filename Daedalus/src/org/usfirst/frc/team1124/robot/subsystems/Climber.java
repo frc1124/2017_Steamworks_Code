@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Climber extends Subsystem {
 	public static CANTalon motor = new CANTalon(RobotMap.climber);
 	public static DigitalInput limit = new DigitalInput(RobotMap.limit);
-	public static DoubleSolenoid sol = new DoubleSolenoid(RobotMap.gearDoor[0],RobotMap.gearDoor[1],RobotMap.gearDoor[2]);
+	public static DoubleSolenoid sol = new DoubleSolenoid(RobotMap.ropeDoor[0],RobotMap.ropeDoor[1],RobotMap.ropeDoor[2]);
 	
     public void initDefaultCommand() {}
     public void climb(boolean up) { motor.set((up&&limit.get()) ? 1.0 : -0.7); }

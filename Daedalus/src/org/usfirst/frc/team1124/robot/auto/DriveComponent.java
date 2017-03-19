@@ -129,7 +129,6 @@ public class DriveComponent extends Command {
 
 	@Override
 	protected void interrupted() {
-		// We need this method to override 
-		// Bad things happen if this method is not here
+		System.out.println("done");
 	}
 }
