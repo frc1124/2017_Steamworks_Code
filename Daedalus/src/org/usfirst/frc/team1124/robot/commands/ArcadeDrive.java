@@ -23,8 +23,7 @@ public class ArcadeDrive extends Command {
 		rightY = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY), 3);
     	NetworkTable.getTable("debug").putNumber("Joystick X", OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
     	
-		if ((Math.abs(leftX) > 0.02 || Math.abs(leftY) > 0.02) && (Math.abs(rightY) > 0.02 || Math.abs(rightX) > 0.02)) hybrid();
-    	else if(Math.abs(leftX) > 0.02 || Math.abs(leftY) > 0.02) arcade();
+    	if(Math.abs(leftX) > 0.02 || Math.abs(leftY) > 0.02) arcade();
     	else if(Math.abs(rightY) > 0.02 || Math.abs(rightX) > 0.02) mecanum(true);
     }
     protected boolean isFinished() { return(false); }
@@ -40,28 +39,4 @@ public class ArcadeDrive extends Command {
     	Drive.mec.mecanumDrive_Cartesian(rightX, rightY, rotation, 0);
     }
     
-    private void hybrid() {
-    	double frontLeft, rearLeft, frontRight, rearRight;
-        double arcadeLeft, arcadeRight;
-
-        double angleMec = Math.atan2(rightY, rightX);
-
-        frontLeft = (Math.sin(Math.toRadians(angleMec)) + rightX) / 2;
-        frontRight = (Math.cos(Math.toRadians(angleMec)) - rightX) / 2;
-        rearLeft = (Math.cos(Math.toRadians(angleMec)) + rightX) / 2;
-        rearRight = (Math.sin(Math.toRadians(angleMec)) - rightX) / 2;
-
-        arcadeLeft = -leftY+leftX;
-        arcadeRight = -leftY-leftX;
-
-        frontLeft += (arcadeLeft / 2);
-        frontRight += (arcadeRight / 2);
-        rearLeft += (arcadeLeft / 2);
-        rearRight += (arcadeRight / 2);
-
-        Drive.leftBack.set(rearLeft);
-        Drive.leftFront.set(frontLeft);
-        Drive.rightBack.set(rearRight);
-        Drive.rightFront.set(frontRight);
-    }
 }
