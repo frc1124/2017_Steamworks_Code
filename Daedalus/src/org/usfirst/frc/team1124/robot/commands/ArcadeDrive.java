@@ -50,18 +50,23 @@ public class ArcadeDrive extends Command {
 
         double angleMec = Math.atan2(ry, rx);
 
-        frontLeft = (Math.sin(Math.toRadians(angleMec)) + rx) / 2;
-        frontRight = (Math.cos(Math.toRadians(angleMec)) - rx) / 2;
-        rearLeft = (Math.cos(Math.toRadians(angleMec)) + rx) / 2;
-        rearRight = (Math.sin(Math.toRadians(angleMec)) - rx) / 2;
+        frontLeft = (Math.sin(Math.toRadians(angleMec)) + rx);
+        frontRight = (Math.cos(Math.toRadians(angleMec)) - rx);
+        rearLeft = (Math.cos(Math.toRadians(angleMec)) + rx);
+        rearRight = (Math.sin(Math.toRadians(angleMec)) - rx);
 
-        arcadeLeft = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
-        arcadeRight = Math.pow(-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX),3);
+        arcadeLeft = (-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))+OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX);
+        arcadeRight = (-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY))-OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX);
 
-        frontLeft += (arcadeLeft / 2);
-        frontRight += (arcadeRight / 2);
-        rearLeft += (arcadeLeft / 2);
-        rearRight += (arcadeRight / 2);
+        frontLeft += arcadeLeft;
+        frontRight += arcadeRight;
+        rearLeft += arcadeLeft;
+        rearRight += arcadeRight;
+        
+        rearLeft = Math.max(Math.min(rearLeft, 1), -1);
+        rearRight = Math.max(Math.min(rearRight, 1), -1);
+        frontLeft = Math.max(Math.min(frontLeft, 1), -1);
+        frontRight = Math.max(Math.min(frontRight, 1), -1);
 
         Drive.leftBack.set(rearLeft);
         Drive.leftFront.set(frontLeft);
