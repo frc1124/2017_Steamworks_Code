@@ -9,12 +9,19 @@ import edu.wpi.first.wpilibj.networktables.*;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ArcadeDrive extends Command {
+	
+	private static final int ARCADE_MODE = 0;
+	private static final int MEC_MODE = 1;
+	
+	private int mode = ARCADE_MODE;
 
 	private double leftX, leftY, rightX, rightY;
 
     public ArcadeDrive() { this.requires(Robot.chassis); }
 
-	protected void initialize() {}
+	protected void initialize() {
+		Drive.lockAngle();
+	}
 
 	protected void execute() {
 		leftX = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX), 3);
@@ -24,17 +31,27 @@ public class ArcadeDrive extends Command {
     	NetworkTable.getTable("debug").putNumber("Joystick X", OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
     	
     	if(Math.abs(leftX) > 0.02 || Math.abs(leftY) > 0.02) arcade();
-    	else if(Math.abs(rightY) > 0.02 || Math.abs(rightX) > 0.02) mecanum(true);
+    	else if(Math.abs(rightY) > 0.02 || Math.abs(rightX) > 0.02) mecanum();
+    	else stayStill();
     }
-    protected boolean isFinished() { return(false); }
+    private void stayStill() {
+		double rotation = 0;
+		if (mode == MEC_MODE)
+    		rotation = Robot.chassis.turnController.getOutput(Drive.navx.getYaw(), Drive.lockAngle);
+    	Drive.mec.mecanumDrive_Cartesian(0, 0, rotation, 0);
+	}
+
+	protected boolean isFinished() { return(false); }
     protected void end() {}
-    protected void interrupted() {}//this.cancel(); }
+    protected void interrupted() {}
 	private void arcade() {
+		mode = ARCADE_MODE;
 		Robot.chassis.setRightSpeed(-leftY - leftX);
 		Robot.chassis.setLeftSpeed(-leftY + leftX);
 	}
-    private void mecanum(boolean reset) {
-    	if(reset) { Drive.lockAngle(); }
+    private void mecanum() {
+    	if(mode==ARCADE_MODE) { Drive.lockAngle(); }
+    	mode = MEC_MODE;
     	double rotation = Robot.chassis.turnController.getOutput(Drive.navx.getYaw(), Drive.lockAngle);
     	Drive.mec.mecanumDrive_Cartesian(rightX, rightY, rotation, 0);
     }

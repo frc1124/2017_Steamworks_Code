@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1124.robot.commands;
 
 import org.usfirst.frc.team1124.robot.Robot;
+import org.usfirst.frc.team1124.robot.subsystems.Drive;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Strafe extends Command {
@@ -11,7 +13,7 @@ public class Strafe extends Command {
     	this.requires(Robot.chassis); 
     }
 
-    protected void initialize() {}
+    protected void initialize() { Drive.lockAngle(); }
     protected void execute() { Robot.chassis.strafe(spd); }
     protected boolean isFinished() { return(false); }
     protected void end() { Robot.chassis.allStop(); }

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1124.robot.subsystems;
 
+import org.usfirst.frc.team1124.robot.Robot;
 import org.usfirst.frc.team1124.robot.RobotMap;
 import org.usfirst.frc.team1124.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1124.robot.utils.MiniPID;
@@ -60,11 +61,8 @@ public class Drive extends Subsystem {
 		rightBack.set(spd);
 	}
 	public void strafe(double spd) {
-		double rot = 0.0;
-		leftFront.set(spd+rot);
-		leftBack.set(-spd+rot);
-		rightFront.set(-spd-rot);
-		rightBack.set(spd-rot);
+		double rotation = Robot.chassis.turnController.getOutput(Drive.navx.getYaw(), Drive.lockAngle);
+		Robot.chassis.mec.mecanumDrive_Cartesian(spd, 0, rotation, 0);
 	}
 	public double getLeftSpeed() { return(0); }
 	public double getRightSpeed() { return(0); }
