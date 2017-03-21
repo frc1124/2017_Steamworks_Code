@@ -7,6 +7,7 @@ public class PlaceGearOnCenter extends CommandGroup {
 	public PlaceGearOnCenter(){
 		this.addSequential(new DriveComponent(48));
 		this.addSequential(new ToggleGearDoor());
+		this.addSequential(new HoldComponent(1000));
 		this.addSequential(new DriveComponent(-45));
 		this.addSequential(new ToggleGearDoor());
 	}
