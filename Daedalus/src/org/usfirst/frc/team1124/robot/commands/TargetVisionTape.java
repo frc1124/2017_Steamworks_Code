@@ -11,7 +11,7 @@ public class TargetVisionTape extends Command {
 
     protected void initialize() {}
     protected void execute() { Robot.chassis.strafe(VisionComms.read()); }
-    protected boolean isFinished() { return(VisionComms.read() < threshhold); }
+    protected boolean isFinished() { return(false); }
     protected void end() {}
     protected void interrupted() { this.cancel(); }
 }

@@ -11,7 +11,7 @@ public class VisionComms {
 	private static DigitalInput bitThree = new DigitalInput(RobotMap.visionBitThree);
 	private static DigitalInput bitFour = new DigitalInput(RobotMap.visionBitFour);
 	private static DigitalInput bitFive = new DigitalInput(RobotMap.visionBitFive);
-	private static double scaleFactor = 40.0;
+	private static double scaleFactor = 31.0;
 	
 	public static double read() {
 		double val = 0.0;
