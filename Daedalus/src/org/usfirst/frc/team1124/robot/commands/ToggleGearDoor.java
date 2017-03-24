@@ -11,5 +11,5 @@ public class ToggleGearDoor extends Command {
     protected void execute() { Robot.gearDoor.toggle(); }
     protected boolean isFinished() { return(true); }
     protected void end() {}
-    protected void interrupted() { this.cancel(); }
+    protected void interrupted() { }
 }
