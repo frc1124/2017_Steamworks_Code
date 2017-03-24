@@ -11,7 +11,7 @@ public class DriveComponent extends Command {
 	private static final double MAX_SPEED = 0.9;
 	private static final double DISTANCE_PER_TICK = 4 * Math.PI / 4096;
 	private static final int TICKS_TIL_FULL = 16000;
-	private static final int QUIT_DISTANCE = 3000;
+	private static final int QUIT_DISTANCE = 1000;
 
 	// Distance we need to move in encoder ticks
 	private double distanceInTicks;

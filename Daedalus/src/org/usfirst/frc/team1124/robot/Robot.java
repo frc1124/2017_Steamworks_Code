@@ -6,7 +6,7 @@ import org.usfirst.frc.team1124.robot.auto.PlaceGearOnCenterAndLeft;
 import org.usfirst.frc.team1124.robot.auto.PlaceGearOnCenterAndRight;
 import org.usfirst.frc.team1124.robot.auto.PlaceGearOnLeft;
 import org.usfirst.frc.team1124.robot.auto.PlaceGearOnRight;
-import org.usfirst.frc.team1124.robot.commands.Strafe;
+import org.usfirst.frc.team1124.robot.commands.DriveUntil;
 import org.usfirst.frc.team1124.robot.subsystems.Camera;
 import org.usfirst.frc.team1124.robot.subsystems.Climber;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
@@ -61,8 +61,8 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
 	public void teleopPeriodic() {
-		NetworkTable.getTable("debug").putNumber("leftUlt", Math.round(Drive.leftUltrasonic.getAverageVoltage()*1024/5)*5);
-		NetworkTable.getTable("debug").putNumber("rightUlt", Math.round(Drive.rightUltrasonic.getAverageVoltage()*1024/5)*5);
+		NetworkTable.getTable("debug").putNumber("leftUlt", Math.round(Drive.leftUltrasonic.getVoltage()*1024/5)*5);
+		NetworkTable.getTable("debug").putNumber("rightUlt", Math.round(Drive.rightUltrasonic.getVoltage()*1024/5)*5);
 		NetworkTable.getTable("debug").putNumber("visionVal", VisionComms.read());
 
 		NetworkTable.getTable("vision").putBoolean("sign", VisionComms.read(0));

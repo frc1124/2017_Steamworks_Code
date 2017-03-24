@@ -24,8 +24,8 @@ public class RobotMap {
 	public static final int secondDriverRightY = 5;
 	public static final int secondDriverLeftX = 0;
 	public static final int secondDriverLeftY = 1;
-	
-	//buttonsh
+
+	//buttons
 	public static final int firstDriverA = 1;
 	public static final int firstDriverB = 2;
 	public static final int firstDriverX = 3;

@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class GearDoor extends Subsystem {
 	public static DoubleSolenoid gearDoor = new DoubleSolenoid(RobotMap.gearDoor[0],RobotMap.gearDoor[1],RobotMap.gearDoor[2]);
     
-    public void initDefaultCommand() {}
+    public void initDefaultCommand() {
+    	gearDoor.set(Value.kReverse); 	
+    }
     public void toggle() { this.set(gearDoor.get().equals(Value.kForward)); }
     public void set(boolean up) { gearDoor.set(up ? Value.kReverse : Value.kForward); }
 }
