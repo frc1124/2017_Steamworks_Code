@@ -1,11 +1,9 @@
 package org.usfirst.frc.team1124.robot;
 
 import org.usfirst.frc.team1124.robot.commands.Climb;
-import org.usfirst.frc.team1124.robot.commands.Strafe;
 import org.usfirst.frc.team1124.robot.commands.TargetVisionTape;
 import org.usfirst.frc.team1124.robot.commands.ToggleGearDoor;
 import org.usfirst.frc.team1124.robot.commands.ToggleRopeDoor;
-import org.usfirst.frc.team1124.robot.utils.VisionComms;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;

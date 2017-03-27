@@ -6,14 +6,12 @@ import org.usfirst.frc.team1124.robot.auto.PlaceGearOnCenterAndLeft;
 import org.usfirst.frc.team1124.robot.auto.PlaceGearOnCenterAndRight;
 import org.usfirst.frc.team1124.robot.auto.PlaceGearOnLeft;
 import org.usfirst.frc.team1124.robot.auto.PlaceGearOnRight;
-import org.usfirst.frc.team1124.robot.commands.DriveUntil;
 import org.usfirst.frc.team1124.robot.subsystems.Camera;
 import org.usfirst.frc.team1124.robot.subsystems.Climber;
 import org.usfirst.frc.team1124.robot.subsystems.Drive;
 import org.usfirst.frc.team1124.robot.subsystems.GearDoor;
 import org.usfirst.frc.team1124.robot.utils.StateManager;
 import org.usfirst.frc.team1124.robot.utils.VisionComms;
-
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -29,16 +27,14 @@ public class Robot extends IterativeRobot {
 	public static Compressor compressor;
 	public static Command auto;
 
-	@SuppressWarnings("deprecation")
 	public void robotInit() {
 		chassis = new Drive();
 		climber = new Climber();
 		gearDoor = new GearDoor();
 		oi = new OI();
 		camera = new Camera();
-		
-		/*temporary*/
-		NetworkTable.getTable("dash").putInt("auto", 4);
+		gearDoor.set(true);
+		climber.set(true);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -55,9 +51,8 @@ public class Robot extends IterativeRobot {
 		auto.start();
 		StateManager.updateAll();
 	}
-	public void disabledInit() { Scheduler.getInstance().removeAll(); }
-	@SuppressWarnings("deprecation")
-	public void teleopInit() {  }
+	public void disabledInit() {}
+	public void teleopInit() { Scheduler.getInstance().removeAll(); }
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
 	public void teleopPeriodic() {
@@ -72,8 +67,11 @@ public class Robot extends IterativeRobot {
 		NetworkTable.getTable("vision").putBoolean("four", VisionComms.read(4));
 		NetworkTable.getTable("vision").putBoolean("five", VisionComms.read(5));
 		
-		NetworkTable.getTable("limit").putBoolean("limit", climber.limit.get());
-		Scheduler.getInstance().run(); 
+		NetworkTable.getTable("limit").putBoolean("limit", Climber.limit.get());
+		
+		NetworkTable.getTable("dash").putBoolean("gearDoor", gearDoor.get());
+		
+		Scheduler.getInstance().run();
 	}
 	public void testInit() {}
 	public void testPeriodic() { Scheduler.getInstance().run(); }

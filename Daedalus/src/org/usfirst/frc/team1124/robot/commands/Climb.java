@@ -12,11 +12,10 @@ public class Climb extends Command {
     }
 
     protected void initialize() {}
-    protected void execute() { Robot.climber.limitOverride(up); }
+    protected void execute() { Robot.climber.climb(up); }
     protected boolean isFinished() { return(false); }
     protected void end() { Robot.climber.allStop(); }
     protected void interrupted() { 
     	this.end();
-    	this.cancel();
     }
 }

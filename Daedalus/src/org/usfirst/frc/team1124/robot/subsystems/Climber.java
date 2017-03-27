@@ -13,7 +13,11 @@ public class Climber extends Subsystem {
 	public static DoubleSolenoid sol = new DoubleSolenoid(RobotMap.ropeDoor[0],RobotMap.ropeDoor[1],RobotMap.ropeDoor[2]);
 	
     public void initDefaultCommand() {}
-    public void climb(boolean up) { motor.set((up&&limit.get()) ? 1.0 : -0.7); }
+    public void climb(boolean up) {
+    	motor.setExpiration(0.5);
+    	if(limit.get()) { allStop(); }
+    	else { limitOverride(up); }
+    }
     public void limitOverride(boolean up) { motor.set(up ? 1.0 : -0.7); }
     public void allStop() { motor.set(0.0); }
     public void toggle() { this.set(sol.get().equals(Value.kForward)); }

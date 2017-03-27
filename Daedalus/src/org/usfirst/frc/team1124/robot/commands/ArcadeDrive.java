@@ -30,8 +30,8 @@ public class ArcadeDrive extends Command {
 		rightY = Math.pow(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY), 3);
     	NetworkTable.getTable("debug").putNumber("Joystick X", OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX));
     	
-    	if((OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX) > 0.02) || OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY) > 0.02) arcade();
-    	else if(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX) > 0.02 || OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY) > 0.02) mecanum();
+    	if(Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftX)) > 0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverLeftY)) > 0.02) arcade();
+    	else if(Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightX)) > 0.02 || Math.abs(OI.firstDriver.getRawAxis(RobotMap.firstDriverRightY)) > 0.02) mecanum();
     	else stayStill();
     }
     private void stayStill() {

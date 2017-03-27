@@ -42,6 +42,11 @@ public class Drive extends Subsystem {
 		rightFront.setPID(0.01, 0.0, 0.01);
 		rightBack.setPID(0.01, 0.0, 0.01);
 		
+		leftFront.setExpiration(0.5);
+		leftBack.setExpiration(0.5);
+		rightFront.setExpiration(0.5);
+		rightBack.setExpiration(0.5);
+		
 		leftFront.setInverted(true);
 		leftBack.setInverted(true);
 	}
@@ -62,7 +67,7 @@ public class Drive extends Subsystem {
 	}
 	public void strafe(double spd) {
 		double rotation = Robot.chassis.turnController.getOutput(Drive.navx.getYaw(), Drive.lockAngle);
-		Robot.chassis.mec.mecanumDrive_Cartesian(spd, 0, rotation, 0);
+		Drive.mec.mecanumDrive_Cartesian(spd, 0, rotation, 0);
 	}
 	public double getLeftSpeed() { return(0); }
 	public double getRightSpeed() { return(0); }

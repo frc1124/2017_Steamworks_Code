@@ -28,6 +28,7 @@ public class DriveComponent extends Command {
 	private boolean done = false;
 
 	public DriveComponent(double distance) {
+		super(Math.abs(distance) / 12d);
 		direction = (int) Math.signum(distance);
 		this.distanceInTicks = direction * distance / DISTANCE_PER_TICK;
 		requires(Robot.chassis);
