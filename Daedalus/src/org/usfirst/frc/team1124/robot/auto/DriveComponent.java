@@ -113,13 +113,13 @@ public class DriveComponent extends Command {
 
 	protected boolean isFinished() {
 		// Are we done?
-		return done;
+		return done || this.isTimedOut();
 	}
 
 	@Override
 	public boolean isRunning() {
 		// We need this method to override 
-		return !done;
+		return !isFinished();
 	}
 
 	@Override
