@@ -15,7 +15,7 @@ public class PlaceGearOnLeft extends CommandGroup {
 		//this.addSequential(new PressToWin());
 		this.addSequential(new TargetComponent(), 2);
 		System.out.println("Targeted");
-		this.addSequential(new DriveComponent(24));
+		this.addSequential(new DriveComponent(24), 2);
 		System.out.println("Drove 24");
 		this.addSequential(new ToggleGearDoor());
 		System.out.println("Gear door up");

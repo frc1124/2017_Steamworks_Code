@@ -55,6 +55,9 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() { Scheduler.getInstance().removeAll(); }
 	public void disabledPeriodic() { Scheduler.getInstance().run(); }
 	public void autonomousPeriodic() { Scheduler.getInstance().run(); }
+	
+	private boolean test = false;
+	
 	public void teleopPeriodic() {
 		NetworkTable.getTable("debug").putNumber("leftUlt", Math.round(Drive.leftUltrasonic.getVoltage()*1024/5)*5);
 		NetworkTable.getTable("debug").putNumber("rightUlt", Math.round(Drive.rightUltrasonic.getVoltage()*1024/5)*5);
@@ -66,9 +69,11 @@ public class Robot extends IterativeRobot {
 		NetworkTable.getTable("vision").putBoolean("three", VisionComms.read(3));
 		NetworkTable.getTable("vision").putBoolean("four", VisionComms.read(4));
 		NetworkTable.getTable("vision").putBoolean("five", VisionComms.read(5));
-		
+		test = !test;
+		NetworkTable.getTable("Spitter").putBoolean("Spit Facts", test);
 		NetworkTable.getTable("limit").putBoolean("limit", Climber.limit.get());
 		
+
 		NetworkTable.getTable("dash").putBoolean("gearDoor", gearDoor.get());
 		
 		Scheduler.getInstance().run();
